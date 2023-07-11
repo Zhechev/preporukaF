@@ -1,9 +1,30 @@
 import Router from '@/router'
 import store from '@/store'
 import { createApp } from 'vue';
-import filters from './common/filters'
-import i18n from './i18n'
+import filters from './common/filters';
+import i18n from './i18n';
 
+// css
+import "./assets/css/stylesheet.css";
+import "./assets/css/mmenu.css";
+import "./assets/css/style.css";
+
+// js
+
+
+
+import "./assets/js/slick.min.js";
+import "/assets/js/rangeslider.min.js";
+import "/assets/js/magnific-popup.min.js";
+import "/assets/js/jquery-ui.min.js";
+import "/assets/js/bootstrap-select.min.js";
+import "/assets/js/mmenu.js";
+import "/assets/js/tooltips.min.js";
+import "/assets/js/jquery_custom.js";
+import "/assets/js/markerclusterer.js";
+import "/assets/js/moment.min.js";
+import "/assets/js/daterangepicker.js";
+import "/assets/js/leaflet.js";
 
 import _ from 'lodash';
 window._ = _;

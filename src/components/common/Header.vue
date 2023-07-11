@@ -32,7 +32,7 @@
                   <ul>
                     <li v-for="category in categories" :key="category.id">
                       <router-link :to="{ name: 'createVenue', params: { id: category.id } }">
-                        test
+                        test  teya
                       </router-link>
                     </li>
                   </ul>
