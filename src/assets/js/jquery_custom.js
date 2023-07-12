@@ -329,6 +329,7 @@
             $(this).children(".first-slider-value").val($(this).slider("values", 0) + " " + dataUnit);
             $(this).children(".second-slider-value").val($(this).slider("values", 1) + " " + dataUnit);
         });
+        // magnific popup
         $('.utf_gallery_container').each(function() {
             $(this).magnificPopup({
                 type: 'image',
@@ -373,6 +374,8 @@
             preloader: false,
             fixedContentPos: false
         });
+        // end magnific popup
+        // slick carousel
         $('.fullwidth_block-slick-carousel').slick({
             centerMode: true,
             centerPadding: '15%',
@@ -399,6 +402,7 @@
                 }
             }]
         });
+        
 		$(".time-slot").each(function() {
 			var timeSlot = $(this);
 			$(this).find('input').on('change',function() {
@@ -527,6 +531,7 @@
                 }
             }]
         });
+        // end slick
         var $tabsNav = $('.utf_tabs_nav'),
             $tabsNavLis = $tabsNav.children('li');
         $tabsNav.each(function() {

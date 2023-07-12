@@ -32,7 +32,7 @@
 										<div class="col-md-6">
 											<h5>text city</h5>
 											<div class="intro-search-field utf-chosen-cat-single" id="city_id_div">
-												<select class="selectpicker default" name="city_id" data-selected-text-format="count" data-size="7" title="city" id="city_id">
+												<select class="" name="city_id" data-selected-text-format="count" data-size="7" title="city" id="city_id">
 													<option value="" data-lat="" data-lng="">test</option>
 													<option value="" data-lat="" data-lng="">test1</option>
 													<option value="" data-lat="" data-lng="">test2</option>
@@ -55,7 +55,7 @@
 										<i class="sl sl-icon-picture"></i> imgaes
 									</h3>
 								</div>
-								<!-- <form action="file-upload" class="dropzone"></form> -->
+
 								<div class="row with-forms">
 									<div class="utf_submit_section col-md-6">
 										<h4>cover image</h4>
