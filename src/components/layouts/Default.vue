@@ -33,6 +33,7 @@ export default {
     computed: {
         ...mapGetters({
             isAuth: 'auth/authenticated',
+            categories: 'categories/categories'  // Add this line
         }),
     },
 }

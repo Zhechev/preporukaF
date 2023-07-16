@@ -40,7 +40,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import axios from 'axios';
+
 
 export default {
     name: "LoginForm",
@@ -60,24 +60,17 @@ export default {
         }),
         async login() {
             this.processing = true;
-            await axios.get('http://localhost:8000/sanctum/csrf-cookie');
-            await axios.post('http://localhost:8000/login', this.auth)
-                .then(({ data }) => {
-                    this.signIn();
-                    console.log(data);
+            this.signIn(this.auth)
+                .then(() => {
+                    this.$router.push({ name: 'home' }); 
                 })
                 .catch(({ response }) => {
-                    if (response.status === 422) {
-                        this.validationErrors = response.data.errors;
-                    } else {
-                        this.validationErrors = {};
-                        alert(response.data.message);
-                    }
+                    console.log(response);
                 })
                 .finally(() => {
                     this.processing = false;
                 });
         }
     }
-};
+}
 </script>

@@ -6,7 +6,7 @@
                     <div class="card-body">
                         <h1 class="text-center">Register</h1>
                         <hr/>
-                        <form action="javascript:void(0)" @submit="register" class="row" method="post">
+                        <form action="javascript:void(0)" @submit="handleRegister" class="row" method="post">
                             <div class="col-12" v-if="Object.keys(validationErrors).length > 0">
                                 <div class="alert alert-danger">
                                     <ul class="mb-0">
@@ -17,14 +17,19 @@
                             <div class="form-group col-12">
                                 <label for="name" class="font-weight-bold">Name</label>
                                 <input type="text" name="name" v-model="user.name" id="name" placeholder="Enter name" class="form-control">
+                                <p class="text-danger" v-if="validationErrors.name">{{ validationErrors.name[0] }}</p>
                             </div>
                             <div class="form-group col-12 my-2">
                                 <label for="email" class="font-weight-bold">Email</label>
                                 <input type="text" name="email" v-model="user.email" id="email" placeholder="Enter Email" class="form-control">
+                                <p class="text-danger" v-if="validationErrors.email">{{ validationErrors.email[0] }}</p>
                             </div>
                             <div class="form-group col-12">
                                 <label for="password" class="font-weight-bold">Password</label>
                                 <input type="password" name="password" v-model="user.password" id="password" placeholder="Enter Password" class="form-control">
+                                <div v-if="validationErrors.password" class="text-danger">
+                                    <p v-for="(error, index) in validationErrors.password" :key="index">{{ error }}</p>
+                                </div>
                             </div>
                             <div class="form-group col-12 my-2">
                                 <label for="password_confirmation" class="font-weight-bold">Confirm Password</label>
@@ -48,7 +53,6 @@
 
 <script>
 import { mapActions } from 'vuex';
-import axios from 'axios';
 
 export default {
     name: "RegisterForm",
@@ -65,29 +69,25 @@ export default {
         };
     },
     methods: {
-        ...mapActions({
-            signIn: 'auth/login'
-        }),
-        async register() {
+        ...mapActions('auth', ['register']),
+        async handleRegister() {
             this.processing = true;
-            await axios.get('/sanctum/csrf-cookie');
-            await axios.post('/register', this.user)
-                .then(() => {
+            try {
+                await this.register({user: this.user, lang: this.$i18n.locale});
+                this.$router.push({ name: 'home' }); // <- moved here
+                this.validationErrors = {};
+            } catch (error) {
+                if (error.response && error.response.status === 422) {
+                    this.validationErrors = error.response.data.errors;
+                } else {
                     this.validationErrors = {};
-                    this.signIn();
-                })
-                .catch(({ response }) => {
-                    if (response.status === 422) {
-                        this.validationErrors = response.data.errors;
-                    } else {
-                        this.validationErrors = {};
-                        alert(response.data.message);
-                    }
-                })
-                .finally(() => {
-                    this.processing = false;
-                });
+                    alert(error.response ? error.response.data.message : error.message);
+                }
+            } finally {
+                this.processing = false;
+            }
         }
+
     }
 };
 </script>

@@ -1,5 +1,6 @@
-import axios from 'axios'
 import router from '@/router'
+import { login, logout, register } from '../services/authService';
+
 
 export default {
     namespaced: true,
@@ -24,21 +25,37 @@ export default {
         }
     },
     actions:{
-        async login({commit}){
-            return axios.get('/api/user').then(({data})=>{
-                commit('SET_USER',data)
-                commit('SET_AUTHENTICATED',true)
-                router.push({name:'home'})
-            }).catch(({response:{data}})=>{
-                console.log(data);
-                commit('SET_USER',{})
-                commit('SET_AUTHENTICATED',false)
-            })
+        async login({commit}, authData) {
+            try {
+                const data = await login(authData);
+                commit('SET_USER', data.user);
+                commit('SET_AUTHENTICATED', true);
+                router.push({ name: 'home' });
+            } catch ({ response: { data } }) {
+                commit('SET_USER', {});
+                commit('SET_AUTHENTICATED', false);
+            }
         },
-        logout({commit}){
-            commit('SET_USER',{})
-            commit('SET_AUTHENTICATED',false)
-        }
-
-    },
+        async logout({commit}) {
+            try {
+                await logout();
+                commit('SET_USER', {});
+                commit('SET_AUTHENTICATED', false);
+                router.push({ name: 'home' });
+            } catch (error) {
+                commit('SET_USER', {});
+                commit('SET_AUTHENTICATED', false);
+            }
+        },
+        async register({dispatch}, {userData, lang}) {
+            try {
+                await register(userData, lang);
+                dispatch('login', userData);
+            } catch (error) {
+                console.log(error.response.data);
+                throw error; // <- add this line
+            }
+        },        
+    }
+    
 }
