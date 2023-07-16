@@ -1,34 +1,14 @@
 <template>
     <div class="clearfix"></div>
   
-    <div @click="showMultiple" id="utf_listing_gallery_part" class="utf_listing_section">
-      <Splide :options="options" aria-labelledby="My Favorite Images">
-        <SplideSlide>
-          <img class="listing_gallery_img"
-            src="https://images.squarespace-cdn.com/content/v1/571fc5edd210b89083925aba/1587497063492-3M55NJG231XKWL9PLFL2/Liam_Wong_Tokyo_Nights_Phone_Wallpapers_Cyberpunk_Blade_Runner_TOKYOO_TO_KY_OO_Japan_BookMinutes+To+Midnight.jpg?format=1000w"
-            alt="Sample 1"
-          />
-        </SplideSlide>
-        <SplideSlide>
-          <img class="listing_gallery_img"
-            src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nature-quotes-1557340276.jpg?crop=0.666xw:1.00xh;0.168xw,0&resize=640:*"
-            alt="Sample 2"
-          />
-        </SplideSlide>
-        <SplideSlide>
-          <img class="listing_gallery_img"
-            src="https://images.squarespace-cdn.com/content/v1/571fc5edd210b89083925aba/1587497063492-3M55NJG231XKWL9PLFL2/Liam_Wong_Tokyo_Nights_Phone_Wallpapers_Cyberpunk_Blade_Runner_TOKYOO_TO_KY_OO_Japan_BookMinutes+To+Midnight.jpg?format=1000w"
-            alt="Sample 3"
-          />
-        </SplideSlide>
-        <SplideSlide>
-          <img class="listing_gallery_img"
-            src="https://images.squarespace-cdn.com/content/v1/571fc5edd210b89083925aba/1587497063492-3M55NJG231XKWL9PLFL2/Liam_Wong_Tokyo_Nights_Phone_Wallpapers_Cyberpunk_Blade_Runner_TOKYOO_TO_KY_OO_Japan_BookMinutes+To+Midnight.jpg?format=1000w"
-            alt="Sample 4"
-          />
-        </SplideSlide>
-      </Splide>
-    </div>
+  <div id="utf_listing_gallery_part" class="utf_listing_section">
+    <Splide :options="options" ref="splideRef" aria-labelledby="My Favorite Images">
+      <SplideSlide v-for="(img, index) in imgsRef" :key="index">
+        <img class="listing_gallery_img" :src="img.src" :alt="'Sample ' + (index + 1)" @click="showMultiple($event, index)" />
+      </SplideSlide>
+    </Splide>
+  </div>
+
 
     <vue-easy-lightbox
         :visible="visibleRef"
@@ -260,117 +240,93 @@
     </div>
 </template>
   
-  <script>
-  import { mapGetters } from 'vuex';
-  import { Splide, SplideSlide } from '@splidejs/vue-splide';
-  import LeafletMap from '../common/LeafletMap.vue';
-  import axios from 'axios';
-  
-  // Default theme
-  import '@splidejs/vue-splide/css';
+<script>
+import { mapGetters } from 'vuex';
+import { ref, onMounted } from 'vue'; // Import ref and onMounted from 'vue', not 'vuex'
+import { Splide, SplideSlide } from '@splidejs/vue-splide';
+import axios from 'axios';
 
-  import VueEasyLightbox from 'vue-easy-lightbox';
-  import { ref } from 'vue'
+import '@splidejs/vue-splide/css';
+import VueEasyLightbox from 'vue-easy-lightbox';
 
+export default {
+  name: 'VenueComponent',
+  components: { Splide, SplideSlide, VueEasyLightbox },
+  props: ['id'],
   
-import 'vue-easy-lightbox/dist/external-css/vue-easy-lightbox.esm.min.js'   
-import 'vue-easy-lightbox/external-css'
-
-  
-  export default {
-    name: 'VenueComponent',
-  
-    components: { Splide, SplideSlide, LeafletMap, VueEasyLightbox },
-  
-    props: ['id'],
-  
-    setup() {
-      const options = {
-        rewind: true,
-        gap: '1rem',
-        width: '100%',
-        height: '400px',
-        type:"loop",
-        perPage: 1,
-        perMove: 1,
-        focus: 'center',
-      };
-
-      const visibleRef = ref(false)
-    const indexRef = ref(0) // default 0
-    const imgsRef = ref([])
+  setup() {
+    const options = {
+      rewind: true,
+      gap: '1rem',
+      width: '100%',
+      height: '400px',
+      type:"loop",
+      perPage: 1,
+      perMove: 1,
+      focus: 'center',
+    };
+    
+    const visibleRef = ref(false);
+    const indexRef = ref(0);
+    const imgsRef = ref([
+      { title: 'test img', src: 'http://via.placeholder.com/350x150' },
+      { title: 'test img 2', src: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nature-quotes-1557340276.jpg?crop=0.666xw:1.00xh;0.168xw,0&resize=640:*' },
+    ]);
+    const splideRef = ref(null); // Adding a ref for the Splide component
 
     const onShow = () => {
-      visibleRef.value = true
-    }
+      visibleRef.value = true;
+    };
 
-    const showMultiple = () => {
-      imgsRef.value = [
-        { title: 'test img', src: 'http://via.placeholder.com/350x150' },
-        { title: 'test img 2', src: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nature-quotes-1557340276.jpg?crop=0.666xw:1.00xh;0.168xw,0&resize=640:*' },
-      ]
-      indexRef.value = 0 // index of imgList
-      onShow()
-    }
-    const onHide = () => (visibleRef.value = false)
+    const showMultiple = (event, index) => {
+      if (!event.target.classList.contains('splide__arrow')) {
+        imgsRef.value = [
+          { title: 'test img', src: 'http://via.placeholder.com/350x150' },
+          { title: 'test img 2', src: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nature-quotes-1557340276.jpg?crop=0.666xw:1.00xh;0.168xw,0&resize=640:*' },
+        ];
+        indexRef.value = index;
+        onShow();
+      }
+    };
 
+    const onHide = () => (visibleRef.value = false);
+
+    // Prevent event propagation for the slider controls
+    onMounted(() => {
+      const controls = splideRef.value.$el.querySelectorAll('.splide__arrow');
+      controls.forEach((control) => {
+        control.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+      });
+    });
+    
     return {
-    options,
+      options,
       visibleRef,
       indexRef,
       imgsRef,
       showMultiple,
-      onHide
-    }
-    },
-  
-    data() {
-        return {
-            venue: {},
-        };
-    },
-  
-    computed: {
-      ...mapGetters([]),
-      featuresWithCheckStatus() {
-        if (!this.venue.category || !this.venue.category.features) {
-          return [];
-        }
-        return this.venue.category.features.map((categoryFeature) => {
-          const hasFeature = this.venue.features.some((venueFeature) => venueFeature.id === categoryFeature.id);
-          return { ...categoryFeature, hasFeature };
-        });
-      },
-      authStateCheck() {
-        return this.$store.state.auth.authenticated;
-      },
-      addReviewText() {
-        // replace this with your i18n or localization text function
-        return 'Add Review';
-      },
-      reviewDisabledText() {
-        // replace this with your i18n or localization text function
-        return 'Add Review Disabled';
-      },
-      loginNowText() {
-        // replace this with your i18n or localization text function
-        return 'Login Now';
-      },
-      loginRoute() {
-        // replace this with your login route, make sure it's a string
-        return '/login';
-      },
-    },
-  
-    mounted() {
-      axios.get('https://preporuka.zhechev.eu/api/venues/' + this.id).then(({ data }) => {
-        this.venue = data;
-      });
-    },
-  };
-  </script>
-  
-  <style scoped>
-  /* Add your component-specific styles here */
-  </style>
-  
+      onHide,
+      splideRef,
+    };
+  },
+
+  data() {
+    return {
+      venue: {},
+    };
+  },
+
+  computed: {
+    ...mapGetters([]),
+    // ...Other computed properties...
+  },
+
+  mounted() {
+    axios.get('https://preporuka.zhechev.eu/api/venues/' + this.id).then(({ data }) => {
+      this.venue = data;
+    });
+  },
+};
+</script>
