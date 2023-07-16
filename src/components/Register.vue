@@ -73,7 +73,7 @@ export default {
         async handleRegister() {
             this.processing = true;
             try {
-                await this.register({user: this.user, lang: this.$i18n.locale});
+                await this.register({userData: this.user, lang: this.$i18n.locale});
                 this.$router.push({ name: 'home' }); // <- moved here
                 this.validationErrors = {};
             } catch (error) {
