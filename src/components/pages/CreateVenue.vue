@@ -11,7 +11,7 @@
 							<div class="add_utf_listing_section margin-top-45">
 								<div class="utf_add_listing_part_headline_part">
 									<h3>
-										<i class="sl sl-icon-tag"></i>category title
+										<i class="sl sl-icon-tag"></i><font-awesome-icon :icon="['fas', 'tag']" />category title
 									</h3>
 								</div>
 								<div class="row with-forms">

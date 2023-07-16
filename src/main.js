@@ -8,6 +8,18 @@ import i18n from './i18n';
 import "./assets/css/stylesheet.css";
 import "./assets/css/style.css";
 
+/* import the fontawesome core */
+import { library } from '@fortawesome/fontawesome-svg-core'
+
+/* import font awesome icon component */
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+/* import specific icons */
+import { fas } from '@fortawesome/free-solid-svg-icons'
+
+/* add icons to the library */
+library.add(fas)
+
 // js
 
 import _ from 'lodash';
@@ -24,6 +36,7 @@ import DefaultLayout from './components/layouts/Default.vue';
 
 const app = createApp(DefaultLayout);
 
+app.component('font-awesome-icon', FontAwesomeIcon);
 app.component('chosen-select', Chosen);
 app.component('default-layout', DefaultLayout); // rename here
 

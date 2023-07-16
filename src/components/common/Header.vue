@@ -20,15 +20,15 @@
         <div class="utf_right_side">
           <div class="header_widget">
             <router-link :to="{ name: 'login' }" class="button border sign-in popup-with-zoom-anim" v-if="!isAuth">
-              <i class="fa fa-sign-in"></i>{{ $t('text.hello') }}
+              <font-awesome-icon :icon="['fas', 'sign-in']" />{{ $t('text.hello') }}
             </router-link>
             <a class="button border sign-in popup-with-zoom-anim" v-if="isAuth" href="" @click.prevent="logout">
-              <i class="fa fa-sign-in"></i>Logout
+              <font-awesome-icon :icon="['fas', 'sign-in']" />Logout
             </a>
             <nav id="navigation" class="style_one">
               <ul id="responsive">
                 <li>
-                  <a href="#"><i class="sl sl-icon-user"></i></a>
+                  <a href="#"><font-awesome-icon :icon="['fas', 'user']" /></a>
                   <ul>
                     <li v-for="category in categories" :key="category.id">
                       <router-link :to="{ name: 'createVenue', params: { id: category.id } }">
