@@ -24,11 +24,10 @@
             </a>
             <nav id="navigation" class="style_one">
                         <ul id="responsive">
-                            <<a href="#"><font-awesome-icon :icon="['fas', 'user']" /></a>
+                            <a href="#"><font-awesome-icon :icon="['fas', 'user']" /></a>
                                 <ul>
                                     <li v-for="category in categories" :key="category.id"><router-link :to="{ name: 'createVenue', params: { id: category.id } }">{{ category['category_name_' + $i18n.locale] }}</router-link></li>
                                 </ul>
-                            </li>
                         </ul>
                       </nav>
         </div>
