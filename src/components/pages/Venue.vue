@@ -139,7 +139,7 @@
             <h3 class="utf_listing_headline_part margin-top-60 margin-bottom-40"></h3>
             <div id="utf_single_listing_map_block">
               <div id="utf_listing_location" class="col-md-12 utf_listing_section map">
-                <leaflet-map v-if="venue && venue.lat && venue.lng" :lat="venue.lat" :lng="venue.lng"></leaflet-map>
+                <leaflet-map v-if="venue && venue.lat && venue.lng" :lat="venue.lat" :lng="venue.lng" :zoom="13"></leaflet-map>
               </div>
             </div>
           </div>
@@ -258,7 +258,7 @@
         <!-- Sidebar -->
       </div>
     </div>
-  </template>
+</template>
   
   <script>
   import { mapGetters } from 'vuex';
@@ -366,7 +366,6 @@ import 'vue-easy-lightbox/external-css'
       axios.get('https://preporuka.zhechev.eu/api/venues/' + this.id).then(({ data }) => {
         this.venue = data;
       });
-      console.log(this.$t);
     },
   };
   </script>
