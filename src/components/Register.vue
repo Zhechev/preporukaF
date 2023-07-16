@@ -7,13 +7,6 @@
                         <h1 class="text-center">Register</h1>
                         <hr/>
                         <form action="javascript:void(0)" @submit="handleRegister" class="row" method="post">
-                            <div class="col-12" v-if="Object.keys(validationErrors).length > 0">
-                                <div class="alert alert-danger">
-                                    <ul class="mb-0">
-                                        <li v-for="(value, key) in validationErrors" :key="key">{{ value[0] }}</li>
-                                    </ul>
-                                </div>
-                            </div>
                             <div class="form-group col-12">
                                 <label for="name" class="font-weight-bold">Name</label>
                                 <input type="text" name="name" v-model="user.name" id="name" placeholder="Enter name" class="form-control">
@@ -22,7 +15,9 @@
                             <div class="form-group col-12 my-2">
                                 <label for="email" class="font-weight-bold">Email</label>
                                 <input type="text" name="email" v-model="user.email" id="email" placeholder="Enter Email" class="form-control">
-                                <p class="text-danger" v-if="validationErrors.email">{{ validationErrors.email[0] }}</p>
+                                <div v-if="validationErrors.email" class="text-danger">
+                                    <p class="text-danger" v-if="validationErrors.email">{{ validationErrors.email[0] }}</p>
+                                </div>
                             </div>
                             <div class="form-group col-12">
                                 <label for="password" class="font-weight-bold">Password</label>
@@ -34,6 +29,9 @@
                             <div class="form-group col-12 my-2">
                                 <label for="password_confirmation" class="font-weight-bold">Confirm Password</label>
                                 <input type="password" name="password_confirmation" v-model="user.password_confirmation" id="password_confirmation" placeholder="Enter Password" class="form-control">
+                                <div v-if="validationErrors.password_confirmation" class="text-danger">
+                                    <p v-for="(error, index) in validationErrors.password_confirmation" :key="index">{{ error }}</p>
+                                </div>
                             </div>
                             <div class="col-12 mb-2">
                                 <button type="submit" :disabled="processing" class="btn btn-primary btn-block">
