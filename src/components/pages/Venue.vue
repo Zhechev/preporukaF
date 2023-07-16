@@ -69,19 +69,19 @@
             </div>
             <div class="social-contact">
               <a href="#" class="facebook-link">
-                <span class="i"><font-awesome-icon :icon="['fas', 'facebook']" /></span>Facebook
+                <span class="i"><font-awesome-icon :icon="['fab', 'facebook']" /></span>Facebook
               </a>
               <a href="#" class="twitter-link">
-                <span class="i"><font-awesome-icon :icon="['fas', 'twitter']" /></span> Twitter
+                <span class="i"><font-awesome-icon :icon="['fab', 'twitter']" /></span> Twitter
               </a>
               <a href="#" class="instagram-link">
-                <span class="i"><font-awesome-icon :icon="['fas', 'instagram']" /></span> Instagram
+                <span class="i"><font-awesome-icon :icon="['fab', 'instagram']" /></span> Instagram
               </a>
               <a href="#" class="linkedin-link">
-                <span class="i"><font-awesome-icon :icon="['fas', 'linkedin']" /></span> Linkedin
+                <span class="i"><font-awesome-icon :icon="['fab', 'linkedin']" /></span> Linkedin
               </a>
               <a href="#" class="youtube-link">
-                <span class="i"><font-awesome-icon :icon="['fas', 'youtube']" /></span> Youtube
+                <span class="i"><font-awesome-icon :icon="['fab', 'youtube']" /></span> Youtube
               </a>
             </div>
           </div>

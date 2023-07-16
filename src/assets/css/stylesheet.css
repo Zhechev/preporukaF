@@ -2771,6 +2771,9 @@ a.utf_gallery {
 /*==========
   Listing Slider Style
 ============*/
+#utf_listing_gallery_part {
+	cursor: zoom-in;
+}
 .utf_listing_section .splide {
 	background-color: #e8e8e8;
 }
