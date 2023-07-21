@@ -19,6 +19,7 @@ function loadLocaleMessages () {
 
 
 const i18n = createI18n({
+    legacy: false,
     locale: 'bg',
     fallbackLocale: 'bg',
     messages: loadLocaleMessages(),
