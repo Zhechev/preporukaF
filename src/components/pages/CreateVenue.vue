@@ -303,7 +303,7 @@ export default {
       alert(1);
 
       // API call
-      axios.post('http://localhost:8000/api/venues', formData, {
+      axios.post('http://preporuka.zhechev.eu/api/venues', formData, {
           headers: {
               'Content-Type': 'multipart/form-data'
           }

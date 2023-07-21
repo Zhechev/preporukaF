@@ -6,16 +6,32 @@
         <input v-model="form.title" type="text" id="home-search-title" name="title" placeholder="Име на обекта">
       </div>
       <div class="main_input_search_part_item" id="search-choose-city-div">
-        <chosen-select v-model="form.city" id="search-choose-city" name="city" placeholder="Изберете град">
+        <div class="dropdown">
+          <button class="btn dropdown-toggle" type="button" id="dropdownCity" data-bs-toggle="dropdown" aria-expanded="false">
+          Изберете град
+          </button>
+          <ul id="search-choose-city" class="dropdown-menu" aria-labelledby="dropdownCity">
+            <li v-for="city in cities" :key="city.id" :value="city.id"><a class="dropdown-item" href="#">{{ getCityName(city) }}</a></li>
+          </ul>
+        </div>
+        <!-- <chosen-select v-model="form.city" id="search-choose-city" name="city" placeholder="Изберете град">
           <option value="Изберете град"></option>
           <option v-for="city in cities" :key="city.id">{{ getCityName(city) }}</option>   
-        </chosen-select>
+        </chosen-select> -->
       </div>
       <div class="main_input_search_part_item" id="search-choose-category-div">
-        <chosen-select v-model="form.category" id="search-choose-category" name="category" placeholder="Изберете категория">
+        <div class="dropdown">
+          <button class="btn dropdown-toggle" type="button" id="dropdownCategory" data-bs-toggle="dropdown" aria-expanded="false">
+          Изберете категория
+          </button>
+          <ul id="search-choose-category" class="dropdown-menu" aria-labelledby="dropdownCategory">
+            <li v-for="category in categories" :key="category.id" :value="category.id"><a class="dropdown-item" href="#">{{ getCategoryName(category) }}</a></li>
+          </ul>
+        </div>
+        <!-- <chosen-select v-model="form.category" id="search-choose-category" name="category" placeholder="Изберете категория">
           <option value="0" selected>Изберете категория</option>
           <option value="{{ category.id }}" v-for="category in categories" :key="category.id">{{ getCategoryName(category) }}</option>
-        </chosen-select>
+        </chosen-select> -->
       </div>
       <button class="button" type="submit" id="home-search-button">ТЪРСИ</button>
     </div>
@@ -26,7 +42,7 @@
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import ChosenSelect from './ChosenSelect.vue';
+// import ChosenSelect from './ChosenSelect.vue';
 
 
 export default {
@@ -50,7 +66,7 @@ export default {
         }
     },
     components: {
-        ChosenSelect
+        // ChosenSelect
     },
     setup() {
     const router = useRouter();

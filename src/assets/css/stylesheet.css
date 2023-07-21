@@ -11,9 +11,6 @@ Version: 2.0
 /*Bootstrap Css*/
 @import url("bootstrap-grid.css");
 
-/*Icons*/
-/* @import url("icons.css"); */
-
 /*Google Fonts*/
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700,800");
 @import url('https://fonts.googleapis.com/css?family=Nunito:300,400,600,600i,700,800&subset=latin-ext');
@@ -605,28 +602,6 @@ div.datedropper .pick-btn, div.datedropper .pick li span, div.datedropper.primar
 	opacity: 1;
 	visibility: visible;
 }
-#navigation ul li a:after, #navigation ul ul li a:after {
-	font-family: "FontAwesome";
-	opacity: 0.5;
-}
-#navigation ul li a:after {
-	content: '\f107';
-	padding-left: 5px;
-	font-weight:400;
-}
-#navigation ul ul li a:after {
-	content: '\f105';
-	position: absolute;
-	right: 12px;
-	top: 7px;
-}
-#navigation ul li a:only-child:after {
-	content: '';
-	padding: 0;
-}
-#navigation ul ul li a:only-child:after {
-	content: '';
-}
 #navigation ul ul {
 	background-color: #fff;
 	box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.12);
@@ -689,10 +664,6 @@ body #navigation ul ul {
 }
 #navigation.style_one ul li {
 	transition: all 0.25s;
-}
-#navigation.style_one ul li a {
-	color: #444;
-	cursor: pointer;
 }
 #navigation.style_one ul li:hover a {
 	background:rgba(249, 25, 66, .06);
@@ -1286,12 +1257,56 @@ body[data-menu-position="closed"] .nav_responsive i.fa.fa-reorder:before {
 .main_input_search_part_item.location a:hover {
 	color: #ff2222;
 }
+.main_input_search_part_item .dropdown .dropdown-toggle {
+	position: relative;
+    display: inline-block;
+    height: 48px;
+    line-height: 0;
+    padding: 0 15px;
+    margin: 0;
+    outline: none;
+    font-size: 16px;
+    color: #808080;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+    background-color: #ffffff;
+    font-weight: 400;
+    opacity: 1;
+    border-radius: 4px;
+    border: none;
+	text-align: left;
+}
+.main_input_search_part_item .dropdown .dropdown-toggle::after {
+	vertical-align: 0.1em;
+	float: right;
+}
+.main_input_search_part_item .dropdown .dropdown-menu {
+	position: absolute;
+    inset: 0px auto auto 0px;
+    margin: 0px;
+	padding: 10px 0;
+    transform: translate3d(0px, 50.4px, 0px);
+	min-width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+.main_input_search_part_item .dropdown .dropdown-menu li {
+	position: relative;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.main_input_search_part_item .dropdown .dropdown-menu li:last-child {
+	border-bottom: none;
+}
 .main_input_search_part input, .main_input_search_part input:focus {
 	font-size: 16px;
 	border: none;
 	background: #fff;
 	margin: 0;
-	padding: 0;
+	padding: 0 15px;
 	height: 44px;
 	line-height: 44px;
 	box-shadow: none;
@@ -7413,97 +7428,23 @@ width: 5px;
 	margin-top:10px;
 }
 }
-.bootstrap-select.btn-group {
-	position: relative;
-}
-.bootstrap-select.btn-group button {
-	position: relative;
-	display: inline-block;
-	height: 48px;
-	line-height: 0;
-	padding: 0 15px;
-	margin: 0;
-	outline: none;
-	font-size: 16px;
-	color: #808080;
-	max-width: 100%;
-	width: 100%;
-	box-sizing: border-box;
-	display: block;
-	background-color: #ffffff;
-	font-weight: 400;
-	opacity: 1;
-	border-radius: 4px;
-	border: none;
-}
 .hide-tick .check-mark {
 	display: none !important;
 }
-.bootstrap-select.btn-group .dropdown-menu li a span.check-mark {
-	position: absolute;
-	display: inline-block;
-	right: 8px;
-	top: 50%;
-	transform: translateY(-50%);
-	margin: 0;
-	line-height: 0;
-	width: 20px;
-	height: 20px;
-	text-align: center;
-}
-.bootstrap-select.btn-group .dropdown-menu li span.check-mark:before {
-	font-family: "Feather-Icons";
-	content: "\e92b";
-	font-size: 18px;
-	transition: all 0.3s;
-	display: inline-block;
-	top: 50%;
-	right: 0;
-	position: absolute;
-	margin: 0;
-	opacity: 0;
-	transform: scale(0.5);
-}
-.bootstrap-select.btn-group .dropdown-menu li.selected span.check-mark:before {
-	opacity: 1;
-	transform: scale(1);
-	transition: all 0.35s cubic-bezier(0.3, -.41, .19, 2), opacity 0.3s;
-}
-.bootstrap-select .dropdown-menu li.selected a span.check-mark:before, .bootstrap-select .dropdown-menu li.selected:hover a span.check-mark:before {
-	color: #66676b;
-}
-.bootstrap-select .glyphicon:not(.check-mark) {
-	font-size: 17px;
-	line-height: 0;
-	position: relative;
-	top: 1px;
-	margin-right: 3px;
-}
-.bootstrap-select .filter-option .glyphicon {
-	position: relative;
-	top: 1px;
-}
-.with-border .dropdown-menu, .with-border.bootstrap-select.btn-group button {
-	background:#fbfdff;
-	border: 1px solid #dde6ef;
-	box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.05);
-}
-.with-border.bootstrap-select:before {
-	width: calc(100% - 2px);
-	left: 1px;
-}
-.dropdown-menu > li > a:hover, .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover {
-    background-color: rgba(255, 34, 34, 0.07);
-}
-.dropdown-menu > li > a:hover, .dropdown-menu > .active > a, .bootstrap-select .dropdown-menu li.selected a span.check-mark:before{
-	color: #ff2222;
-}
+
 @media (max-width: 991px) {
 .main_input_search_part .bootstrap-select.btn-group button {
     height: 55px;
 }
 header.fullwidth .container {
     padding: 0 15px;
+}
+.main_input_search_part_item {
+    margin-bottom: 10px;
+	padding: 0;
+}
+.main_input_search_part_item, .main_input_search_part .main_input_search_part_item:nth-last-child(2) {
+    padding: 0;
 }
 }
 .utf-chosen-cat-single{

@@ -1,5 +1,7 @@
 <template>
-    <select ref="selectEl"><slot></slot></select>
+    <!-- <select ref="selectEl"><slot></slot></select> -->
+    <div ref="selectEl">
+    </div>
 </template>
 
 <script>

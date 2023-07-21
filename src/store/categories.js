@@ -17,7 +17,7 @@ export default {
     },
     actions:{
         async categories({commit}){
-            return axios.get('http://localhost:8000/api/categories').then(({data})=>{
+            return axios.get('http://preporuka.zhechev.eu/api/categories').then(({data})=>{
                 commit('setCategories',data)
             })
         },

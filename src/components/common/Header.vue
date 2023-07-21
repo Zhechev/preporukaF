@@ -16,25 +16,47 @@
         <div class="utf_right_side">
           <div class="header_widget">
             <router-link :to="{ name: 'login' }" class="button border sign-in popup-with-zoom-anim" v-if="!isAuth">
-              <font-awesome-icon :icon="['fas', 'sign-in']" />{{ $t('text.hello') }}
+              <font-awesome-icon :icon="['fas', 'sign-in']" />
+              <!-- {{ $t('text.hello') }} --> Вход
             </router-link>
-            <router-link :to="{name:'register'}" class="button border sign-in" v-if="!isAuth"><i class="fa fa-sign-in"></i>Register</router-link>
+            <!-- <router-link :to="{name:'register'}" class="button border sign-in" v-if="!isAuth"><i class="fa fa-sign-in"></i>Register</router-link>
             <a class="button border sign-in popup-with-zoom-anim" v-if="isAuth" href="" @click.prevent="logout">
               <font-awesome-icon :icon="['fas', 'sign-in']" />Logout
-            </a>
-            <nav id="navigation" class="style_one">
+            </a> -->
+            <div>
+              <div class="dropdown">
+                <button class="button border with-icon dropdown-toggle" type="button" id="addVenue" data-bs-toggle="dropdown" aria-expanded="false">
+                  <font-awesome-icon :icon="['fas', 'location-dot']" /> Добави обект
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="addVenue">
+                  <li v-for="category in categories" :key="category.id"><router-link :to="{ name: 'createVenue', params: { id: category.id } }">{{ category['category_name_' + $i18n.locale] }}</router-link></li>
+                </ul>
+              </div>
+            </div>
+            <!-- <nav id="navigation" class="style_one">
                         <ul id="responsive">
                           <li>
-                            <a href="#"><font-awesome-icon :icon="['fas', 'user']" /></a>
+                            <a href="#" class="button border sign-in popup-with-zoom-anim"><font-awesome-icon :icon="['fas', 'location-dot']" /> Добави обект</a>
                                 <ul>
                                     <li v-for="category in categories" :key="category.id"><router-link :to="{ name: 'createVenue', params: { id: category.id } }">{{ category['category_name_' + $i18n.locale] }}</router-link></li>
                                 </ul>
                               </li>
                         </ul>
-                      </nav>
+                      </nav> -->
+            <div>
+              <div class="dropdown">
+                <button class="button border with-icon dropdown-toggle" type="button" id="changeLang" data-bs-toggle="dropdown" aria-expanded="false">
+                  <font-awesome-icon :icon="['fas', 'globe']" />
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="changeLang">
+                  <li><a class="dropdown-item" href="#" @click="changeLanguage('en')">English</a></li>
+                  <li><a class="dropdown-item" href="#" @click="changeLanguage('bg')">Bulgarian</a></li>
+                </ul>
+              </div>
+            </div>
         </div>
-          <a href="#" @click="changeLanguage('en')">English</a>
-          <a href="#" @click="changeLanguage('bg')">Bulgarian</a>
+          <!-- <a href="#" @click="changeLanguage('en')">English</a>
+          <a href="#" @click="changeLanguage('bg')">Bulgarian</a> -->
         </div>
 
 

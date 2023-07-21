@@ -5,6 +5,9 @@ import filters from './common/filters';
 import i18n from './i18n';
 
 // css
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap'; // Import Bootstrap JavaScript components if needed
+
 import "./assets/css/stylesheet.css";
 import "./assets/css/style.css";
 
