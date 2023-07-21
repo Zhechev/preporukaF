@@ -205,7 +205,7 @@ import axios from 'axios';
 						this.categoryId = route.params.id
 				},
 				mounted() {
-						axios.get('https://preporuka.zhechev.eu/api/categories/'+this.categoryId).then(({data})=>{
+						axios.get('http://localhost:8000/api/categories/'+this.categoryId).then(({data})=>{
 								this.category = data;
 						})
 				},
