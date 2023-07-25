@@ -36,15 +36,30 @@ export default {
                 commit('SET_AUTHENTICATED', false);
             }
         },
+        // async logout({commit}) {
+        //     try {
+        //         await logout();
+        //         commit('SET_USER', {});
+        //         commit('SET_AUTHENTICATED', false);
+        //     } catch (error) {
+        //         commit('SET_USER', {});
+        //         commit('SET_AUTHENTICATED', false);
+        //         console.error("Error logging out", error);
+        //     }
+        // },
         async logout({commit}) {
             try {
-                await logout();
-                commit('SET_USER', {});
-                commit('SET_AUTHENTICATED', false);
-                router.push({ name: 'home' });
+                const response = await logout();
+                // Check the response message or status code from the backend
+                if (response.message === 'Logged out successfully') {
+                    commit('SET_USER', {});
+                    commit('SET_AUTHENTICATED', false);
+                    router.push({ name: 'login' }); // redirect to login page, if required
+                } else {
+                    console.error("Backend logout was not successful:", response.data.message);
+                }
             } catch (error) {
-                commit('SET_USER', {});
-                commit('SET_AUTHENTICATED', false);
+                console.error("Error logging out");
             }
         },
         async register({dispatch}, {userData, lang}) {

@@ -61,11 +61,8 @@ export default {
         async login() {
             this.processing = true;
             this.signIn(this.auth)
-                .then(() => {
-                    this.$router.push({ name: 'home' }); 
-                })
-                .catch(({ response }) => {
-                    console.log(response);
+                .catch(({ message }) => {
+                    this.validationErrors = message;
                 })
                 .finally(() => {
                     this.processing = false;

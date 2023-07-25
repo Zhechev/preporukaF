@@ -9,7 +9,8 @@ export async function login(authData) {
 }
 
 export async function logout() {
-    await axios.post(`${BASE_URL}/logout`);
+    const response = await axios.post(`${BASE_URL}/logout`);
+    return response.data;
 }
 
 export async function register(userData, lang) {
