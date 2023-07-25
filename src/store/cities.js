@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const BASE_URL = process.env.VUE_APP_BASE_API_URL;
+
 export default {
     namespaced: true,
     state:{
@@ -17,7 +19,7 @@ export default {
     },
     actions:{
         async cities({commit}) {
-            return axios.get('https://preporuka.zhechev.eu/api/cities').then(({data})=>{
+            return axios.get(`${BASE_URL}/cities`).then(({data})=>{
                 commit('setCities',data)
             })
         },

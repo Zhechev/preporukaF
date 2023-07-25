@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const BASE_URL = process.env.VUE_APP_BASE_API_URL;
+
 export default {
     namespaced: true,
     state:{
@@ -17,7 +19,7 @@ export default {
     },
     actions:{
         async categories({commit}){
-            return axios.get('http://preporuka.zhechev.eu/api/categories').then(({data})=>{
+            return axios.get(`${BASE_URL}/categories`).then(({data})=>{
                 commit('setCategories',data)
             })
         },
