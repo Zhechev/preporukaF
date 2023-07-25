@@ -15,6 +15,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.3",
     "@popperjs/core": "^2.11.8",
     "@splidejs/vue-splide": "^0.6.12",
+    "@vee-validate/rules": "^4.10.8",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.0",
     "core-js": "^3.8.3",

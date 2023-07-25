@@ -3,20 +3,20 @@ import { login, logout, register } from '../services/authService';
 
 
 export default {
-    namespaced: true,
-    state:{
+    namespaced: true, // This means that the module is namespaced. With this, you'll access the module's state, getters, actions, etc. with a prefix based on its module name.
+    state:{ // Defining the state
         authenticated:false,
         user:{}
     },
-    getters:{
-        authenticated(state){
+    getters:{ // Simply return their respective state properties.
+        authenticated(state) {
             return state.authenticated
         },
-        user(state){
+        user(state) {
             return state.user
         }
     },
-    mutations:{
+    mutations:{ // These are synchronous functions that change the state.
         SET_AUTHENTICATED (state, value) {
             state.authenticated = value
         },
@@ -28,25 +28,16 @@ export default {
         async login({commit}, authData) {
             try {
                 const data = await login(authData);
+
+                // Commit mutation to update user and authenticated state 
                 commit('SET_USER', data.user);
                 commit('SET_AUTHENTICATED', true);
-                router.push({ name: 'home' });
+                router.push({ name: 'home' }); // redirect
             } catch ({ response: { data } }) {
                 commit('SET_USER', {});
                 commit('SET_AUTHENTICATED', false);
             }
         },
-        // async logout({commit}) {
-        //     try {
-        //         await logout();
-        //         commit('SET_USER', {});
-        //         commit('SET_AUTHENTICATED', false);
-        //     } catch (error) {
-        //         commit('SET_USER', {});
-        //         commit('SET_AUTHENTICATED', false);
-        //         console.error("Error logging out", error);
-        //     }
-        // },
         async logout({commit}) {
             try {
                 const response = await logout();

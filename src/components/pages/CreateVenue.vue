@@ -11,74 +11,127 @@
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
                   <h3>
-                    <i class="sl sl-icon-tag"></i><font-awesome-icon :icon="['fas', 'tag']" />{{ $t('text.venue_title') }}
+                    <i class="sl sl-icon-tag"></i
+                    ><font-awesome-icon :icon="['fas', 'tag']" />{{
+                      $t("text.venue_title")
+                    }}
                   </h3>
                 </div>
                 <div class="row with-forms">
                   <div class="col-md-6">
-                    <h5>{{ $t('text.title') }}</h5>
-                    <Field v-model="title" type="text" class="search-field" name="title" id="title" :placeholder="$t('text.title')" />
+                    <h5>{{ $t("text.title") }}</h5>
+                    <Field
+                      v-model="title"
+                      type="text"
+                      class="search-field"
+                      name="title"
+                      id="title"
+                      :placeholder="$t('text.title')"
+                      :rules="isRequired"
+                    />
+                    <ErrorMessage name="title" />
                   </div>
-                  <div class="dropdown">
-                    <button 
-                        class="btn dropdown-toggle" 
-                        type="button" 
-                        id="dropdownCategory" 
-                        data-bs-toggle="dropdown" 
-                        aria-expanded="false">
-                        {{ selectedCategoryId ? getCategoryNameById(selectedCategoryId) : $t('text.choose_category') }}
-                    </button>
-                    <ul 
-                        id="search-choose-category" 
-                        class="dropdown-menu" 
-                        aria-labelledby="dropdownCategory">
-                        <li 
-                            v-for="category in categories" 
-                            :key="category.id"
-                        >
-                            <a 
-                                class="dropdown-item" 
-                                href="#"
-                                @click.prevent="selectedCategoryId = category.id"
-                            >
-                                {{ getCategoryName(category) }}
-                            </a>
+                  <div class="col-md-6">
+                    <div class="dropdown">
+                      <button
+                        class="btn dropdown-toggle"
+                        type="button"
+                        id="dropdownCategory"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        {{
+                          selectedCategoryId
+                            ? getCategoryNameById(selectedCategoryId)
+                            : $t("text.choose_category")
+                        }}
+                      </button>
+                      <ul
+                        id="search-choose-category"
+                        class="dropdown-menu"
+                        aria-labelledby="dropdownCategory"
+                      >
+                        <li v-for="category in categories" :key="category.id">
+                          <a
+                            class="dropdown-item"
+                            href="#"
+                            @click.prevent="selectedCategoryId = category.id"
+                          >
+                            {{ getCategoryName(category) }}
+                          </a>
                         </li>
-                    </ul>
-                </div>
-
-                <!-- Hidden input field for validation -->
-                <Field 
-                    v-model="selectedCategoryId" 
-                    type="hidden" 
-                    name="category"
-                    :rules="isRequired"
-                />
-                <ErrorMessage name="category" />
+                      </ul>
+                    </div>
+                    <!-- Hidden input field for validation -->
+                    <Field
+                      v-model="selectedCategoryId"
+                      type="hidden"
+                      name="category"
+                      :rules="validateCategory"
+                    />
+                    <ErrorMessage name="category" />
+                  </div>
                 </div>
               </div>
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
                   <h3>
-                    <i class="sl sl-icon-map"></i>{{ $t('text.location') }}
+                    <i class="sl sl-icon-map"></i>{{ $t("text.location") }}
                   </h3>
                 </div>
                 <div class="utf_submit_section">
                   <div class="row with-forms">
                     <div class="col-md-6">
-                      <h5>{{ $t('text.city') }}</h5>
-                      <div class="intro-search-field utf-chosen-cat-single" id="city_id_div">
-                        <select v-if="cities && cities.length > 0" @change="selectCity" class="" name="city_id" data-selected-text-format="count" data-size="7" :title="$t('text.venue_title')" id="city_id" v-model="selectedCity">
-                          <option v-for="city in cities" :key="city.id" :value="city">{{ city['name_' + $i18n.locale] }}</option>
+                      <h5>{{ $t("text.city") }}</h5>
+                      <div
+                        class="intro-search-field utf-chosen-cat-single"
+                        id="city_id_div"
+                      >
+                        <select
+                          v-if="cities && cities.length > 0"
+                          @change="selectCity"
+                          class=""
+                          name="city_id"
+                          data-selected-text-format="count"
+                          data-size="7"
+                          :title="$t('text.venue_title')"
+                          id="city_id"
+                          v-model="selectedCity"
+                        >
+                          <option
+                            v-for="city in cities"
+                            :key="city.id"
+                            :value="city"
+                          >
+                            {{ city["name_" + $i18n.locale] }}
+                          </option>
                         </select>
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <h5>{{ $t('text.address') }}</h5>
-                      <input v-model="address" type="text" class="input-text" name="address" id="address" :placeholder="$t('text.address')">
+                      <h5>{{ $t("text.address") }}</h5>
+                      <Field
+                        v-model="address"
+                        type="text"
+                        class="input-text"
+                        name="address"
+                        id="address"
+                        :placeholder="$t('text.address')"
+                        :rules="isRequired"
+                      />
+                      <ErrorMessage name="address" />
                     </div>
-                    <div id="utf_listing_location" class="col-md-12 utf_listing_section map">
-                      <leaflet-map ref="map" :lat="selectedCityLat" :lng="selectedCityLng" :zoom="zoom" :interactive=true></leaflet-map>
+                    <div
+                      id="utf_listing_location"
+                      class="col-md-12 utf_listing_section map"
+                    >
+                      <leaflet-map
+                        ref="map"
+                        :lat="selectedCityLat"
+                        :lng="selectedCityLng"
+                        :zoom="zoom"
+                        :interactive="true"
+                      ></leaflet-map>
                     </div>
                   </div>
                 </div>
@@ -86,97 +139,178 @@
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
                   <h3>
-                    <i class="sl sl-icon-picture"></i>{{ $t('text.photos') }}
+                    <i class="sl sl-icon-picture"></i>{{ $t("text.photos") }}
                   </h3>
                 </div>
                 <div class="row with-forms">
                   <div class="utf_submit_section col-md-6">
-                    <h4>{{ $t('text.cover_photo') }}</h4>
+                    <h4>{{ $t("text.cover_photo") }}</h4>
                     <input ref="coverImage" type="file" name="coverImage" />
                   </div>
                   <div class="utf_submit_section col-md-6">
-                    <h4>{{ $t('text.other_photos') }}</h4>
-                    <input ref="otherImagesInput" type="file" name="images[]" multiple/>  
+                    <h4>{{ $t("text.other_photos") }}</h4>
+                    <input
+                      ref="otherImagesInput"
+                      type="file"
+                      name="images[]"
+                      multiple
+                    />
                   </div>
                 </div>
               </div>
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
                   <h3>
-                    <i class="sl sl-icon-list"></i>{{ $t('text.content') }}
+                    <i class="sl sl-icon-list"></i>{{ $t("text.content") }}
                   </h3>
                 </div>
                 <div class="row with-forms">
                   <div class="col-md-6">
-                    <h5>{{ $t('text.phone') }}</h5>
-                    <input v-model="phone" type="text" name="phone" id="phone" :placeholder="$t('text.phone')">
+                    <h5>{{ $t("text.phone") }}</h5>
+                    <input
+                      v-model="phone"
+                      type="text"
+                      name="phone"
+                      id="phone"
+                      :placeholder="$t('text.phone')"
+                    />
                   </div>
                   <div class="col-md-6">
                     <h5>E-mail</h5>
-                    <Field v-model="email" type="text" class="search-field" name="email" id="email" placeholder="E-mail" :rules="validateEmail" />
+                    <Field
+                      v-model="email"
+                      type="text"
+                      class="search-field"
+                      name="email"
+                      id="email"
+                      placeholder="E-mail"
+                      :rules="validateEmail"
+                    />
                     <ErrorMessage name="email" />
                   </div>
                   <div class="col-md-6">
                     <h5>Website</h5>
-                    <input v-model="website" type="text" name="website" placeholder="Website">
+                    <input
+                      v-model="website"
+                      type="text"
+                      name="website"
+                      placeholder="Website"
+                    />
                   </div>
                   <div class="col-md-6">
                     <h5>Facebook</h5>
-                    <input v-model="facebook" type="text" name="facebook" placeholder="Facebook">
+                    <input
+                      v-model="facebook"
+                      type="text"
+                      name="facebook"
+                      placeholder="Facebook"
+                    />
                   </div>
                   <div class="col-md-6">
                     <h5>Instagram</h5>
-                    <input v-model="instagram" type="text" name="instagram" placeholder="Instagram">
+                    <input
+                      v-model="instagram"
+                      type="text"
+                      name="instagram"
+                      placeholder="Instagram"
+                    />
                   </div>
                   <div class="col-md-12">
-                    <h5>{{ $t('text.description_bg') }}</h5>
-                    <textarea v-model="content_bg" name="content_bg" cols="40" rows="3" id="content_bg" :placeholder="$t('text.description_bg')" spellcheck="true"></textarea>
+                    <h5>{{ $t("text.description_bg") }}</h5>
+                    <Field
+                      v-model="content_bg"
+                      name="content_bg"
+                      cols="40"
+                      rows="3"
+                      id="content_bg"
+                      :placeholder="$t('text.description_bg')"
+                      spellcheck="true"
+                    />
+                    <ErrorMessage name="content_bg" />
                   </div>
                   <div class="col-md-12">
-                    <h5>{{ $t('text.description_en') }}</h5>
-                    <textarea v-model="content_en" name="content_en" cols="40" rows="3" id="content_en" :placeholder="$t('text.description_en')" spellcheck="true"></textarea>
+                    <h5>{{ $t("text.description_en") }}</h5>
+                    <textarea
+                      v-model="content_en"
+                      name="content_en"
+                      cols="40"
+                      rows="3"
+                      id="content_en"
+                      :placeholder="$t('text.description_en')"
+                      spellcheck="true"
+                    ></textarea>
                   </div>
                 </div>
               </div>
 
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
-                  <h3><i class="sl sl-icon-clock"></i>{{ $t('text.work_time') }}</h3>
+                  <h3>
+                    <i class="sl sl-icon-clock"></i>{{ $t("text.work_time") }}
+                  </h3>
                 </div>
 
                 <div class="switcher-content">
-                  <div class=row>
-                    <div class="col-md-3">
+                  <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-4">
+                      <h5>{{ $t("text.оpening_hours") }}:</h5>
                     </div>
                     <div class="col-md-4">
-                      <h5>{{ $t('text.оpening_hours') }}:</h5>
-                    </div>
-                    <div class="col-md-4">
-                      <h5>{{ $t('text.closing_hours') }}:</h5>
+                      <h5>{{ $t("text.closing_hours") }}:</h5>
                     </div>
                   </div>
-                  <div class="row utf_opening_day utf_js_demo_hours" v-for="(time, index) in openingHours" :key="index">
+                  <div
+                    class="row utf_opening_day utf_js_demo_hours"
+                    v-for="(time, index) in openingHours"
+                    :key="index"
+                  >
                     <div class="col-md-2">
-                      <h5>{{time.dayName}} :-</h5>
+                      <h5>{{ time.dayName }} :-</h5>
                     </div>
                     <div class="col-md-2">
                       <select class="utf_chosen_select" v-model="time.openHour">
-                        <option v-for="hour in hours" :key="hour" :value="hour">{{hour}}</option>
+                        <option v-for="hour in hours" :key="hour" :value="hour">
+                          {{ hour }}
+                        </option>
                       </select>
                     </div>
                     <div class="col-md-2">
-                      <select class="utf_chosen_select" v-model="time.openMinute">
-                        <option v-for="minute in minutes" :key="minute" :value="minute">{{minute}}</option>
+                      <select
+                        class="utf_chosen_select"
+                        v-model="time.openMinute"
+                      >
+                        <option
+                          v-for="minute in minutes"
+                          :key="minute"
+                          :value="minute"
+                        >
+                          {{ minute }}
+                        </option>
                       </select>
                     </div>
                     <div class="col-md-2">
-                      <select class="utf_chosen_select" v-model="time.closeHour">
-                        <option v-for="hour in hours" :key="hour" :value="hour">{{hour}}</option>
+                      <select
+                        class="utf_chosen_select"
+                        v-model="time.closeHour"
+                      >
+                        <option v-for="hour in hours" :key="hour" :value="hour">
+                          {{ hour }}
+                        </option>
                       </select>
                     </div>
                     <div class="col-md-2">
-                      <select class="utf_chosen_select" v-model="time.closeMinute">
-                        <option v-for="minute in minutes" :key="minute" :value="minute">{{minute}}</option>
+                      <select
+                        class="utf_chosen_select"
+                        v-model="time.closeMinute"
+                      >
+                        <option
+                          v-for="minute in minutes"
+                          :key="minute"
+                          :value="minute"
+                        >
+                          {{ minute }}
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -185,20 +319,31 @@
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
                   <h3>
-                    <i class="sl sl-icon-tag"></i>{{ $t('text.features') }}
+                    <i class="sl sl-icon-tag"></i>{{ $t("text.features") }}
                   </h3>
                 </div>
                 <div class="checkboxes in-row amenities_checkbox">
                   <ul>
-                    <li v-for="feature in getCategoryFeatures()" :key="feature.id">
-                        <input :id="'input-feature' + feature.id" type="checkbox" name="check" :value="feature.id" v-model="selectedFeatures">
-                      <label :for="'input-feature' + feature.id">{{ feature['name_' + $i18n.locale] }}</label>
+                    <li
+                      v-for="feature in getCategoryFeatures()"
+                      :key="feature.id"
+                    >
+                      <input
+                        :id="'input-feature' + feature.id"
+                        type="checkbox"
+                        name="check"
+                        :value="feature.id"
+                        v-model="selectedFeatures"
+                      />
+                      <label :for="'input-feature' + feature.id">{{
+                        feature["name_" + $i18n.locale]
+                      }}</label>
                     </li>
                   </ul>
                 </div>
               </div>
               <button class="button preview" @click="checkErrors">
-                <i class="fa fa-arrow-circle-right"></i>{{ $t('text.save') }}
+                <i class="fa fa-arrow-circle-right"></i>{{ $t("text.save") }}
               </button>
             </div>
           </div>
@@ -209,92 +354,103 @@
 </template>
 
 <script>
-import { useStore } from 'vuex'
-import LeafletMap from '../common/LeafletMap.vue';
-import axios from 'axios';
-import { Form, Field, ErrorMessage } from 'vee-validate';
-import { useI18n } from 'vue-i18n';
-import { computed, ref } from 'vue';
-import { createVenue } from '@/services/venueService';
+import { useStore } from "vuex";
+import LeafletMap from "../common/LeafletMap.vue";
+import axios from "axios";
+import { Form, Field, ErrorMessage } from "vee-validate";
+import { required as requiredRule, email as emailRule } from '@vee-validate/rules';
+import { useI18n } from "vue-i18n";
+import { computed, ref } from "vue";
+import { createVenue } from "@/services/venueService";
 
-axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
+  "token"
+)}`;
 
 export default {
-  name: 'CreateVenueComponent',
+  name: "CreateVenueComponent",
 
   components: { LeafletMap, Form, Field, ErrorMessage },
 
-  props: ['id'],
+  props: ["id"],
 
   setup(props) {
     const { t, locale } = useI18n();
     const store = useStore();
     const selectedCategoryId = ref(null);
     const zoom = ref(7);
-    const title = ref('');
-    const address = ref('');
-    const phone = ref('');
-    const email = ref('');
-    const website = ref('');
-    const facebook = ref('');
-    const instagram = ref('');
-    const content_bg = ref('');
-    const content_en = ref('');
+    const title = ref("");
+    const address = ref("");
+    const phone = ref("");
+    const email = ref("");
+    const website = ref("");
+    const facebook = ref("");
+    const instagram = ref("");
+    const content_bg = ref("");
+    const content_en = ref("");
     const formRef = ref(null);
     const selectedFeatures = ref([]);
 
-    const categories = computed(() => store.getters['categories/categories']);
+    const categories = computed(() => store.getters["categories/categories"]);
 
     // eslint-disable-next-line no-unused-vars
-    const cities = computed(() => store.getters['cities/cities']);
+    const cities = computed(() => store.getters["cities/cities"]);
     const selectedCity = ref(cities.value ? cities.value[0] : null);
 
     // eslint-disable-next-line no-unused-vars
-    const user = computed(() => store.getters['auth/user']);
+    const user = computed(() => store.getters["auth/user"]);
 
     const days = computed(() => ({
-      1: t('text.monday'),
-      2: t('text.tuesday'),
-      3: t('text.wednesday'),
-      4: t('text.thursday'),
-      5: t('text.friday'),
-      6: t('text.saturday'),
-      7: t('text.sunday')
+      1: t("text.monday"),
+      2: t("text.tuesday"),
+      3: t("text.wednesday"),
+      4: t("text.thursday"),
+      5: t("text.friday"),
+      6: t("text.saturday"),
+      7: t("text.sunday"),
     }));
 
-    const hours = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
-    const minutes = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'));
+    const hours = Array.from({ length: 24 }, (_, i) =>
+      String(i).padStart(2, "0")
+    );
+    const minutes = Array.from({ length: 60 }, (_, i) =>
+      String(i).padStart(2, "0")
+    );
 
     const openingHours = computed(() => {
-      return Object.entries(days.value).map(entry => ({
+      return Object.entries(days.value).map((entry) => ({
         day: entry[0],
         dayName: days.value[entry[0]],
-        openHour: '00',
-        openMinute: '00',
-        closeHour: '00',
-        closeMinute: '00'
+        openHour: "00",
+        openMinute: "00",
+        closeHour: "00",
+        closeMinute: "00",
       }));
     });
 
     const getCategoryFeatures = () => {
-      let category = categories.value.find(category => category.id == props.id);
+      let category = categories.value.find(
+        (category) => category.id == props.id
+      );
       return category ? category.features : [];
     };
 
-    const selectCity = event => {
+    const selectCity = (event) => {
       let selectedCityId = event.target.value;
-      selectedCity.value = cities.value.find(city => city.id === Number(selectedCityId));
+      selectedCity.value = cities.value.find(
+        (city) => city.id === Number(selectedCityId)
+      );
       zoom.value = 13; // change the zoom level when a city is selected
     };
 
-    const getCategoryName = category => {
+    const getCategoryName = (category) => {
       const lang = locale.value;
-      return category['category_name_' + lang] || '';
+      return category["category_name_" + lang] || "";
     };
 
-    const getCategoryNameById = id => {
-      const category = categories.value.find(cat => cat.id === id);
-      return category ? getCategoryName(category) : '';
+    const getCategoryNameById = (id) => {
+      const category = categories.value.find((cat) => cat.id === id);
+      return category ? getCategoryName(category) : "";
     };
 
     const submitForm = async () => {
@@ -306,77 +462,86 @@ export default {
       console.log(selectedCity.value);
 
       // populate formData with form inputs
-      formData.append('title', title.value);
-      formData.append('address', address.value);
-      formData.append('city_id', selectedCity.value.id);
-      formData.append('phone', phone.value);
-      formData.append('email', email.value);
-      formData.append('website', website.value);
-      formData.append('facebook', facebook.value);
-      formData.append('instagram', instagram.value);
-      formData.append('content_bg', content_bg.value);
-      formData.append('content_en', content_en.value);
-      formData.append('category_id', props.id);
-      formData.append('user_id', user.value.id);
-      formData.append('openingHours', JSON.stringify(openingHours.value));
-      formData.append('lat', lat);
-      formData.append('lng', lng);
+      formData.append("title", title.value);
+      formData.append("address", address.value);
+      formData.append("city_id", selectedCity.value.id);
+      formData.append("phone", phone.value);
+      formData.append("email", email.value);
+      formData.append("website", website.value);
+      formData.append("facebook", facebook.value);
+      formData.append("instagram", instagram.value);
+      formData.append("content_bg", content_bg.value);
+      formData.append("content_en", content_en.value);
+      formData.append("category_id", props.id);
+      formData.append("user_id", user.value.id);
+      formData.append("openingHours", JSON.stringify(openingHours.value));
+      formData.append("lat", lat);
+      formData.append("lng", lng);
 
-     // add cover image to formData
-    const coverImageFile = ref(null); // Define a ref for the input element
+      // add cover image to formData
+      const coverImageFile = ref(null); // Define a ref for the input element
 
-    if (coverImageFile.value) {
-      formData.append('coverImage', coverImageFile.value);
-    }
+      if (coverImageFile.value) {
+        formData.append("coverImage", coverImageFile.value);
+      }
 
       // add other images to formData
       let otherImagesInput = ref(null); // Define a ref for the input element
-      const otherImagesFiles = computed(() => otherImagesInput.value ? otherImagesInput.value.files : null);
+      const otherImagesFiles = computed(() =>
+        otherImagesInput.value ? otherImagesInput.value.files : null
+      );
 
       const files = otherImagesFiles.value;
       if (files) {
         for (let i = 0; i < files.length; i++) {
-          formData.append('images[]', files[i]);
+          formData.append("images[]", files[i]);
         }
       }
 
       let selectedFeatures = [];
-      document.querySelectorAll('input[name="check"]:checked').forEach(checkbox => {
-        selectedFeatures.push(checkbox.value);
-      });
+      document
+        .querySelectorAll('input[name="check"]:checked')
+        .forEach((checkbox) => {
+          selectedFeatures.push(checkbox.value);
+        });
       // Add the selected features to formData
-      formData.append('features', selectedFeatures);
+      formData.append("features", selectedFeatures);
 
       for (let pair of formData.entries()) {
-        console.log(pair[0] + ', ' + pair[1]);
+        console.log(pair[0] + ", " + pair[1]);
       }
 
       // Use the centralized API call
       try {
-          const response = await createVenue(formData);
-          console.log(response);
-          // redirect to the new venue page, if needed
+        const response = await createVenue(formData);
+        console.log(response);
+        // redirect to the new venue page, if needed
       } catch (error) {
-          console.log(error);
+        console.log(error);
       }
     };
 
     const validateEmail = value => {
-      if (!value) {
-        return t('validation.required');
-      }
+        if (!requiredRule(value)) {
+            return t("validation.required");
+        }
 
-      const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-      if (!regex.test(value)) {
-        return t('validation.email');
-      }
+        if (!emailRule(value)) {
+            return t("validation.email");
+        }
 
-      return true;
+        return true;
     };
 
-    const isRequired = value => {
-      return !!value || 'Category is required';
+    const validateCategory = (value) => {
+      return !!value || t('validation.choose_category');
     };
+
+    const isRequired = (value) => {
+      if (!requiredRule(value)) {
+            return t("validation.required");
+        }
+    }
 
     const checkErrors = async () => {
       const result = await formRef.value.validate();
@@ -385,18 +550,18 @@ export default {
         const firstErrorField = Object.keys(result.errors)[0];
         let errorElement;
 
-        if (firstErrorField === 'category') {
+        if (firstErrorField === "category") {
           // This handles the special case where the error is on the hidden category input.
           // Here, we scroll to the dropdown associated with this input.
-          errorElement = document.querySelector('#dropdownCategory');
+          errorElement = document.querySelector("#dropdownCategory");
         } else {
           errorElement = document.querySelector(`[name="${firstErrorField}"]`);
         }
 
         if (errorElement) {
           errorElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
+            behavior: "smooth",
+            block: "center",
           });
         }
       }
@@ -427,12 +592,13 @@ export default {
       getCategoryNameById,
       submitForm,
       validateEmail,
+      validateCategory,
       isRequired,
       checkErrors,
       formRef,
       categories,
       cities,
-      selectedFeatures
+      selectedFeatures,
     };
   },
 
@@ -447,5 +613,5 @@ export default {
       return this.selectedCity ? this.selectedCity.lng : 25.4833039; // return default lng if no city is selected
     },
   },
-}
+};
 </script>
