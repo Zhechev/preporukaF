@@ -325,7 +325,7 @@
                 <div class="checkboxes in-row amenities_checkbox">
                   <ul>
                     <li
-                      v-for="feature in getCategoryFeatures()"
+                      v-for="feature in categoryFeatures"
                       :key="feature.id"
                     >
                       <input
@@ -341,6 +341,7 @@
                     </li>
                   </ul>
                 </div>
+
               </div>
               <button class="button preview" @click="checkErrors">
                 <i class="fa fa-arrow-circle-right"></i>{{ $t("text.save") }}
@@ -372,9 +373,7 @@ export default {
 
   components: { LeafletMap, Form, Field, ErrorMessage },
 
-  props: ["id"],
-
-  setup(props) {
+  setup() {
     const { t, locale } = useI18n();
     const store = useStore();
     const selectedCategoryId = ref(null);
@@ -446,12 +445,13 @@ export default {
       }));
     });
 
-    const getCategoryFeatures = () => {
+    const categoryFeatures = computed(() => {
+      console.log(selectedCategoryId.value)
       let category = categories.value.find(
-        (category) => category.id == props.id
+        (category) => category.id == selectedCategoryId.value
       );
       return category ? category.features : [];
-    };
+    });
 
     const getCategoryName = (category) => {
       const lang = locale.value;
@@ -598,7 +598,7 @@ export default {
       instagram,
       content_bg,
       content_en,
-      getCategoryFeatures,
+      categoryFeatures,
       selectCity,
       getCategoryName,
       getCategoryNameById,
