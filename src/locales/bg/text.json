@@ -28,5 +28,7 @@
     "оpening_hours": "Отваря в",
     "closing_hours": "Затваря в",
     "features": "Характеристики",
-    "save": "Запази"
+    "save": "Запази",
+    "login": "Вход",
+    "add_venue": "Добави обект"
 }

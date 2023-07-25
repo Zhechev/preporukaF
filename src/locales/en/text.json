@@ -28,5 +28,7 @@
     "оpening_hours": "Opening hours",
     "closing_hours": "Closing hours",
     "features": "Features",
-    "save": "Save"
+    "save": "Save",
+    "login": "Login",
+    "add_venue": "Add venue"
 }
