@@ -1,8 +1,8 @@
 <template>
   <div id="main_wrapper">
-    <Form action="" id="add_venue_form" enctype="multipart/form-data" method="POST" @submit="submitForm">
-      <input type="hidden" name="lat" value="" id="lat" />
-      <input type="hidden" name="lng" value="" id="lng" />
+    <Form ref="formRef" @submit="submitForm">
+      <input type="hidden" name="lat" :value="selectedCityLat" id="lat" />
+      <input type="hidden" name="lng" :value="selectedCityLng" id="lng" />
       <input type="hidden" name="category_id" value="" />
       <div class="container margin-bottom-75">
         <div class="row">
@@ -11,38 +11,127 @@
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
                   <h3>
-                    <i class="sl sl-icon-tag"></i><font-awesome-icon :icon="['fas', 'tag']" />{{ $t('text.venue_title') }}
+                    <i class="sl sl-icon-tag"></i
+                    ><font-awesome-icon :icon="['fas', 'tag']" />{{
+                      $t("text.venue_title")
+                    }}
                   </h3>
                 </div>
                 <div class="row with-forms">
                   <div class="col-md-6">
-                    <h5>{{ $t('text.title') }}</h5>
-                    <Field v-model="title" type="text" class="search-field" name="title" id="title" :placeholder="$t('text.title')" />
+                    <h5>{{ $t("text.title") }}</h5>
+                    <Field
+                      v-model="title"
+                      type="text"
+                      class="search-field"
+                      name="title"
+                      id="title"
+                      :placeholder="$t('text.title')"
+                      :rules="isRequired"
+                    />
+                    <ErrorMessage name="title" />
+                  </div>
+                  <div class="col-md-6">
+                    <div class="dropdown">
+                      <button
+                        class="btn dropdown-toggle"
+                        type="button"
+                        id="dropdownCategory"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        {{
+                          selectedCategoryId
+                            ? getCategoryNameById(selectedCategoryId)
+                            : $t("validation.choose_category")
+                        }}
+                      </button>
+                      <ul
+                        id="search-choose-category"
+                        class="dropdown-menu"
+                        aria-labelledby="dropdownCategory"
+                      >
+                        <li v-for="category in categories" :key="category.id">
+                          <a
+                            class="dropdown-item"
+                            href="#"
+                            @click.prevent="selectedCategoryId = category.id"
+                          >
+                            {{ getCategoryName(category) }}
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <!-- Hidden input field for validation -->
+                    <Field
+                      v-model="selectedCategoryId"
+                      type="hidden"
+                      name="category"
+                      :rules="validateCategory"
+                    />
+                    <ErrorMessage name="category" />
                   </div>
                 </div>
               </div>
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
                   <h3>
-                    <i class="sl sl-icon-map"></i>{{ $t('text.location') }}
+                    <i class="sl sl-icon-map"></i>{{ $t("text.location") }}
                   </h3>
                 </div>
                 <div class="utf_submit_section">
                   <div class="row with-forms">
                     <div class="col-md-6">
-                      <h5>{{ $t('text.city') }}</h5>
-                      <div class="intro-search-field utf-chosen-cat-single" id="city_id_div">
-                        <select v-if="cities && cities.length > 0" @change="selectCity($event)" class="" name="city_id" data-selected-text-format="count" data-size="7" :title="$t('text.venue_title')" id="city_id">
-                          <option v-for="city in cities" :key="city.id" :value="city.id">{{ city['name_' + $i18n.locale] }}</option>
+                      <h5>{{ $t("text.city") }}</h5>
+                      <div
+                        class="intro-search-field utf-chosen-cat-single"
+                        id="city_id_div"
+                      >
+                        <select
+                          v-if="cities && cities.length > 0"
+                          @change="selectCity"
+                          class=""
+                          name="city_id"
+                          data-selected-text-format="count"
+                          data-size="7"
+                          :title="$t('text.venue_title')"
+                          id="city_id"
+                          v-model="selectedCity"
+                        >
+                          <option
+                            v-for="city in cities"
+                            :key="city.id"
+                            :value="city.id"
+                          >
+                            {{ city["name_" + $i18n.locale] }}
+                          </option>
                         </select>
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <h5>{{ $t('text.address') }}</h5>
-                      <input v-model="address" type="text" class="input-text" name="address" id="address" :placeholder="$t('text.address')">
+                      <h5>{{ $t("text.address") }}</h5>
+                      <Field
+                        v-model="address"
+                        type="text"
+                        class="input-text"
+                        name="address"
+                        id="address"
+                        :placeholder="$t('text.address')"
+                        :rules="isRequired"
+                      />
+                      <ErrorMessage name="address" />
                     </div>
-                    <div id="utf_listing_location" class="col-md-12 utf_listing_section map">
-                      <leaflet-map ref="map" :lat="selectedCityLat" :lng="selectedCityLng" :zoom="zoom" :interactive=true></leaflet-map>
+                    <div
+                      id="utf_listing_location"
+                      class="col-md-12 utf_listing_section map"
+                    >
+                      <leaflet-map
+                        ref="map"
+                        :lat="selectedCityLat"
+                        :lng="selectedCityLng"
+                        :zoom="zoom"
+                        :interactive="true"
+                      ></leaflet-map>
                     </div>
                   </div>
                 </div>
@@ -50,97 +139,178 @@
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
                   <h3>
-                    <i class="sl sl-icon-picture"></i>{{ $t('text.photos') }}
+                    <i class="sl sl-icon-picture"></i>{{ $t("text.photos") }}
                   </h3>
                 </div>
                 <div class="row with-forms">
                   <div class="utf_submit_section col-md-6">
-                    <h4>{{ $t('text.cover_photo') }}</h4>
+                    <h4>{{ $t("text.cover_photo") }}</h4>
                     <input ref="coverImage" type="file" name="coverImage" />
                   </div>
                   <div class="utf_submit_section col-md-6">
-                    <h4>{{ $t('text.other_photos') }}</h4>
-                    <input ref="otherImages" type="file" name="images[]" multiple/>
+                    <h4>{{ $t("text.other_photos") }}</h4>
+                    <input
+                      ref="otherImagesInput"
+                      type="file"
+                      name="images[]"
+                      multiple
+                    />
                   </div>
                 </div>
               </div>
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
                   <h3>
-                    <i class="sl sl-icon-list"></i>{{ $t('text.content') }}
+                    <i class="sl sl-icon-list"></i>{{ $t("text.content") }}
                   </h3>
                 </div>
                 <div class="row with-forms">
                   <div class="col-md-6">
-                    <h5>{{ $t('text.phone') }}</h5>
-                    <input v-model="phone" type="text" name="phone" id="phone" :placeholder="$t('text.phone')">
+                    <h5>{{ $t("text.phone") }}</h5>
+                    <input
+                      v-model="phone"
+                      type="text"
+                      name="phone"
+                      id="phone"
+                      :placeholder="$t('text.phone')"
+                    />
                   </div>
                   <div class="col-md-6">
                     <h5>E-mail</h5>
-                    <Field v-model="email" type="text" class="search-field" name="email" id="email" placeholder="E-mail" :rules="validateEmail" />
+                    <Field
+                      v-model="email"
+                      type="text"
+                      class="search-field"
+                      name="email"
+                      id="email"
+                      placeholder="E-mail"
+                      :rules="validateEmail"
+                    />
                     <ErrorMessage name="email" />
                   </div>
                   <div class="col-md-6">
                     <h5>Website</h5>
-                    <input v-model="website" type="text" name="website" placeholder="Website">
+                    <input
+                      v-model="website"
+                      type="text"
+                      name="website"
+                      placeholder="Website"
+                    />
                   </div>
                   <div class="col-md-6">
                     <h5>Facebook</h5>
-                    <input v-model="facebook" type="text" name="facebook" placeholder="Facebook">
+                    <input
+                      v-model="facebook"
+                      type="text"
+                      name="facebook"
+                      placeholder="Facebook"
+                    />
                   </div>
                   <div class="col-md-6">
                     <h5>Instagram</h5>
-                    <input v-model="instagram" type="text" name="instagram" placeholder="Instagram">
+                    <input
+                      v-model="instagram"
+                      type="text"
+                      name="instagram"
+                      placeholder="Instagram"
+                    />
                   </div>
                   <div class="col-md-12">
-                    <h5>{{ $t('text.description_bg') }}</h5>
-                    <textarea v-model="content_bg" name="content_bg" cols="40" rows="3" id="content_bg" :placeholder="$t('text.description_bg')" spellcheck="true"></textarea>
+                    <h5>{{ $t("text.description_bg") }}</h5>
+                    <Field
+                      v-model="content_bg"
+                      name="content_bg"
+                      cols="40"
+                      rows="3"
+                      id="content_bg"
+                      :placeholder="$t('text.description_bg')"
+                      spellcheck="true"
+                    />
+                    <ErrorMessage name="content_bg" />
                   </div>
                   <div class="col-md-12">
-                    <h5>{{ $t('text.description_en') }}</h5>
-                    <textarea v-model="content_en" name="content_en" cols="40" rows="3" id="content_en" :placeholder="$t('text.description_en')" spellcheck="true"></textarea>
+                    <h5>{{ $t("text.description_en") }}</h5>
+                    <textarea
+                      v-model="content_en"
+                      name="content_en"
+                      cols="40"
+                      rows="3"
+                      id="content_en"
+                      :placeholder="$t('text.description_en')"
+                      spellcheck="true"
+                    ></textarea>
                   </div>
                 </div>
               </div>
 
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
-                  <h3><i class="sl sl-icon-clock"></i>{{ $t('text.work_time') }}</h3>
+                  <h3>
+                    <i class="sl sl-icon-clock"></i>{{ $t("text.work_time") }}
+                  </h3>
                 </div>
 
                 <div class="switcher-content">
-                  <div class=row>
-                    <div class="col-md-3">
+                  <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-4">
+                      <h5>{{ $t("text.оpening_hours") }}:</h5>
                     </div>
                     <div class="col-md-4">
-                      <h5>{{ $t('text.оpening_hours') }}:</h5>
-                    </div>
-                    <div class="col-md-4">
-                      <h5>{{ $t('text.closing_hours') }}:</h5>
+                      <h5>{{ $t("text.closing_hours") }}:</h5>
                     </div>
                   </div>
-                  <div class="row utf_opening_day utf_js_demo_hours" v-for="(time, index) in openingHours" :key="index">
+                  <div
+                    class="row utf_opening_day utf_js_demo_hours"
+                    v-for="(time, index) in openingHours"
+                    :key="index"
+                  >
                     <div class="col-md-2">
-                      <h5>{{time.dayName}} :-</h5>
+                      <h5>{{ time.dayName }} :-</h5>
                     </div>
                     <div class="col-md-2">
                       <select class="utf_chosen_select" v-model="time.openHour">
-                        <option v-for="hour in hours" :key="hour" :value="hour">{{hour}}</option>
+                        <option v-for="hour in hours" :key="hour" :value="hour">
+                          {{ hour }}
+                        </option>
                       </select>
                     </div>
                     <div class="col-md-2">
-                      <select class="utf_chosen_select" v-model="time.openMinute">
-                        <option v-for="minute in minutes" :key="minute" :value="minute">{{minute}}</option>
+                      <select
+                        class="utf_chosen_select"
+                        v-model="time.openMinute"
+                      >
+                        <option
+                          v-for="minute in minutes"
+                          :key="minute"
+                          :value="minute"
+                        >
+                          {{ minute }}
+                        </option>
                       </select>
                     </div>
                     <div class="col-md-2">
-                      <select class="utf_chosen_select" v-model="time.closeHour">
-                        <option v-for="hour in hours" :key="hour" :value="hour">{{hour}}</option>
+                      <select
+                        class="utf_chosen_select"
+                        v-model="time.closeHour"
+                      >
+                        <option v-for="hour in hours" :key="hour" :value="hour">
+                          {{ hour }}
+                        </option>
                       </select>
                     </div>
                     <div class="col-md-2">
-                      <select class="utf_chosen_select" v-model="time.closeMinute">
-                        <option v-for="minute in minutes" :key="minute" :value="minute">{{minute}}</option>
+                      <select
+                        class="utf_chosen_select"
+                        v-model="time.closeMinute"
+                      >
+                        <option
+                          v-for="minute in minutes"
+                          :key="minute"
+                          :value="minute"
+                        >
+                          {{ minute }}
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -149,20 +319,31 @@
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
                   <h3>
-                    <i class="sl sl-icon-tag"></i>{{ $t('text.features') }}
+                    <i class="sl sl-icon-tag"></i>{{ $t("text.features") }}
                   </h3>
                 </div>
                 <div class="checkboxes in-row amenities_checkbox">
                   <ul>
-                    <li v-for="feature in getCategoryFeatures()" :key="feature.id">
-                      <input :id="'input-feature' + feature.id" type="checkbox" name="check" :value="feature.id">
-                      <label :for="'input-feature' + feature.id">{{ feature['name_' + $i18n.locale] }}</label>
+                    <li
+                      v-for="feature in getCategoryFeatures()"
+                      :key="feature.id"
+                    >
+                      <input
+                        :id="'input-feature' + feature.id"
+                        type="checkbox"
+                        name="check"
+                        :value="feature.id"
+                        v-model="selectedFeatures"
+                      />
+                      <label :for="'input-feature' + feature.id">{{
+                        feature["name_" + $i18n.locale]
+                      }}</label>
                     </li>
                   </ul>
                 </div>
               </div>
-              <button class="button preview">
-                <i class="fa fa-arrow-circle-right"></i>{{ $t('text.save') }}
+              <button class="button preview" @click="checkErrors">
+                <i class="fa fa-arrow-circle-right"></i>{{ $t("text.save") }}
               </button>
             </div>
           </div>
@@ -173,186 +354,264 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import LeafletMap from '../common/LeafletMap.vue';
-import axios from 'axios';
-import { Form, Field, ErrorMessage } from 'vee-validate';
-import { useI18n } from 'vue-i18n';
-import { computed } from 'vue';
+import { useStore } from "vuex";
+import LeafletMap from "../common/LeafletMap.vue";
+import axios from "axios";
+import { Form, Field, ErrorMessage } from "vee-validate";
+import { required as requiredRule, email as emailRule } from '@vee-validate/rules';
+import { useI18n } from "vue-i18n";
+import { computed, ref } from "vue";
+import { createVenue } from "@/services/venueService";
 
-
-axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-
+axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
+  "token"
+)}`;
 
 export default {
-  name: 'CreateVenueComponent',
+  name: "CreateVenueComponent",
 
   components: { LeafletMap, Form, Field, ErrorMessage },
 
-  props: ['id'],
+  props: ["id"],
 
-  data() {
-    return {
-      selectedCity: null,
-      zoom: 7,
-      title: '',
-      address: '',
-      phone: '',
-      email: '',
-      website: '',
-      facebook: '',
-      instagram: '',
-      content_bg: '',
-      content_en: '',
-    }
-  },
-
-  setup() {
+  setup(props) {
     const { t, locale } = useI18n();
+    const store = useStore();
+    const selectedCategoryId = ref(null);
+    const zoom = ref(7);
+    const title = ref("");
+    const address = ref("");
+    const phone = ref("");
+    const email = ref("");
+    const website = ref("");
+    const facebook = ref("");
+    const instagram = ref("");
+    const content_bg = ref("");
+    const content_en = ref("");
+    const formRef = ref(null);
+    const selectedFeatures = ref([]);
+    const selectedCity = ref("");
+
+    const categories = computed(() => store.getters["categories/categories"]);
+
+    const selectCity = (event) => {
+      let selectedCityId = event.target.value;
+      selectedCity.value = cities.value.find(
+        (city) => city.id === Number(selectedCityId)
+      );
+
+      zoom.value = 13; // change the zoom level when a city is selected
+    };
+
+    // eslint-disable-next-line no-unused-vars
+    const cities = computed(() => store.getters["cities/cities"]);
+
+    const selectedCityLat = computed(() => {
+      return selectedCity.value && selectedCity.value.lat ? selectedCity.value.lat : 42.7249925;
+    });
+
+    const selectedCityLng = computed(() => {
+      return selectedCity.value && selectedCity.value.lng ? selectedCity.value.lng : 25.4833039;
+    });
+
+
+    // eslint-disable-next-line no-unused-vars
+    const user = computed(() => store.getters["auth/user"]);
+
     const days = computed(() => ({
-      1: t('text.monday'),
-      2: t('text.tuesday'),
-      3: t('text.wednesday'),
-      4: t('text.thursday'),
-      5: t('text.friday'),
-      6: t('text.saturday'),
-      7: t('text.sunday')
+      1: t("text.monday"),
+      2: t("text.tuesday"),
+      3: t("text.wednesday"),
+      4: t("text.thursday"),
+      5: t("text.friday"),
+      6: t("text.saturday"),
+      7: t("text.sunday"),
     }));
-    
-    const hours = Array.from({length: 24}, (_, i) => String(i).padStart(2, '0'));
-    const minutes = Array.from({length: 60}, (_, i) => String(i).padStart(2, '0'));
+
+    const hours = Array.from({ length: 24 }, (_, i) =>
+      String(i).padStart(2, "0")
+    );
+    const minutes = Array.from({ length: 60 }, (_, i) =>
+      String(i).padStart(2, "0")
+    );
 
     const openingHours = computed(() => {
-      return Object.entries(days.value).map(entry => ({ 
-        day: entry[0], 
-        dayName: days.value[entry[0]], 
-        openHour: '00', 
-        openMinute: '00', 
-        closeHour: '00', 
-        closeMinute: '00' 
+      return Object.entries(days.value).map((entry) => ({
+        day: entry[0],
+        dayName: days.value[entry[0]],
+        openHour: "00",
+        openMinute: "00",
+        closeHour: "00",
+        closeMinute: "00",
       }));
     });
-    
+
+    const getCategoryFeatures = () => {
+      let category = categories.value.find(
+        (category) => category.id == props.id
+      );
+      return category ? category.features : [];
+    };
+
+    const getCategoryName = (category) => {
+      const lang = locale.value;
+      return category["category_name_" + lang] || "";
+    };
+
+    const getCategoryNameById = (id) => {
+      const category = categories.value.find((cat) => cat.id === id);
+      return category ? getCategoryName(category) : "";
+    };
+
+    const submitForm = async () => {
+      let formData = new FormData();
+
+      const lat = selectedCity.value ? selectedCity.value.lat : 42.7249925;
+      const lng = selectedCity.value ? selectedCity.value.lng : 25.4833039;
+
+      // populate formData with form inputs
+      formData.append("title", title.value);
+      formData.append("address", address.value);
+      formData.append("city_id", selectedCity.value.id);
+      formData.append("phone", phone.value);
+      formData.append("email", email.value);
+      formData.append("website", website.value);
+      formData.append("facebook", facebook.value);
+      formData.append("instagram", instagram.value);
+      formData.append("content_bg", content_bg.value);
+      formData.append("content_en", content_en.value);
+      formData.append("category_id", selectedCategoryId.value);
+      formData.append("user_id", user.value.id);
+      formData.append("openingHours", JSON.stringify(openingHours.value));
+      formData.append("lat", lat);
+      formData.append("lng", lng);
+
+      // add cover image to formData
+      const coverImageFile = ref(null); // Define a ref for the input element
+
+      if (coverImageFile.value) {
+        formData.append("coverImage", coverImageFile.value);
+      }
+
+      // add other images to formData
+      let otherImagesInput = ref(null); // Define a ref for the input element
+      const otherImagesFiles = computed(() =>
+        otherImagesInput.value ? otherImagesInput.value.files : null
+      );
+
+      const files = otherImagesFiles.value;
+      if (files) {
+        for (let i = 0; i < files.length; i++) {
+          formData.append("images[]", files[i]);
+        }
+      }
+
+      let selectedFeatures = [];
+      document
+        .querySelectorAll('input[name="check"]:checked')
+        .forEach((checkbox) => {
+          selectedFeatures.push(checkbox.value);
+        });
+      // Add the selected features to formData
+      formData.append("features", selectedFeatures);
+
+      // for (let pair of formData.entries()) {
+      //   console.log(pair[0] + ", " + pair[1]);
+      // }
+
+      // Use the centralized API call
+      try {
+        const response = await createVenue(formData);
+        console.log(response);
+        // redirect to the new venue page, if needed
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const validateEmail = value => {
+        if (!requiredRule(value)) {
+            return t("validation.required");
+        }
+
+        if (!emailRule(value)) {
+            return t("validation.email");
+        }
+
+        return true;
+    };
+
+    const validateCategory = (value) => {
+      return !!value || t('validation.choose_category');
+    };
+
+    const isRequired = (value) => {
+      if (!requiredRule(value)) {
+            return t("validation.required");
+      }
+      
+      return true;
+    }
+
+    const checkErrors = async () => {
+      const result = await formRef.value.validate();
+
+      if (!result.valid) {
+        const firstErrorField = Object.keys(result.errors)[0];
+        let errorElement;
+
+        if (firstErrorField === "category") {
+          // This handles the special case where the error is on the hidden category input.
+          // Here, we scroll to the dropdown associated with this input.
+          errorElement = document.querySelector("#dropdownCategory");
+        } else {
+          errorElement = document.querySelector(`[name="${firstErrorField}"]`);
+        }
+
+        if (errorElement) {
+          errorElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }
+      return result;
+    };
+
     return {
       days,
       hours,
       minutes,
       openingHours,
-      locale
+      locale,
+      selectedCategoryId,
+      selectedCity,
+      selectedCityLat,
+      selectedCityLng,
+      zoom,
+      title,
+      address,
+      phone,
+      email,
+      website,
+      facebook,
+      instagram,
+      content_bg,
+      content_en,
+      getCategoryFeatures,
+      selectCity,
+      getCategoryName,
+      getCategoryNameById,
+      submitForm,
+      validateEmail,
+      validateCategory,
+      isRequired,
+      checkErrors,
+      formRef,
+      categories,
+      cities,
+      selectedFeatures,
     };
   },
-
-  methods: {
-    getCategoryFeatures() {
-      let category = this.categories.find(category => category.id == this.id);
-      return category.features;
-    },
-    selectCity(event) {
-      let selectedCityId = event.target.value;
-      this.selectedCity = this.cities.find(city => city.id === Number(selectedCityId));
-      this.zoom = 13; // change the zoom level when a city is selected
-    },
-
-    submitForm() {
-      let formData = new FormData();
-
-      const lat = this.selectedCityLat;
-      const lng = this.selectedCityLng;
-
-      // populate formData with form inputs
-      formData.append('title', this.title);
-      formData.append('address', this.address);
-      formData.append('city_id', this.selectedCity.id);
-      formData.append('phone', this.phone);
-      formData.append('email', this.email);
-      formData.append('website', this.website);
-      formData.append('facebook', this.facebook);
-      formData.append('instagram', this.instagram);
-      formData.append('content_bg', this.content_bg);
-      formData.append('content_en', this.content_en);
-      formData.append('category_id', this.id);
-      formData.append('user_id', this.user.id);
-      formData.append('openingHours', JSON.stringify(this.openingHours));
-      formData.append('lat', lat);
-      formData.append('lng', lng);
-
-      // add cover image to formData
-      let coverImageFile = this.$refs.coverImage.files[0];
-      if (coverImageFile) {
-        formData.append('coverImage', coverImageFile);
-      }
-
-      // add other images to formData
-      let otherImagesFiles = this.$refs.otherImages.files;
-      if (otherImagesFiles) {
-        for (let i = 0; i < otherImagesFiles.length; i++) {
-          formData.append('images[]', otherImagesFiles[i]);
-        }
-      }
-
-      let selectedFeatures = [];
-      document.querySelectorAll('input[name="check"]:checked').forEach(checkbox => {
-        selectedFeatures.push(checkbox.value);
-      });
-      // Add the selected features to formData
-      formData.append('features', selectedFeatures);
-
-      for (let pair of formData.entries()) {
-        console.log(pair[0]+ ', '+ pair[1]);
-      }
-      alert(1);
-
-      // API call
-      axios.post('http://preporuka.zhechev.eu/api/venues', formData, {
-          headers: {
-              'Content-Type': 'multipart/form-data'
-          }
-      })
-      .then(response => {
-          console.log(response);
-          // redirect to the new venue page, if needed
-      })
-      .catch(error => {
-          console.log(error);
-      });
-    },
-
-    validateEmail(value) {
-      if (!value) {
-        return this.$t('validation.required');
-      }
-
-      const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-      if (!regex.test(value)) {
-        return this.$t('validation.email');
-      }
-
-      return true;
-    },
-  },
-
-  computed: {
-    ...mapGetters({
-      categories: 'categories/categories',
-      cities: 'cities/cities',
-      user: 'auth/user' // add this line
-    }),
-        userId() {
-      return this.user.id;
-    },
-    selectedCityLat() {
-      return this.selectedCity ? this.selectedCity.lat : 42.7249925;  // return default lat if no city is selected
-    },
-
-    selectedCityLng() {
-      return this.selectedCity ? this.selectedCity.lng : 25.4833039;  // return default lng if no city is selected
-    },
-  },
-
-  mounted() {
-    this.selectedCity = this.cities[0]
-    console.log(this.openingHours);
-  }
-}
+};
 </script>
-    
