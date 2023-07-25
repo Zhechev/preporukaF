@@ -43,7 +43,7 @@
                         {{
                           selectedCategoryId
                             ? getCategoryNameById(selectedCategoryId)
-                            : $t("text.choose_category")
+                            : $t("validation.choose_category")
                         }}
                       </button>
                       <ul
@@ -101,7 +101,7 @@
                           <option
                             v-for="city in cities"
                             :key="city.id"
-                            :value="city"
+                            :value="city.id"
                           >
                             {{ city["name_" + $i18n.locale] }}
                           </option>
@@ -390,12 +390,30 @@ export default {
     const content_en = ref("");
     const formRef = ref(null);
     const selectedFeatures = ref([]);
+    const selectedCity = ref("");
 
     const categories = computed(() => store.getters["categories/categories"]);
 
+    const selectCity = (event) => {
+      let selectedCityId = event.target.value;
+      selectedCity.value = cities.value.find(
+        (city) => city.id === Number(selectedCityId)
+      );
+
+      zoom.value = 13; // change the zoom level when a city is selected
+    };
+
     // eslint-disable-next-line no-unused-vars
     const cities = computed(() => store.getters["cities/cities"]);
-    const selectedCity = ref(cities.value ? cities.value[0] : null);
+
+    const selectedCityLat = computed(() => {
+      return selectedCity.value && selectedCity.value.lat ? selectedCity.value.lat : 42.7249925;
+    });
+
+    const selectedCityLng = computed(() => {
+      return selectedCity.value && selectedCity.value.lng ? selectedCity.value.lng : 25.4833039;
+    });
+
 
     // eslint-disable-next-line no-unused-vars
     const user = computed(() => store.getters["auth/user"]);
@@ -435,14 +453,6 @@ export default {
       return category ? category.features : [];
     };
 
-    const selectCity = (event) => {
-      let selectedCityId = event.target.value;
-      selectedCity.value = cities.value.find(
-        (city) => city.id === Number(selectedCityId)
-      );
-      zoom.value = 13; // change the zoom level when a city is selected
-    };
-
     const getCategoryName = (category) => {
       const lang = locale.value;
       return category["category_name_" + lang] || "";
@@ -459,8 +469,6 @@ export default {
       const lat = selectedCity.value ? selectedCity.value.lat : 42.7249925;
       const lng = selectedCity.value ? selectedCity.value.lng : 25.4833039;
 
-      console.log(selectedCity.value);
-
       // populate formData with form inputs
       formData.append("title", title.value);
       formData.append("address", address.value);
@@ -472,7 +480,7 @@ export default {
       formData.append("instagram", instagram.value);
       formData.append("content_bg", content_bg.value);
       formData.append("content_en", content_en.value);
-      formData.append("category_id", props.id);
+      formData.append("category_id", selectedCategoryId.value);
       formData.append("user_id", user.value.id);
       formData.append("openingHours", JSON.stringify(openingHours.value));
       formData.append("lat", lat);
@@ -507,9 +515,9 @@ export default {
       // Add the selected features to formData
       formData.append("features", selectedFeatures);
 
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-      }
+      // for (let pair of formData.entries()) {
+      //   console.log(pair[0] + ", " + pair[1]);
+      // }
 
       // Use the centralized API call
       try {
@@ -540,7 +548,9 @@ export default {
     const isRequired = (value) => {
       if (!requiredRule(value)) {
             return t("validation.required");
-        }
+      }
+      
+      return true;
     }
 
     const checkErrors = async () => {
@@ -576,6 +586,8 @@ export default {
       locale,
       selectedCategoryId,
       selectedCity,
+      selectedCityLat,
+      selectedCityLng,
       zoom,
       title,
       address,
@@ -600,18 +612,6 @@ export default {
       cities,
       selectedFeatures,
     };
-  },
-
-  computed: {
-    userId() {
-      return this.user.id;
-    },
-    selectedCityLat() {
-      return this.selectedCity ? this.selectedCity.lat : 42.7249925; // return default lat if no city is selected
-    },
-    selectedCityLng() {
-      return this.selectedCity ? this.selectedCity.lng : 25.4833039; // return default lng if no city is selected
-    },
   },
 };
 </script>
