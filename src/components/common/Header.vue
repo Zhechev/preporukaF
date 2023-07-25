@@ -7,9 +7,7 @@
         </div>
         <div class="utf_right_side">
           <div class="header_widget d-flex">
-            <router-link :to="{ name: '' }" class="button border with-icon">
-              <font-awesome-icon :icon="['fas', 'location-dot']" /><span class="txt">{{ $t('text.add_venue') }}</span>
-            </router-link>
+            <router-link :to="{ name: 'createVenue' }" class="button border with-icon"><font-awesome-icon :icon="['fas', 'location-dot']" /><span class="txt">{{ $t('text.add_venue') }}</span></router-link>
             <router-link :to="{ name: 'login' }" class="button border sign-in popup-with-zoom-anim" v-if="!isAuth">
               <font-awesome-icon :icon="['fas', 'sign-in']" />
               <span class="txt none">{{ $t('text.login') }}</span>

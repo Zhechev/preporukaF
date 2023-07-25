@@ -81,7 +81,7 @@ const routes = [
     },
     {
         name: "createVenue",
-        path: "/venues/create/:id",
+        path: "/venues/create/",
         props: true,
         component: CreateVenue,
         meta: {
