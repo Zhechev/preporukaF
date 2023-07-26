@@ -204,7 +204,7 @@ h2.headline_part span {
 	font-size: 20px;
 	line-height: 30px;
 }
-input, input[type="text"], input[type="password"], input[type="email"], input[type="number"], textarea, select {
+input, input[type="text"], input[type="password"], input[type="email"], input[type="number"], textarea, select, .form-dropdown {
 	height: 50px;
 	line-height: 50px;
 	padding: 0 15px;
@@ -226,6 +226,16 @@ input, input[type="text"], input[type="password"], input[type="email"], input[ty
 select {
 	padding: 15px 18px;
 	cursor: pointer;
+}
+.form-dropdown {
+	text-align: left;
+	line-height: 0;
+}
+.form-dropdown-menu {
+	width: 100%;
+}
+.form-dropdown-menu:after {
+	float: right;
 }
 .main_input_search_part_item .utf_chosen_select{
 	background:#fff;
@@ -1914,9 +1924,6 @@ button.panel-cancel:active {
 .row.with-forms {
 	margin-left: -10px;
 	margin-right: -10px;
-}
-.with-forms .col-xs-1, .with-forms .col-sm-1, .with-forms .col-md-1, .with-forms .col-lg-1, .with-forms .col-xs-2, .with-forms .col-sm-2, .with-forms .col-md-2, .with-forms .col-lg-2, .with-forms .col-xs-3, .with-forms .col-sm-3, .with-forms .col-md-3, .with-forms .col-lg-3, .with-forms .col-xs-4, .with-forms .col-sm-4, .with-forms .col-md-4, .with-forms .col-lg-4, .with-forms .col-xs-5, .with-forms .col-sm-5, .with-forms .col-md-5, .with-forms .col-lg-5, .with-forms .col-xs-6, .with-forms .col-sm-6, .with-forms .col-md-6, .with-forms .col-lg-6, .with-forms .col-xs-7, .with-forms .col-sm-7, .with-forms .col-md-7, .with-forms .col-lg-7, .with-forms .col-xs-8, .with-forms .col-sm-8, .with-forms .col-md-8, .with-forms .col-lg-8, .with-forms .col-xs-9, .with-forms .col-sm-9, .with-forms .col-md-9, .with-forms .col-lg-9, .with-forms .col-xs-10, .with-forms .col-sm-10, .with-forms .col-md-10, .with-forms .col-lg-10, .with-forms .col-xs-11, .with-forms .col-sm-11, .with-forms .col-md-11, .with-forms .col-lg-11, .with-forms .col-xs-12, .with-forms .col-sm-12, .with-forms .col-md-12, .with-forms .col-lg-12 {
-	padding: 0 10px;
 }
 
 /*==========
@@ -5173,7 +5180,7 @@ label.switch {
 #utf_add_listing_part h5 i {
 	padding-right: 4px;
 }
-.utf_add_listing_part_headline_part i {
+.utf_add_listing_part_headline_part .i {
 	margin-right: 10px;
     color: #fff;
     width: 40px;
