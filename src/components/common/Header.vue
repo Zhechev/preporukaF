@@ -19,7 +19,7 @@
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="profile">
                   <li><a class="dropdown-item" href="#">Настройки</a></li>
-                  <li><a class="dropdown-item" href="#">Разлогване</a></li>
+                  <li><a class="dropdown-item" href="#" @click.prevent="logout">Разлогване</a></li>
                 </ul>
               </div>
             </div>
