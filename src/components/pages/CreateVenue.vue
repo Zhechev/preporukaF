@@ -11,8 +11,7 @@
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
                   <h3>
-                    <i class="sl sl-icon-tag"></i
-                    ><font-awesome-icon :icon="['fas', 'tag']" />{{
+                      <span class="i"><font-awesome-icon :icon="['fas', 'tag']" /></span>{{
                       $t("text.venue_title")
                     }}
                   </h3>
@@ -32,9 +31,10 @@
                     <ErrorMessage name="title" />
                   </div>
                   <div class="col-md-6">
+                    <h5>{{ $t("text.category") }}</h5>
                     <div class="dropdown">
                       <button
-                        class="btn dropdown-toggle"
+                        class="form-dropdown btn dropdown-toggle"
                         type="button"
                         id="dropdownCategory"
                         data-bs-toggle="dropdown"
@@ -47,8 +47,7 @@
                         }}
                       </button>
                       <ul
-                        id="search-choose-category"
-                        class="dropdown-menu"
+                        class="form-dropdown-menu dropdown-menu"
                         aria-labelledby="dropdownCategory"
                       >
                         <li v-for="category in categories" :key="category.id">
@@ -76,36 +75,44 @@
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
                   <h3>
-                    <i class="sl sl-icon-map"></i>{{ $t("text.location") }}
+                    <span class="i"><font-awesome-icon :icon="['fas', 'map']" /></span>{{ $t("text.location") }}
                   </h3>
                 </div>
                 <div class="utf_submit_section">
                   <div class="row with-forms">
                     <div class="col-md-6">
                       <h5>{{ $t("text.city") }}</h5>
-                      <div
-                        class="intro-search-field utf-chosen-cat-single"
-                        id="city_id_div"
-                      >
-                        <select
+                      <div class="dropdown">
+                        <button
                           v-if="cities && cities.length > 0"
                           @change="selectCity"
-                          class=""
-                          name="city_id"
-                          data-selected-text-format="count"
-                          data-size="7"
-                          :title="$t('text.venue_title')"
-                          id="city_id"
-                          v-model="selectedCity"
+                          class="form-dropdown btn dropdown-toggle"
+                          type="button"
+                          id="city_id_div"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                          
                         >
-                          <option
-                            v-for="city in cities"
-                            :key="city.id"
-                            :value="city.id"
-                          >
+                          {{
+                            selectedCity
+                              ? selectedCity["name_" + $i18n.locale]
+                              : $t('text.venue_title')
+                          }}
+                        </button>
+                        <ul
+                          class="form-dropdown-menu dropdown-menu"
+                          aria-labelledby="city_id_div"
+                        >
+                          <li v-for="city in cities" :key="city.id" v-bind="selectedCity">
+                            <a
+                              class="dropdown-item"
+                              href="#"
+                              @click.prevent="selectCity(city)"
+                            >
                             {{ city["name_" + $i18n.locale] }}
-                          </option>
-                        </select>
+                            </a>
+                          </li>
+                        </ul>
                       </div>
                     </div>
                     <div class="col-md-6">
@@ -131,6 +138,7 @@
                         :lng="selectedCityLng"
                         :zoom="zoom"
                         :interactive="true"
+                        style="z-index: 1;"
                       ></leaflet-map>
                     </div>
                   </div>
@@ -139,16 +147,16 @@
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
                   <h3>
-                    <i class="sl sl-icon-picture"></i>{{ $t("text.photos") }}
+                    <span class="i"><font-awesome-icon :icon="['fas', 'image']" /></span> {{ $t("text.photos") }}
                   </h3>
                 </div>
                 <div class="row with-forms">
                   <div class="utf_submit_section col-md-6">
-                    <h4>{{ $t("text.cover_photo") }}</h4>
+                    <h5>{{ $t("text.cover_photo") }}</h5>
                     <input ref="coverImage" type="file" name="coverImage" />
                   </div>
                   <div class="utf_submit_section col-md-6">
-                    <h4>{{ $t("text.other_photos") }}</h4>
+                    <h5>{{ $t("text.other_photos") }}</h5>
                     <input
                       ref="otherImagesInput"
                       type="file"
@@ -161,7 +169,7 @@
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
                   <h3>
-                    <i class="sl sl-icon-list"></i>{{ $t("text.content") }}
+                    <span class="i"><font-awesome-icon :icon="['fas', 'list']" /></span> {{ $t("text.content") }}
                   </h3>
                 </div>
                 <div class="row with-forms">
@@ -246,36 +254,27 @@
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
                   <h3>
-                    <i class="sl sl-icon-clock"></i>{{ $t("text.work_time") }}
+                    <span class="i"><font-awesome-icon :icon="['fas', 'clock']" /></span> {{ $t("text.work_time") }}
                   </h3>
                 </div>
 
                 <div class="switcher-content">
-                  <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-4">
-                      <h5>{{ $t("text.оpening_hours") }}:</h5>
-                    </div>
-                    <div class="col-md-4">
-                      <h5>{{ $t("text.closing_hours") }}:</h5>
-                    </div>
-                  </div>
                   <div
                     class="row utf_opening_day utf_js_demo_hours"
                     v-for="(time, index) in openingHours"
                     :key="index"
                   >
                     <div class="col-md-2">
-                      <h5>{{ time.dayName }} :-</h5>
+                      <h5>{{ time.dayName }}</h5>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-5 d-flex">
+                      <span class="hours-txt">от</span>
                       <select class="utf_chosen_select" v-model="time.openHour">
                         <option v-for="hour in hours" :key="hour" :value="hour">
                           {{ hour }}
                         </option>
                       </select>
-                    </div>
-                    <div class="col-md-2">
+                      <span class="hours-dots">:</span>
                       <select
                         class="utf_chosen_select"
                         v-model="time.openMinute"
@@ -289,7 +288,8 @@
                         </option>
                       </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-5 d-flex">
+                      <span class="hours-txt">до</span>
                       <select
                         class="utf_chosen_select"
                         v-model="time.closeHour"
@@ -298,8 +298,7 @@
                           {{ hour }}
                         </option>
                       </select>
-                    </div>
-                    <div class="col-md-2">
+                      <span class="hours-dots">:</span>
                       <select
                         class="utf_chosen_select"
                         v-model="time.closeMinute"
@@ -319,7 +318,7 @@
               <div class="add_utf_listing_section margin-top-45">
                 <div class="utf_add_listing_part_headline_part">
                   <h3>
-                    <i class="sl sl-icon-tag"></i>{{ $t("text.features") }}
+                    <span class="i"><font-awesome-icon :icon="['fas', 'copy']" /></span> {{ $t("text.features") }}
                   </h3>
                 </div>
                 <div class="checkboxes in-row amenities_checkbox">
@@ -335,7 +334,9 @@
                         :value="feature.id"
                         v-model="selectedFeatures"
                       />
-                      <label :for="'input-feature' + feature.id">{{
+                      <label class="icon icon-solid" :for="'input-feature' + feature.id">
+                        <span class="tick"><font-awesome-icon :icon="['fas', 'check']" /></span>
+                      {{
                         feature["name_" + $i18n.locale]
                       }}</label>
                     </li>
@@ -376,7 +377,7 @@ export default {
   setup() {
     const { t, locale } = useI18n();
     const store = useStore();
-    const selectedCategoryId = ref(null);
+    const selectedCategoryId = ref(1);
     const zoom = ref(7);
     const title = ref("");
     const address = ref("");
@@ -393,15 +394,11 @@ export default {
 
     const categories = computed(() => store.getters["categories/categories"]);
 
-    const selectCity = (event) => {
-      let selectedCityId = event.target.value;
-      selectedCity.value = cities.value.find(
-        (city) => city.id === Number(selectedCityId)
-      );
-
-      zoom.value = 13; // change the zoom level when a city is selected
+    const selectCity = (city) => {
+      selectedCity.value = city;
+      zoom.value = 13; 
     };
-
+    
     // eslint-disable-next-line no-unused-vars
     const cities = computed(() => store.getters["cities/cities"]);
 
