@@ -9,7 +9,7 @@
                         <h2>{{ $t('text.find_best') }} <span class="typed-words">{{ getCategoryName(getRandomProperty(categories)) }}</span><span class="typed-cursor">|</span>
                         </h2>
                         <h4>{{ $t('text.find_best_venues') }}</h4>
-                        <Search :categories="categories" :cities="cities"></Search>
+                        <SearchComponent :categories="categories" :cities="cities"></SearchComponent>
                         <div class="main_popular_categories">
                             <h3>explore categories</h3>
                             <ul class="main_popular_categories_list">
@@ -386,11 +386,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Search from '../common/Search.vue'
+import SearchComponent from '../components/common/SearchComponent.vue'
 
 export default {
     components: {
-        Search: Search
+        SearchComponent: SearchComponent
     },
     name: "default-layout",
     methods: {

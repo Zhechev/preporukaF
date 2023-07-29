@@ -1,0 +1,324 @@
+<script>
+import { useRoute } from "vue-router";
+import { mapGetters } from "vuex";
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      categories: this.$store.state.categories.categories,
+      category: {},
+      categoryId: 0,
+    };
+  },
+  setup() {},
+  name: "default-layout",
+  methods: {
+    debug: function () {
+      // console.log(this.category);
+    },
+  },
+  beforeMount() {
+    this.debug();
+    const route = useRoute();
+    this.categoryId = route.params.id;
+  },
+  mounted() {
+    axios
+      .get("http://preporuka.zhechev.eu/api/categories/" + this.categoryId)
+      .then(({ data }) => {
+        this.category = data;
+      });
+  },
+  computed: {
+    ...mapGetters({}),
+  },
+};
+</script>
+
+<template>
+  <div class="clearfix"></div>
+  <div id="titlebar" class="gradient">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Layout List With Sidebar</h2>
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a href="index_1.html">Home</a></li>
+              <li>Layout List With Sidebar</li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-8">
+        <div class="listing_filter_block">
+          <div class="col-md-2 col-xs-2">
+            <div class="utf_layout_nav">
+              <a href="listings_grid_with_sidebar.html" class="grid"
+                ><font-awesome-icon :icon="['fas', 'th']"
+              /></a>
+              <a href="#" class="list active"
+                ><font-awesome-icon :icon="['fas', 'align-justify']"
+              /></a>
+            </div>
+          </div>
+          <div class="col-md-10 col-xs-10">
+            <div class="sort-by utf_panel_dropdown sort_by_margin float-right">
+              <a href="#">Destination</a>
+              <div class="utf_panel_dropdown-content">
+                <input
+                  class="distance-radius"
+                  type="range"
+                  min="1"
+                  max="999"
+                  step="1"
+                  value="1"
+                  data-title="Select Range"
+                />
+                <div class="panel-buttons">
+                  <button class="panel-apply">Apply</button>
+                </div>
+              </div>
+            </div>
+            <div class="sort-by">
+              <div class="utf_sort_by_select_item sort_by_margin">
+                <select
+                  data-placeholder="Sort by Listing"
+                  class="utf_chosen_select_single"
+                >
+                  <option>Sort by Listing</option>
+                  <option>Latest Listings</option>
+                  <option>Popular Listings</option>
+                  <option>Price (Low to High)</option>
+                  <option>Price (High to Low)</option>
+                  <option>Highest Reviewe</option>
+                  <option>Lowest Reviewe</option>
+                  <option>Newest Listing</option>
+                  <option>Oldest Listing</option>
+                  <option>Random Listings</option>
+                </select>
+              </div>
+            </div>
+            <div class="sort-by">
+              <div class="utf_sort_by_select_item sort_by_margin">
+                <select
+                  :data-placeholder="$t('text.categories')"
+                  class="utf_chosen_select_single"
+                >
+                  <option>{{ $t("text.categories") }}</option>
+                  <option>Restaurant</option>
+                  <option>Health</option>
+                  <option>Hotels</option>
+                  <option>Real Estate</option>
+                  <option>Fitness</option>
+                  <option>Shopping</option>
+                  <option>Travel</option>
+                  <option>Shops</option>
+                  <option>Nightlife</option>
+                  <option>Events</option>
+                </select>
+              </div>
+            </div>
+            <div class="sort-by">
+              <div class="utf_sort_by_select_item utf_search_map_section">
+                <ul>
+                  <li>
+                    <a class="utf_common_button" href="#"
+                      ><font-awesome-icon
+                        :icon="['fas', 'location-crosshairs']"
+                      />Near Me</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div
+            v-for="venue in category.venues"
+            :key="venue.id"
+            class="col-lg-12 col-md-12"
+          >
+            <div class="utf_listing_item-container list-layout">
+              <router-link
+                :to="{ name: 'showVenue', params: { id: venue.id } }"
+                class="utf_listing_item"
+              >
+                <div class="utf_listing_item-image">
+                  <img src="images/utf_listing_item-01.jpg" alt="" />
+                  <span class="like-icon"></span>
+                  <span class="tag"><i :class="category.icon"></i>test</span>
+                  <div class="utf_listing_prige_block utf_half_list">
+                    <!-- <span class="utf_meta_listing_price"><i class="fa fa-tag"></i> $25 - $45</span> -->
+                    <!-- <span class="utp_approve_item"><i class="utf_approve_listing"></i></span> -->
+                  </div>
+                </div>
+                <span class="utf_open_now">Open Now</span>
+                <div class="utf_listing_item_content">
+                  <div class="utf_listing_item-inner">
+                    <h3>{{ venue.title }}</h3>
+                    <span
+                      ><font-awesome-icon :icon="['fas', 'map-marker']"
+                    /></span>
+                    <span
+                      ><font-awesome-icon :icon="['fas', 'phone']" /> (+15)
+                      124-796-3633</span
+                    >
+                    <div class="utf_star_rating_section" data-rating="4.5">
+                      <div class="utf_counter_star_rating">(4.5)</div>
+                    </div>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Maecenas in pulvinar neque. Nulla finibus lobortis
+                      pulvinar. Donec a consectetur nulla.
+                    </p>
+                  </div>
+                </div>
+              </router-link>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-md-12">
+            <div
+              class="utf_pagination_container_part margin-top-20 margin-bottom-70"
+            >
+              <nav class="pagination">
+                <ul>
+                  <li>
+                    <a href="#"
+                      ><font-awesome-icon :icon="['fas', 'arrow-left']"
+                    /></a>
+                  </li>
+                  <li><a href="#" class="current-page">1</a></li>
+                  <li><a href="#">2</a></li>
+                  <li><a href="#">3</a></li>
+                  <li><a href="#">4</a></li>
+                  <li>
+                    <a href="#"
+                      ><font-awesome-icon :icon="['fas', 'arrow-right']"
+                    /></a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4 col-md-4">
+        <div class="sidebar">
+          <div class="utf_box_widget margin-bottom-35">
+            <h3>
+              <span class="i"
+                ><font-awesome-icon :icon="['fas', 'sign-hanging']" />
+              </span>
+              Filters
+            </h3>
+            <div class="row with-forms">
+              <div class="col-md-12">
+                <input
+                  type="text"
+                  placeholder="What are you looking for?"
+                  value=""
+                />
+              </div>
+            </div>
+            <div class="row with-forms">
+              <div class="col-md-12">
+                <div class="input-with-icon location">
+                  <input
+                    type="text"
+                    placeholder="Search Location..."
+                    value=""
+                  />
+                  <a href="#"
+                    ><span class="i"
+                      ><font-awesome-icon
+                        :icon="['fas', 'location-dot']" /></span
+                  ></a>
+                </div>
+              </div>
+            </div>
+            <a
+              href="#"
+              class="more-search-options-trigger margin-bottom-10"
+              data-open-title="More Filters Options"
+              data-close-title="More Filters Options"
+            ></a>
+            <div class="more-search-options relative">
+              <div class="checkboxes one-in-row margin-bottom-15">
+                <input id="check-a" type="checkbox" name="check" />
+                <label for="check-a">Real Estate</label>
+                <input id="check-b" type="checkbox" name="check" />
+                <label for="check-b">Friendly Workspace</label>
+                <input id="check-c" type="checkbox" name="check" />
+                <label for="check-c">Instant Book</label>
+                <input id="check-d" type="checkbox" name="check" />
+                <label for="check-d">Wireless Internet</label>
+                <input id="check-e" type="checkbox" name="check" />
+                <label for="check-e">Free Parking</label>
+                <input id="check-f" type="checkbox" name="check" />
+                <label for="check-f">Elevator in Building</label>
+                <input id="check-g" type="checkbox" name="check" />
+                <label for="check-g">Restaurant</label>
+                <input id="check-h" type="checkbox" name="check" />
+                <label for="check-h">Dance Floor</label>
+              </div>
+            </div>
+            <button class="button fullwidth_block margin-top-5">Update</button>
+          </div>
+          <div class="utf_box_widget margin-top-35 margin-bottom-75">
+            <h3>
+              <span class="i"
+                ><font-awesome-icon :icon="['fas', 'folder']"
+              /></span>
+              {{ $t("text.categories") }}
+            </h3>
+            <ul class="utf_listing_detail_sidebar">
+              <li>
+                <span class="i"
+                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
+                ><a href="#">Travel</a>
+              </li>
+              <li>
+                <span class="i"
+                  ><font-awesome-icon :icon="['fas', 'angles-right']"
+                /></span>
+                <a href="#">Nightlife</a>
+              </li>
+              <li>
+                <span class="i"
+                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
+                ><a href="#">Fitness</a>
+              </li>
+              <li>
+                <span class="i"
+                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
+                ><a href="#">Real Estate</a>
+              </li>
+              <li>
+                <span class="i"
+                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
+                ><a href="#">Restaurant</a>
+              </li>
+              <li>
+                <span class="i"
+                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
+                ><a href="#">Dance Floor</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

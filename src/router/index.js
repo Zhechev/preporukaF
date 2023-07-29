@@ -6,14 +6,14 @@ const Login = () => import('@/components/Login.vue')
 const Register = () => import('@/components/Register.vue')
 
 // Layouts
-const Home = () => import('@/components/pages/Home.vue')
+const HomeView = () => import('@/views/HomeView.vue')
 
 // Categories
-const Category = () => import('@/components/pages/Category.vue')
+const CategoryView = () => import('@/views/CategoryView.vue')
 
 // Venues
-const Venue = () => import('@/components/pages/Venue.vue')
-const CreateVenue = () => import('@/components/pages/CreateVenue.vue')
+const VenueView = () => import('@/views/VenueView.vue')
+const CreateVenueView = () => import('@/views/CreateVenueView.vue')
 
 
 const routes = [
@@ -45,7 +45,7 @@ const routes = [
     },
     {
         path: "/",
-        component: Home,
+        component: HomeView,
         meta: {
             middleware: ["all"]
         },
@@ -53,9 +53,9 @@ const routes = [
             {
                 name: "home",
                 path: '/',
-                component: Home,
+                component: HomeView,
                 meta: {
-                    title: `Home`
+                    title: `HomeView`
                 }
             }
         ]
@@ -63,17 +63,17 @@ const routes = [
     {
         name: "showCategory",
         path: "/category/:id",
-        component: Category,
+        component: CategoryView,
         meta: {
             middleware: ["all"],
-            title: 'Category'
+            title: 'CategoryView'
         }
     },
     {
         name: "showVenue",
         path: "/venues/:id",
         props: true,
-        component: Venue,
+        component: VenueView,
         meta: {
             middleware: ["all"],
             title: 'showVenue'
@@ -83,10 +83,10 @@ const routes = [
         name: "createVenue",
         path: "/venues/create/",
         props: true,
-        component: CreateVenue,
+        component: CreateVenueView,
         meta: {
             middleware: ["auth"],
-            title: 'create'
+            title: 'createVenue'
         }
     }
 ]
