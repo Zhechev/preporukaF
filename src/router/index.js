@@ -9,7 +9,7 @@ const Register = () => import('@/components/Register.vue')
 const HomeView = () => import('@/views/HomeView.vue')
 
 // Categories
-const CategoryView = () => import('@/views/CategoryView.vue')
+const VenuesView = () => import('@/views/VenuesView.vue')
 
 // Venues
 const VenueView = () => import('@/views/VenueView.vue')
@@ -61,12 +61,12 @@ const routes = [
         ]
     },
     {
-        name: "showCategory",
-        path: "/category/:id",
-        component: CategoryView,
+        name: "showVenues",
+        path: "/venues/",
+        component: VenuesView,
         meta: {
             middleware: ["all"],
-            title: 'CategoryView'
+            title: 'VenuesView'
         }
     },
     {

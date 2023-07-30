@@ -1,39 +1,70 @@
-<script>
-import { useRoute } from "vue-router";
-import { mapGetters } from "vuex";
-import axios from "axios";
+<script setup>
+import { getVenues } from "@/services/venueService";
+import { ref, onMounted, watch } from "vue";
 
-export default {
-  data() {
-    return {
-      categories: this.$store.state.categories.categories,
-      category: {},
-      categoryId: 0,
-    };
-  },
-  setup() {},
-  name: "default-layout",
-  methods: {
-    debug: function () {
-      // console.log(this.category);
-    },
-  },
-  beforeMount() {
-    this.debug();
-    const route = useRoute();
-    this.categoryId = route.params.id;
-  },
-  mounted() {
-    axios
-      .get("http://preporuka.zhechev.eu/api/categories/" + this.categoryId)
-      .then(({ data }) => {
-        this.category = data;
-      });
-  },
-  computed: {
-    ...mapGetters({}),
-  },
+const venues = ref([]);
+
+// Pagination state
+const currentPage = ref(1);
+const totalPages = ref(0);
+const paginationLinks = ref([]);
+
+// Filters state
+const selectedFilter = ref("default");
+
+watch(selectedFilter, async (newFilter) => {
+  console.log('iame change');
+  await fetchVenuesByFilter(newFilter);
+});
+
+const fetchVenuesByFilter = async (filter) => {
+    try {
+        const venuesResponse = await getVenues(currentPage.value, filter);
+        venues.value = venuesResponse.data;
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
+onMounted(async () => {
+    try {
+        const venuesResponse = await getVenues(currentPage.value);
+        
+        venues.value = venuesResponse.data;
+
+        totalPages.value = venuesResponse.last_page;
+        paginationLinks.value = venuesResponse.links;
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+const changePage = async (page) => {
+    currentPage.value = page;
+    try {
+        const venuesResponse = await getVenues(currentPage.value);
+        venues.value = venuesResponse.data;
+    } catch (error) {
+        console.error(error.message);
+    }
 };
+
+const getPageRange = () => {
+    const total = totalPages.value;
+    const current = currentPage.value;
+
+    let start = current - 2;
+    if (start < 1) start = 1;
+
+    let end = start + 3; // 4 numbers in total
+    if (end > total) end = total;
+
+    // Adjusting start if we're at the last few pages
+    if (current > total - 2) start = end - 3;
+
+    return Array.from({ length: end - start + 1 }, (_, i) => i + start);
+};
+
 </script>
 
 <template>
@@ -87,41 +118,19 @@ export default {
             </div>
             <div class="sort-by">
               <div class="utf_sort_by_select_item sort_by_margin">
-                <select
-                  data-placeholder="Sort by Listing"
-                  class="utf_chosen_select_single"
-                >
-                  <option>Sort by Listing</option>
-                  <option>Latest Listings</option>
-                  <option>Popular Listings</option>
-                  <option>Price (Low to High)</option>
-                  <option>Price (High to Low)</option>
-                  <option>Highest Reviewe</option>
-                  <option>Lowest Reviewe</option>
-                  <option>Newest Listing</option>
-                  <option>Oldest Listing</option>
-                  <option>Random Listings</option>
+                <select v-model="selectedFilter" data-placeholder="Sort by Listing" class="utf_chosen_select_single">
+                    <option value="default">Sort by Venues</option>
+                    <option value="latest">Latest Venues</option>
+                    <option value="popular">Popular Venues</option>
+                    <option value="price_low">Price (Low to High)</option>
+                    <option value="price_high">Price (High to Low)</option>
+                    <option value="highest_review">Highest Reviewe</option>
+                    <option value="lowest_review">Lowest Reviewe</option>
+                    <option value="newest">Newest Venue</option>
+                    <option value="oldest">Oldest Venue</option>
+                    <option value="random">Random Venues</option>
                 </select>
-              </div>
-            </div>
-            <div class="sort-by">
-              <div class="utf_sort_by_select_item sort_by_margin">
-                <select
-                  :data-placeholder="$t('text.categories')"
-                  class="utf_chosen_select_single"
-                >
-                  <option>{{ $t("text.categories") }}</option>
-                  <option>Restaurant</option>
-                  <option>Health</option>
-                  <option>Hotels</option>
-                  <option>Real Estate</option>
-                  <option>Fitness</option>
-                  <option>Shopping</option>
-                  <option>Travel</option>
-                  <option>Shops</option>
-                  <option>Nightlife</option>
-                  <option>Events</option>
-                </select>
+
               </div>
             </div>
             <div class="sort-by">
@@ -139,9 +148,9 @@ export default {
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row" v-if="venues && venues.length">
           <div
-            v-for="venue in category.venues"
+            v-for="venue in venues"
             :key="venue.id"
             class="col-lg-12 col-md-12"
           >
@@ -153,7 +162,7 @@ export default {
                 <div class="utf_listing_item-image">
                   <img src="images/utf_listing_item-01.jpg" alt="" />
                   <span class="like-icon"></span>
-                  <span class="tag"><i :class="category.icon"></i>test</span>
+                  <span class="tag"><i :class="venue.category.icon"></i>test</span>
                   <div class="utf_listing_prige_block utf_half_list">
                     <!-- <span class="utf_meta_listing_price"><i class="fa fa-tag"></i> $25 - $45</span> -->
                     <!-- <span class="utp_approve_item"><i class="utf_approve_listing"></i></span> -->
@@ -190,24 +199,39 @@ export default {
             <div
               class="utf_pagination_container_part margin-top-20 margin-bottom-70"
             >
-              <nav class="pagination">
-                <ul>
-                  <li>
-                    <a href="#"
-                      ><font-awesome-icon :icon="['fas', 'arrow-left']"
-                    /></a>
-                  </li>
-                  <li><a href="#" class="current-page">1</a></li>
-                  <li><a href="#">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">4</a></li>
-                  <li>
-                    <a href="#"
-                      ><font-awesome-icon :icon="['fas', 'arrow-right']"
-                    /></a>
-                  </li>
-                </ul>
-              </nav>
+    <nav v-if="paginationLinks.length" class="pagination">
+    <ul>
+        <li>
+            <a href="#" @click.prevent="changePage(currentPage - 1)" :disabled="currentPage === 1">
+                <font-awesome-icon :icon="['fas', 'arrow-left']" />
+            </a>
+        </li>
+        
+        <li v-if="currentPage > 3">
+            <a href="#" @click.prevent="changePage(1)">1</a>
+            <span>...</span>
+        </li>
+
+        <li v-for="page in getPageRange()" :key="page">
+            <a href="#" 
+               @click.prevent="changePage(page)" 
+               :class="{ 'current-page': currentPage === page }">
+                {{ page }}
+            </a>
+        </li>
+
+        <li v-if="currentPage < totalPages.value - 2">
+            <span>...</span>
+            <a href="#" @click.prevent="changePage(totalPages.value)">{{ totalPages.value }}</a>
+        </li>
+
+        <li>
+            <a href="#" @click.prevent="changePage(currentPage + 1)" :disabled="currentPage === totalPages">
+                <font-awesome-icon :icon="['fas', 'arrow-right']" />
+            </a>
+        </li>
+    </ul>
+</nav>
             </div>
           </div>
         </div>

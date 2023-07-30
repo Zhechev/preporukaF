@@ -16,3 +16,17 @@ export const createVenue = async (formData) => {
     }
 };
 
+export const getVenues = async (page = 1, filter = 'default') => {
+    try {
+        const response = await axios.get(`${BASE_URL}/venues`, {
+            params: {
+                page: page,
+                filter: filter
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching category venues:', error);
+        throw error;
+    }
+};

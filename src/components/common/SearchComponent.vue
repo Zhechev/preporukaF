@@ -1,3 +1,29 @@
+<script setup>
+import { ref, computed, defineProps } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { locale } = useI18n();
+
+const props = defineProps(["categories", "cities"]);
+
+const category = ref("");
+const city = ref("");
+
+const lang = computed(() => {
+  return locale.value;
+});
+
+const getCategoryName = (category) => {
+  return category["category_name_" + lang.value];
+};
+
+const getCityName = (city) => {
+  return city["name_" + lang.value];
+};
+
+const submitForm = () => {};
+</script>
+
 <template>
   <form @submit.prevent="submitForm" id="home-search-form">
     <div class="main_input_search_part">
@@ -19,15 +45,17 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Изберете град
+            {{ city ? getCityName(city) : $t("text.choose_city") }}
           </button>
           <ul
             id="search-choose-city"
             class="dropdown-menu"
             aria-labelledby="dropdownCity"
           >
-            <li v-for="city in props.cities" :key="city.id" :value="city.id">
-              <a class="dropdown-item" href="#">{{ getCityName(city) }}</a>
+            <li v-for="c in props.cities" :key="c.id">
+              <a class="dropdown-item" href="#" @click.prevent="city = c">
+                {{ getCityName(c) }}
+              </a>
             </li>
           </ul>
         </div>
@@ -42,9 +70,7 @@
             aria-expanded="false"
           >
             {{
-              category
-                ? getCategoryName(category)
-                : $t("validation.choose_category")
+              category ? getCategoryName(category) : $t("text.choose_category")
             }}
           </button>
           <ul
@@ -65,34 +91,4 @@
       </button>
     </div>
   </form>
-</template> 
-
-
-<script setup>
-import { ref, computed, defineProps } from "vue";
-import { useI18n } from "vue-i18n";
-
-const { locale } = useI18n();
-
-const props = defineProps(['categories', 'cities']);
-
-const category = ref("");
-
-const lang = computed(() => {
-  return locale.value;
-});
-
-const getCategoryName = (category) => {
-  return category["category_name_" + lang.value];
-};
-
-const getCityName = (city) => {
-  return city["name_" + lang.value];
-};
-
-const submitForm = () => {
-
-};
-
-</script>
-
+</template>

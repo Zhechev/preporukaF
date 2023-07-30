@@ -29,5 +29,7 @@
     "features": "Features",
     "save": "Save",
     "login": "Login",
-    "add_venue": "Add venue"
+    "add_venue": "Add venue",
+    "choose_category": "Choose Category",
+    "choose_city": "Choose City"
 }

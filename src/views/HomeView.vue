@@ -8,7 +8,9 @@ export default {
   },
   name: "default-layout",
   methods: {
-    debug: function () {},
+    debug: function () {
+      console.log(this.categories);
+    },
     getRandomProperty(obj) {
       return obj[Math.floor(Math.random() * obj.length)];
     },
@@ -55,7 +57,7 @@ export default {
               <ul class="main_popular_categories_list">
                 <li v-for="category in categories" :key="category.id">
                   <router-link
-                    :to="{ name: 'showCategory', params: { id: category.id } }"
+                    :to="{ name: 'showVenues' }"
                     :key="category.id"
                   >
                     <div class="utf_box">
@@ -83,13 +85,13 @@ export default {
         <div class="container_categories_box margin-top-5 margin-bottom-30">
           <router-link
             v-for="category in categories"
-            :to="{ name: 'showCategory', params: { id: category.id } }"
+            :to="{ name: 'showVenues' }"
             :key="category.id"
             class="utf_category_small_box_part"
           >
             <i :class="category.icon"></i>
             <h4>{{ getCategoryName(category) }}</h4>
-            <span>{{ category.venues.length }}</span>
+            <span>{{ category.venues_count }}</span>
           </router-link>
         </div>
       </div>
