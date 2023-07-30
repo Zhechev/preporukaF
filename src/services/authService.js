@@ -14,7 +14,7 @@ export async function logout() {
 }
 
 export async function register(userData, lang) {
-    await axios.get(`${BASE_URL}sanctum/csrf-cookie`);
+    await axios.get(`${BASE_URL}/sanctum/csrf-cookie`);
     const { data } = await axios.post(`${BASE_URL}/register?lang=${lang}`, userData);
     return data;
 }

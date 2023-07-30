@@ -33,10 +33,16 @@ export default {
                 commit('SET_USER', data.user);
                 commit('SET_AUTHENTICATED', true);
                 router.push({ name: 'home' }); // redirect
-            } catch ({ response: { data } }) {
+            } catch (error) {
                 commit('SET_USER', {});
                 commit('SET_AUTHENTICATED', false);
+                if (error.response && error.response.data) {
+                    throw error.response.data;
+                } else {
+                    throw new Error('An unexpected error occurred.');
+                }
             }
+            
         },
         async logout({commit}) {
             try {

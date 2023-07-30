@@ -2,8 +2,8 @@ import { createWebHistory, createRouter } from 'vue-router'
 import store from '@/store'
 
 // Guest Component
-const Login = () => import('@/components/Login.vue')
-const Register = () => import('@/components/Register.vue')
+const LoginView = () => import('@/components/LoginView.vue')
+const RegisterView = () => import('@/components/RegisterView.vue')
 
 // Layouts
 const HomeView = () => import('@/views/HomeView.vue')
@@ -20,10 +20,10 @@ const routes = [
     {
         name: "login",
         path: "/login",
-        component: Login,
+        component: LoginView,
         meta: {
             middleware: "guest",
-            title: `Login`
+            title: `LoginView`
         }
     },
     {
@@ -37,10 +37,10 @@ const routes = [
     {
         name: "register",
         path: "/register",
-        component: Register,
+        component: RegisterView,
         meta: {
             middleware: "guest",
-            title: `Register`
+            title: `RegisterView`
         }
     },
     {
