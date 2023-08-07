@@ -38,5 +38,11 @@
     "price_high": "Price high",
     "lowest_review": "Lowest review",
     "highest_review": "Highest review",
-    "sort": "Sort by"
+    "sort": "Sort by",
+    "name": "Name",
+    "email": "E-mail",
+    "password": "Password",
+    "confirm_password": "Confirm password",
+    "register": "Register",
+    "please_wait": "Please wait"
 }

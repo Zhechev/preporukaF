@@ -38,5 +38,11 @@
     "price_high": "Цена възх.",
     "lowest_review": "Най-нисък рейтинг",
     "highest_review": "Най-висок рейтинг",
-    "sort": "Сортирай по"
+    "sort": "Сортирай по",
+    "name": "Име",
+    "email": "E-mail",
+    "password": "Парола",
+    "confirm_password": "Потвърди парола",
+    "register": "Регистрация",
+    "please_wait": "Моля, изчакайте"
 }
