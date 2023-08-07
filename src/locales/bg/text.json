@@ -31,5 +31,12 @@
     "login": "Вход",
     "add_venue": "Добави обект",
     "choose_category": "Изберете категория",
-    "choose_city": "Изберете град"
+    "choose_city": "Изберете град",
+    "latest": "Последни",
+    "popular_venue": "Популярни обекти",
+    "price_low": "Цена низх.",
+    "price_high": "Цена възх.",
+    "lowest_review": "Най-нисък рейтинг",
+    "highest_review": "Най-висок рейтинг",
+    "sort": "Сортирай по"
 }

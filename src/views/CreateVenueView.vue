@@ -85,8 +85,7 @@ const selectCity = (city) => {
 };
 
 const getCategoryName = (category) => {
-  const lang = locale.value;
-  return category["category_name_" + lang] || "";
+  return category["category_name_" + locale.value] || "";
 };
 
 const getCategoryNameById = (id) => {

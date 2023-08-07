@@ -31,5 +31,12 @@
     "login": "Login",
     "add_venue": "Add venue",
     "choose_category": "Choose Category",
-    "choose_city": "Choose City"
+    "choose_city": "Choose City",
+    "latest": "Latest",
+    "popular_venue": "Popular Venues",
+    "price_low": "Price low",
+    "price_high": "Price high",
+    "lowest_review": "Lowest review",
+    "highest_review": "Highest review",
+    "sort": "Sort by"
 }
