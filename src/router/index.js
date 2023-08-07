@@ -15,6 +15,8 @@ const VenuesView = () => import('@/views/VenuesView.vue')
 const VenueView = () => import('@/views/VenueView.vue')
 const CreateVenueView = () => import('@/views/CreateVenueView.vue')
 
+const GoogleLoginSuccessView = () => import('@/components/GoogleLoginSuccessView.vue')
+
 
 const routes = [
     {
@@ -87,6 +89,15 @@ const routes = [
         meta: {
             middleware: ["auth"],
             title: 'createVenue'
+        }
+    },
+    {
+        name: "login-success",
+        path: "/login-success",
+        component: GoogleLoginSuccessView,
+        meta: {
+            middleware: ["all"],
+            title: `Google Login Success`
         }
     }
 ]

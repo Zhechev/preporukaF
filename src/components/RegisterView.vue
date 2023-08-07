@@ -3,12 +3,36 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
-import { Field, ErrorMessage, defineRule, useForm } from 'vee-validate';
-import { required, email } from '@vee-validate/rules';
+import { Field, ErrorMessage, defineRule, useForm, configure } from 'vee-validate';
+import { required, email, confirmed, min } from '@vee-validate/rules';
 
-// Define vee-validate rules
+const router = useRouter();
+const { t, locale } = useI18n();
+const store = useStore();
+
+configure({
+  generateMessage: (context) => {
+    const displayName = getDisplayName(context.field);
+    switch (context.rule.name) {
+      case 'required':
+        return t('validation.required', { field: displayName });
+      case 'email':
+        return t('validation.email');
+      case 'confirmed':
+        return t('validation.password_confirmation');
+      case 'min':
+        return t('validation.min', { min: 5 });
+      default:
+        return `The ${displayName} field is not valid.`;
+    }
+  },
+});
+
+
 defineRule('required', required);
 defineRule('email', email);
+defineRule('confirmed', confirmed);
+defineRule('min', min);
 
 const user = ref({
   name: '',
@@ -19,33 +43,40 @@ const user = ref({
 
 const processing = ref(false);
 
-const router = useRouter();
-const { locale } = useI18n();
-const store = useStore();
-
 const { handleSubmit, setFieldError } = useForm();
 
 const onSubmit = handleSubmit(async () => {
   processing.value = true;
   try {
     await store.dispatch('auth/register', {
-      userData: user,
+      userData: user.value,
       lang: locale,
     });
     router.push({ name: 'home' });
-    // Clear individual error fields
-    }  catch (error) {
-        const errors = error.errors || {};
+  } catch (error) {
+    const errorMessages = error.errors || {};
 
-        // Set the server errors for vee-validate to display
-        for (const key in errors) {
-            setFieldError(key, errors[key][0]);
-        }
-    } finally {
-        processing.value = false;
+    for (const key in errorMessages) {
+        setFieldError(key, errorMessages[key][0]);
     }
-}); 
+  } finally {
+    processing.value = false;
+  }
+});
+
+// Retrieves a user-friendly display name for a given field name in vee-validate
+function getDisplayName(fieldName) {
+  const names = {
+    name: t('text.name'),
+    email: 'Email',
+    password: 'Password',
+    password_confirmation: 'Password Confirmation',
+  };
+
+  return names[fieldName] || fieldName;
+}
 </script>
+
 
 <template>
     <div class="container h-100">
@@ -57,28 +88,28 @@ const onSubmit = handleSubmit(async () => {
                         <hr/>
                         <form @submit.prevent="onSubmit" class="row" method="post">
                             <div class="form-group col-12">
-                                <label for="name" class="font-weight-bold">Name</label>
-                                <Field name="name" :rules="'required'" v-model="user.name" />
-                                <ErrorMessage name="name" />
+                                <label for="name" class="font-weight-bold">{{ $t('text.name') }}</label>
+                                <Field name="name" :rules="'required|min:5'" v-model="user.name" />
+                                <ErrorMessage name="name" class="error-message" />
                             </div>
                             <div class="form-group col-12 my-2">
-                                <label for="email" class="font-weight-bold">Email</label>
+                                <label for="email" class="font-weight-bold">{{ $t('text.email') }}</label>
                                 <Field name="email" :rules="'required|email'" v-model="user.email" />
                                 <ErrorMessage name="email" />
                             </div>
                             <div class="form-group col-12">
-                                <label for="password" class="font-weight-bold">Password</label>
+                                <label for="password" class="font-weight-bold">{{ $t('text.password') }}</label>
                                 <Field type="password" name="password" :rules="'required'" v-model="user.password" />
                                 <ErrorMessage name="password" />
                             </div>
                             <div class="form-group col-12 my-2">
-                                <label for="password_confirmation" class="font-weight-bold">Confirm Password</label>
-                                <Field type="password" name="password_confirmation" :rules="'required'" v-model="user.password_confirmation" />
+                                <label for="password_confirmation" class="font-weight-bold">{{ $t('text.confirm_password') }}</label>
+                                <Field type="password" name="password_confirmation" :rules="'required|confirmed:@password'" v-model="user.password_confirmation" />
                                 <ErrorMessage name="password_confirmation" />
                             </div>
                             <div class="col-12 mb-2">
                                 <button type="submit" :disabled="processing" class="btn btn-primary btn-block">
-                                    {{ processing ? "Please wait" : "Register" }}
+                                    {{ processing ? $t('text.please_wait') : $t('text.register') }}
                                 </button>
                             </div>
                             <div class="col-12 text-center">

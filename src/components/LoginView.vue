@@ -34,6 +34,14 @@ const onSubmit = handleSubmit(async () => {
         processing.value = false;
     }
 });
+
+const loginWithGoogle = () => {
+    window.location.href = 'http://localhost:8000/redirect-to-google';
+}
+
+const loginWithFacebbok = () => {
+    window.location.href = 'http://localhost:8000/redirect-to-facebook';
+}
 </script>
 
 
@@ -51,13 +59,11 @@ const onSubmit = handleSubmit(async () => {
                                 <label for="email" class="font-weight-bold">Email</label>
                                 <Field name="email" :rules="'required|email'" v-model="auth.email" />
                                 <ErrorMessage name="email" />
-                                <span class="text-danger">{{ errorMessage }}</span>
                             </div>
                             <div class="form-group col-12 my-2">
                                 <label for="password" class="font-weight-bold">Password</label>
                                 <Field name="password" :rules="'required'" v-model="auth.password" />
                                 <ErrorMessage name="password" />
-                                <span class="text-danger">{{ errorMessage }}</span>
                             </div>
                             <div class="col-12 mb-2">
                                 <button type="submit" :disabled="processing" @click="login" class="btn btn-primary btn-block">
@@ -67,6 +73,8 @@ const onSubmit = handleSubmit(async () => {
                             <div class="col-12 text-center">
                                 <label>Don't have an account? <router-link :to="{name:'register'}">Register Now!</router-link></label>
                             </div>
+                            <button @click="loginWithGoogle">Login with Google</button>
+                            <button @click="loginWithFacebbok">Login with Facebook</button>
                         </form>
                     </div>
                 </div>

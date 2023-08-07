@@ -1,5 +1,7 @@
 {
-    "required": "This field is required!",
+    "required": "The {field} is required!",
     "email": "This field must be a valid e-mail",
-    "choose_category": "Choose category"
+    "choose_category": "Choose category!",
+    "password_confirmation": "Passwords does not match!",
+    "min": "This field must contain at least {min} characters"
 }

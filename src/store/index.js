@@ -6,7 +6,7 @@ import cities from '@/store/cities'
 
 const store = createStore({
     plugins:[
-        createPersistedState()
+        createPersistedState() // by default stores Vuex state in localStorage. This plugin is specifically designed to help keep your Vuex state across page reloads.
     ],
     modules:{
         auth,

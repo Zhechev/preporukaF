@@ -1,34 +1,26 @@
-<script>
-import { mapGetters } from "vuex";
+<script setup>
+import { useStore } from "vuex";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import SearchComponent from "../components/common/SearchComponent.vue";
 
-export default {
-  components: {
-    SearchComponent: SearchComponent,
-  },
-  name: "default-layout",
-  methods: {
-    debug: function () {
-      console.log(this.categories);
-    },
-    getRandomProperty(obj) {
-      return obj[Math.floor(Math.random() * obj.length)];
-    },
-    getCategoryName(category) {
-      const lang = this.$i18n.locale;
-      return category["category_name_" + lang];
-    },
-  },
-  computed: {
-    ...mapGetters({
-      categories: "categories/categories",
-      cities: "cities/cities",
-    }),
-  },
-  mounted() {
-    this.debug();
-  },
-};
+function getRandomProperty(obj) {
+  return obj[Math.floor(Math.random() * obj.length)];
+}
+
+const { locale } = useI18n();
+
+function getCategoryName(category) {
+  const lang = locale;
+  return category["category_name_" + lang];
+}
+
+const store = useStore();
+
+const token = computed(() => store.getters["auth/token"]);
+const categories = computed(() => store.getters["categories/categories"]);
+const cities = computed(() => store.getters["cities/cities"]);
+console.log(token.value);
 </script>
 
 <template>
