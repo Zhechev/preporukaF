@@ -1,15 +1,22 @@
 <script setup>
 import { useStore } from "vuex";
 import { getVenues } from "@/services/venueService";
-import { getCategories } from "@/services/categoryService";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from 'vue-router';
 
+
+const route = useRoute(); // Access current route
+const router = useRouter(); // Access router instance
 const { t, locale } = useI18n();
+
 const store = useStore();
 const venues = ref([]);
 const categories = computed(() => store.getters["categories/categories"]);
-console.log(categories)
+const cities = computed(() => store.getters["cities/cities"]);
+const category = ref("");
+const city = ref("");
+const selectedFeatures = ref([]);
 
 // like icon, must remove
 const is_like = ref(false);
@@ -20,75 +27,110 @@ const totalPages = ref(0);
 const paginationLinks = ref([]);
 
 // Filters state
-// const selectedFilter = ref("default");
-const sortTypes = computed(() => [
-  {  
-    key: 'latest',
-    name: t("text.latest")
-  }, 
-  { 
-    key: 'popular',
-    name: t("text.popular_venue") 
-  },
-  // { 
-  //   key: 'price_low',
-  //   name: t("text.price_low")
-  // }, 
-  // {  
-  //   key: 'price_high',
-  //   name: t("text.price_high")
-  // }, 
-  { 
-    key: 'lowest_review',
-    name: t("text.lowest_review")
-  },
-  { 
-    key: 'highest_review',
-    name: t("text.highest_review") 
-  }
+const sortingOptions = computed(() => [
+  { key: 'latest', name: t("text.latest") },
+  { key: 'popular', name: t("text.popular_venue") },
+  { key: 'lowest_review', name: t("text.lowest_review") },
+  { key: 'highest_review', name: t("text.highest_review") }
 ]);
 
-const selectedSortType = async (newFilter) => {
-  console.log('iame change');
-  await fetchVenuesBySort(newFilter);
+const currentSortingOption = ref(sortingOptions.value[0]); // default to the first sort type
+
+
+const selectSortingOption = async (newFilter) => {
+    const selectedOption = sortingOptions.value.find((option) => option.key === newFilter);
+    currentSortingOption.value = selectedOption;
+    // Get the current category from the router's query
+    const currentCategory = router.currentRoute.value.query.category;
+
+    // Push both the sort and category parameters to the URL
+    router.push({ name: "showVenues", query: { ...router.currentRoute.value.query, sort: newFilter, category: currentCategory } });
+
+    // Fetch the venues by sort and pass in the current category
+    await fetchVenues(route.query.category, newFilter, route.query.city, selectedFeatures.value.join(','));
+};
+
+const selectFeatures = async (featureId, event) => {
+  if (event.target.checked) {
+    selectedFeatures.value.push(featureId);
+  } else {
+    selectedFeatures.value = selectedFeatures.value.filter(id => id !== featureId);
+  }
+  updateUrlWithFeatures();
+  await fetchVenues(route.query.category, route.query.sort, route.query.city, selectedFeatures.value.join(','));
+};
+
+const updateUrlWithFeatures = () => {
+  router.push({
+    name: "showVenues",
+    query: {
+      ...router.currentRoute.value.query,
+      features: selectedFeatures.value.join(',') // Converting array to comma-separated string
+    }
+  });
+};
+
+const getCityName = (city) => {
+  return city["name_" + locale.value];
+};
+
+const selectedCity = async (c) => {
+  city.value = c;
+  router.push({ name: "showVenues", query: { ...router.currentRoute.value.query, city: c.id}});
+  await fetchVenues(route.query.category, route.query.sort, c.id, selectedFeatures.value.join(','));
 };
 
 const getCategoryName = (category) => {
   return category["category_name_" + locale.value] || "";
 };
 
-const selectedByCat= async (cat) => {
-  console.log('iame change cat');
-  await fetchCategoryBySort(cat);
+const selectedByCat = async (cat) => {
+    if (cat.id != category.value.id) {
+      selectedFeatures.value = [];
+      category.value = cat; // You are setting the entire category object
+      router.push({ name: "showVenues", query: { ...router.currentRoute.value.query, category: cat.id, features: undefined } });
+      await fetchVenues(cat.id, route.query.sort, route.query.city, '');
+    }
 };
 
-const fetchVenuesBySort = async (filter) => {
-    try {
-        const venuesResponse = await getVenues(currentPage.value, filter);
-        venues.value = venuesResponse.data;
-        console.log(venuesResponse.data)
-    } catch (error) {
-        console.error(error.message);
-    }
-}
-
-const fetchCategoryBySort = async (filterCat) => {
-  console.log(filterCat)
-    try {
-        const venuesResponse = await getCategories(currentPage.value, filterCat);
-        venues.value = venuesResponse.data;
-        console.log(venuesResponse.data)
-    } catch (error) {
-        console.error(error.message);
-    }
-}
+const fetchVenues = async (categoryId, sortType, cityId, features) => {
+  try {
+    const venuesResponse = await getVenues(currentPage.value, categoryId, sortType, cityId, features);
+    venues.value = venuesResponse.data;
+    totalPages.value = venuesResponse.last_page;
+    paginationLinks.value = venuesResponse.links;
+  } catch (error) {
+    console.error(error.message);
+    // Optionally show an error to the user
+  }
+};
 
 onMounted(async () => {
-    try {
-        const venuesResponse = await getVenues(currentPage.value);
-        
-        venues.value = venuesResponse.data;
+    currentPage.value = Number(route.query.page) || 1;
+    if (currentPage.value < 1) {
+      currentPage.value = 1; // Ensuring the current page is at least 1
+    }
 
+    const sortType = route.query.sort || 'default';
+    const categoryId = route.query.category || 0;
+    const cityId = route.query.city || 0;
+
+    if (route.query.features) {
+      selectedFeatures.value = route.query.features.split(','); // Convert to array
+    }
+
+    const hasQueryParams = route.query.sort || route.query.city || route.query.category;
+    if (!hasQueryParams) {
+      // Redirect to the URL with default values
+      router.push({
+        name: "showVenues",
+        query: { sort: sortType, city: cityId, category: categoryId }
+      });
+    }
+
+    try {
+        const venuesResponse = await fetchVenues(categoryId, sortType, cityId, route.query.features || '');
+        venues.value = venuesResponse.data;
         totalPages.value = venuesResponse.last_page;
         paginationLinks.value = venuesResponse.links;
     } catch (error) {
@@ -97,30 +139,73 @@ onMounted(async () => {
 });
 
 const changePage = async (page) => {
+    // Preventing navigation to out-of-bounds pages
+    if (page < 1 || page > totalPages.value) return;
+
+    // Get the current sort query parameter
+    const currentSort = router.currentRoute.value.query.sort;
+    const currentCategory = router.currentRoute.value.query.category;
+    const currentCity = router.currentRoute.value.query.city;
+
+    // Update the URL with the selected page and sort type
+    router.push({ name: "showVenues", query: { page: page, sort: currentSort, category: currentCategory, city: currentCity } });
+
     currentPage.value = page;
     try {
-        const venuesResponse = await getVenues(currentPage.value);
-        venues.value = venuesResponse.data;
+      const venuesResponse = await fetchVenues(currentCategory, currentSort, currentCity, selectedFeatures.value.join(','));
+      venues.value = venuesResponse.data;
     } catch (error) {
         console.error(error.message);
     }
 };
 
 const getPageRange = () => {
-    const total = totalPages.value;
-    const current = currentPage.value;
+  const total = totalPages.value;
+  const current = currentPage.value;
 
-    let start = current - 2;
-    if (start < 1) start = 1;
+  if (total === 1) return [1]; // Return only one page if no results
 
-    let end = start + 3; // 4 numbers in total
-    if (end > total) end = total;
+  let start = current - 2;
+  if (start < 1) start = 1;
 
-    // Adjusting start if we're at the last few pages
-    if (current > total - 2) start = end - 3;
+  let end = start + 3; // 4 numbers in total
+  if (end > total) end = total;
 
-    return Array.from({ length: end - start + 1 }, (_, i) => i + start);
+  // Making sure start and end values are within bounds
+  if (start < 1) start = 1;
+  if (end < 1) end = 1;
+  if (end > total) end = total;
+  if (start > end) start = end;
+
+  return Array.from({ length: end - start + 1 }, (_, i) => i + start);
 };
+
+
+watch(
+  () => route.params.page,
+  (newPage) => {
+    if (newPage) {
+      changePage(Number(newPage));
+    }
+  },
+  { immediate: true }
+);
+
+watch(() => route.query, async (newQuery) => {
+  if (newQuery.category) {
+    const selectedCategory = categories.value.find(cat => cat.id.toString() === newQuery.category);
+    if (selectedCategory) {
+      category.value = selectedCategory;
+    }
+  }
+
+  if (newQuery.city) {
+    const selectedCity = cities.value.find(c => c.id.toString() === newQuery.city);
+    if (selectedCity) {
+      city.value = selectedCity;
+    }
+  }
+}, { immediate: true, deep: true });
 
 </script>
 
@@ -176,6 +261,32 @@ const getPageRange = () => {
             <div class="sort-by">
               <div class="utf_sort_by_select_item sort_by_margin">
                 <div class="dropdown">
+                <button
+                  class="form-dropdown btn dropdown-toggle"
+                  type="button"
+                  id="dropdownCity"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  {{ city ? getCityName(city) : $t("text.choose_city") }}
+                </button>
+                <ul
+                  id="search-choose-city"
+                  class="form-dropdown-menu dropdown-menu"
+                  aria-labelledby="dropdownCity"
+                >
+                  <li v-for="c in cities" :key="c.id">
+                    <a class="dropdown-item" href="#" @click="selectedCity(c)">
+                      {{ getCityName(c) }}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              </div>
+            </div>
+            <div class="sort-by">
+              <div class="utf_sort_by_select_item sort_by_margin">
+                <div class="dropdown">
                   <button
                     class="form-dropdown btn dropdown-toggle"
                     type="button"
@@ -184,16 +295,16 @@ const getPageRange = () => {
                     aria-expanded="false"
                     >
                     
-                    {{ $t("text.sort") }}
+                    {{ currentSortingOption.name }}
                     
                   </button>
                   <ul
                     class="form-dropdown-menu dropdown-menu"
                     aria-labelledby="dropdownSort"
                     >
-                      <li v-for="option, key in sortTypes" :key="key">
+                      <li v-for="option, key in sortingOptions" :key="key">
                         <a class="dropdown-item"
-                            href="#" :value="option.key" @click="selectedSortType(option.key)"> {{ option.name }}</a>
+                            href="#" :value="option.key" @click="selectSortingOption(option.key)"> {{ option.name }}</a>
                       </li>
                   </ul>
                 </div>
@@ -210,16 +321,18 @@ const getPageRange = () => {
                     aria-expanded="false"
                     >
                     
-                    {{ $t("text.categories") }}
+                    {{
+                      category ? getCategoryName(category) : $t("text.choose_category")
+                    }}
                     
                   </button>
                   <ul
                     class="form-dropdown-menu dropdown-menu"
                     aria-labelledby="dropdownSortByCat"
                     >
-                      <li v-for="cat in categories" :key="cat.category_id">
+                      <li v-for="cat in categories" :key="cat.id">
                         <a class="dropdown-item"
-                            href="#" :value="cat.id" @click="selectedByCat(cat.id)"> {{ getCategoryName(cat) }} </a>
+                            href="#" :value="cat.id" @click="selectedByCat(cat)"> {{ getCategoryName(cat) }} </a>
                       </li>
                   </ul>
                 </div>
@@ -291,106 +404,69 @@ const getPageRange = () => {
             <div
               class="utf_pagination_container_part margin-top-20 margin-bottom-70"
             >
-    <nav v-if="paginationLinks.length" class="pagination">
-    <ul>
-        <li>
-            <a href="#" @click.prevent="changePage(currentPage - 1)" :disabled="currentPage === 1">
-                <font-awesome-icon :icon="['fas', 'arrow-left']" />
-            </a>
-        </li>
-        
-        <li v-if="currentPage > 3">
-            <a href="#" @click.prevent="changePage(1)">1</a>
-            <span>...</span>
-        </li>
+              <nav v-if="paginationLinks.length" class="pagination">
+                  <ul>
+                      <li>
+                        <a href="#" 
+                          @click.prevent="changePage(currentPage - 1)" 
+                          :class="{ 'disabled-arrow': currentPage === 1 }">
+                            <font-awesome-icon :icon="['fas', 'arrow-left']" />
+                        </a>
+                      </li>
+                      
+                      <li v-if="currentPage > 3">
+                          <a href="#" @click.prevent="changePage(1)">1</a>
+                          <span>...</span>
+                      </li>
 
-        <li v-for="page in getPageRange()" :key="page">
-            <a href="#" 
-               @click.prevent="changePage(page)" 
-               :class="{ 'current-page': currentPage === page }">
-                {{ page }}
-            </a>
-        </li>
+                      <li v-for="page in getPageRange()" :key="page">
+                          <a href="#" 
+                            @click.prevent="changePage(page)" 
+                            :class="{ 'current-page': currentPage === page }">
+                              {{ page }}
+                          </a>
+                      </li>
 
-        <li v-if="currentPage < totalPages.value - 2">
-            <span>...</span>
-            <a href="#" @click.prevent="changePage(totalPages.value)">{{ totalPages.value }}</a>
-        </li>
+                      <li v-if="currentPage < totalPages - 2">
+                          <span>...</span>
+                          <a href="#" @click.prevent="changePage(totalPages)">{{ totalPages }}</a>
+                      </li>
 
-        <li>
-            <a href="#" @click.prevent="changePage(currentPage + 1)" :disabled="currentPage === totalPages">
-                <font-awesome-icon :icon="['fas', 'arrow-right']" />
-            </a>
-        </li>
-    </ul>
-</nav>
+                      <li>
+                        <a href="#" 
+                          @click.prevent="changePage(currentPage + 1)"
+                          :class="{ 'disabled-arrow': currentPage === totalPages }">
+                            <font-awesome-icon :icon="['fas', 'arrow-right']" />
+                        </a>
+                      </li>
+                  </ul>
+              </nav>
             </div>
           </div>
-        </div>
+        </div>  
       </div>
 
       <!-- Sidebar -->
       <div class="col-lg-4 col-md-4">
         <div class="sidebar">
           <div class="utf_box_widget margin-bottom-35">
-            <h3>
-              <span class="i"
-                ><font-awesome-icon :icon="['fas', 'sign-hanging']" />
-              </span>
-              Filters
-            </h3>
-            <div class="row with-forms">
-              <div class="col-md-12">
-                <input
-                  type="text"
-                  placeholder="What are you looking for?"
-                  value=""
-                />
-              </div>
-            </div>
-            <div class="row with-forms">
-              <div class="col-md-12">
-                <div class="input-with-icon location">
-                  <input
-                    type="text"
-                    placeholder="Search Location..."
-                    value=""
-                  />
-                  <a href="#"
-                    ><span class="i"
-                      ><font-awesome-icon
-                        :icon="['fas', 'location-dot']" /></span
-                  ></a>
+            <div class="checkboxes in-row amenities_checkbox">
+                  <ul>
+                    <li v-for="feature in category.features" :key="feature.id">
+                      <input
+                        :id="'input-feature' + feature.id"
+                        type="checkbox"
+                        name="check"
+                        :value="feature.id"
+                        @change="selectFeatures(feature.id, $event)"
+                      />
+                      <label class="icon icon-solid" :for="'input-feature' + feature.id">
+                        <span class="tick"><font-awesome-icon :icon="['fas', 'check']" /></span>
+                        {{ feature["name_" + $i18n.locale] }}
+                      </label>
+                    </li>
+                  </ul>
                 </div>
-              </div>
-            </div>
-            <a
-              href="#"
-              class="more-search-options-trigger margin-bottom-10"
-              data-open-title="More Filters Options"
-              data-close-title="More Filters Options"
-            ></a>
-            <div class="more-search-options relative">
-              <div class="checkboxes one-in-row margin-bottom-15">
-                <input id="check-a" type="checkbox" name="check" />
-                <label for="check-a">Real Estate</label>
-                <input id="check-b" type="checkbox" name="check" />
-                <label for="check-b">Friendly Workspace</label>
-                <input id="check-c" type="checkbox" name="check" />
-                <label for="check-c">Instant Book</label>
-                <input id="check-d" type="checkbox" name="check" />
-                <label for="check-d">Wireless Internet</label>
-                <input id="check-e" type="checkbox" name="check" />
-                <label for="check-e">Free Parking</label>
-                <input id="check-f" type="checkbox" name="check" />
-                <label for="check-f">Elevator in Building</label>
-                <input id="check-g" type="checkbox" name="check" />
-                <label for="check-g">Restaurant</label>
-                <input id="check-h" type="checkbox" name="check" />
-                <label for="check-h">Dance Floor</label>
-              </div>
-            </div>
-            <button class="button fullwidth_block margin-top-5">Update</button>
           </div>
           <div class="utf_box_widget margin-top-35 margin-bottom-75">
             <h3>
@@ -438,3 +514,11 @@ const getPageRange = () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.disabled-arrow {
+    color: grey;
+    pointer-events: none;
+}
+
+</style>

@@ -70,7 +70,7 @@ const routes = [
             middleware: ["all"],
             title: 'VenuesView'
         }
-    },
+    },    
     {
         name: "showVenue",
         path: "/venues/:id",

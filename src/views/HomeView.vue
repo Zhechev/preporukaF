@@ -11,8 +11,7 @@ function getRandomProperty(obj) {
 const { locale } = useI18n();
 
 function getCategoryName(category) {
-  const lang = locale;
-  return category["category_name_" + lang];
+  return category["category_name_" + locale.value];
 }
 
 const store = useStore();
@@ -77,7 +76,7 @@ console.log(token.value);
         <div class="container_categories_box margin-top-5 margin-bottom-30">
           <router-link
             v-for="category in categories"
-            :to="{ name: 'showVenues' }"
+            :to="{ name: 'showVenues', query: { category: category.id, page: 1 } }"
             :key="category.id"
             class="utf_category_small_box_part"
           >

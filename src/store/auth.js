@@ -93,10 +93,19 @@ export default {
                     
                     // Redirect to login page
                     router.push({ name: 'login' }); 
-                } else {
+                }else {
                     console.error("Backend logout was not successful:", response.data.message);
                 }
             } catch (error) {
+                if (error.response.data.message == 'Unauthenticated.') {
+                    // Reset the Vuex state
+                    commit('SET_USER', {});
+                    commit('SET_AUTHENTICATED', false);
+                    commit('SET_TOKEN', {});
+                    
+                    // Redirect to login page
+                    router.push({ name: 'login' }); 
+                }
                 console.error("Error logging out");
             }
         },
