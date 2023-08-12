@@ -31,6 +31,8 @@ const content_en = ref("");
 const formRef = ref(null);
 const selectedFeatures = ref([]);
 const selectedCity = ref("");
+const coverImageFile = ref(null); // Define a ref for the input element
+const otherImagesFiles = ref(null);
 
 const categories = computed(() => store.getters["categories/categories"]);
 const cities = computed(() => store.getters["cities/cities"]);
@@ -116,23 +118,16 @@ const submitForm = async () => {
   formData.append("lat", lat);
   formData.append("lng", lng);
 
-  // add cover image to formData
-  const coverImageFile = ref(null); // Define a ref for the input element
-
-  if (coverImageFile.value) {
-    formData.append("coverImage", coverImageFile.value);
-  }
+  if (coverImageFile.value && coverImageFile.value.files[0]) {
+    formData.append("coverImage", coverImageFile.value.files[0]);
+  } 
 
   // add other images to formData
-  let otherImagesInput = ref(null);
-  const otherImagesFiles = computed(() =>
-    otherImagesInput.value ? otherImagesInput.value.files : null
-  );
 
-  const files = otherImagesFiles.value;
-  if (files) {
-    for (let i = 0; i < files.length; i++) {
-      formData.append("images[]", files[i]);
+  if (otherImagesFiles.value && otherImagesFiles.value.files) {
+    alert(1);
+    for (let i = 0; i < otherImagesFiles.value.files.length; i++) {
+      formData.append("images[]", otherImagesFiles.value.files[i]);
     }
   }
 
@@ -367,12 +362,12 @@ const checkErrors = async () => {
                 <div class="row with-forms">
                   <div class="utf_submit_section col-md-6">
                     <h5>{{ $t("text.cover_photo") }}</h5>
-                    <input ref="coverImage" type="file" name="coverImage" />
+                    <input ref="coverImageFile" type="file" name="coverImage" />
                   </div>
                   <div class="utf_submit_section col-md-6">
                     <h5>{{ $t("text.other_photos") }}</h5>
                     <input
-                      ref="otherImagesInput"
+                      ref="otherImagesFiles"
                       type="file"
                       name="images[]"
                       multiple

@@ -18,6 +18,8 @@ const category = ref("");
 const city = ref("");
 const selectedFeatures = ref([]);
 
+const VUE_APP_BASE_URL_STORAGE = process.env.VUE_APP_BASE_URL_STORAGE;
+
 // like icon, must remove
 const is_like = ref(false);
 
@@ -97,6 +99,7 @@ const fetchVenues = async (categoryId, sortType, cityId, features) => {
   try {
     const venuesResponse = await getVenues(currentPage.value, categoryId, sortType, cityId, features);
     venues.value = venuesResponse.data;
+    console.log(venues.value);
     totalPages.value = venuesResponse.last_page;
     paginationLinks.value = venuesResponse.links;
   } catch (error) {
@@ -365,7 +368,7 @@ watch(() => route.query, async (newQuery) => {
                 class="utf_listing_item"
               >
                 <div class="utf_listing_item-image">
-                  <img src="images/utf_listing_item-01.jpg" alt="" />
+                  <img :src="VUE_APP_BASE_URL_STORAGE + venue.cover_image" alt="" />
                   <span class="tag"><i :class="venue.category.icon"></i>test</span>
                   <div @click="is_like = !is_like" class="like-icon">
                     <span v-if="is_like == false"><font-awesome-icon :icon="['far', 'heart']" /></span>
