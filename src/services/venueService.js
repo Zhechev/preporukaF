@@ -16,8 +16,7 @@ export const createVenue = async (formData) => {
     }
 };
 
-export const getVenues = async (page = 1, category, sort = 'default', city, features) => {
-    console.log(features);
+export const getVenues = async (page = 1, category, sort = 'default', city, features, title) => {
     // Define the parameters object
     const params = {
         page: page
@@ -43,6 +42,10 @@ export const getVenues = async (page = 1, category, sort = 'default', city, feat
         params.features = features.split(','); // Converting comma-separated string to array
     }
 
+    if (title) {
+        params.title = title;
+    }
+
     try {
         const response = await axios.get(`${BASE_URL}/venues`, { params });
         return response.data;
@@ -51,3 +54,8 @@ export const getVenues = async (page = 1, category, sort = 'default', city, feat
         throw error;
     }
 };
+
+export const getVenue = async (id) => {
+    const response = await axios.get(`${BASE_URL}/venues/${id}`);
+    return response.data;
+}

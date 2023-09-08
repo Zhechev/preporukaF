@@ -43,40 +43,25 @@
   </header>
 </template>
 
-<script>
-import { mapActions, mapGetters } from 'vuex'
-// import axios from 'axios';
+<script setup>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 
-export default {
-  name: 'DefaultLayout',
-  data() {
-      return {
-          active: false
-      }
-  },
-  props: ['categories'],
+const store = useStore()
+const { locale } = useI18n()
 
-  methods: {
-    ...mapActions({
-      signOut: 'auth/logout'
-    }),
-    async logout() {
-        this.signOut()
-    },
-    changeLanguage(lang) {
-      this.$i18n.locale = lang
-    }
-  },
-  computed: {
-    ...mapGetters({
-      isAuth: 'auth/authenticated'
-    }),
-    currentLanguage() {
-        return this.$i18n.locale;
-    }
-  },
-  mounted() {
+const signOut = () => store.dispatch('auth/logout')
+const isAuth = computed(() => store.getters['auth/authenticated'])
 
-  }
+const logout = async () => {
+  await signOut()
 }
+
+const changeLanguage = (lang) => {
+  locale.value = lang
+}
+
+const currentLanguage = computed(() => locale.value)
 </script>
+

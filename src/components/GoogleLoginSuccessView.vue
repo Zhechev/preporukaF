@@ -5,11 +5,11 @@ import { useStore } from 'vuex';
 const store = useStore();
 
 // Method to retrieve the token
-const retrieveTokenAndLogin = async () => {
-    await store.dispatch('auth/retrieveTokenAndLogin');
+const retrieveUserData = async () => {
+    await store.dispatch('auth/retrieveUserData');
 };
 
 onMounted(() => {
-    retrieveTokenAndLogin();
+    retrieveUserData();
 });
 </script>

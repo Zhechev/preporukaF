@@ -1,111 +1,82 @@
-<script>
-import { mapGetters } from "vuex";
-import { ref, onMounted } from "vue"; // Import ref and onMounted from 'vue', not 'vuex'
-import { Splide, SplideSlide } from "@splidejs/vue-splide";
-import axios from "axios";
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { getVenue } from "@/services/venueService";
+import '@splidejs/splide/dist/css/splide.min.css'; // Added this
+import '@splidejs/vue-splide/css';
+import { Splide, SplideSlide } from '@splidejs/vue-splide'; // Added this
+import VueEasyLightbox from 'vue-easy-lightbox';
 
-import "@splidejs/vue-splide/css";
-import VueEasyLightbox from "vue-easy-lightbox";
+const route = useRoute();
+const splideRef = ref(null);
+const VUE_APP_BASE_URL_STORAGE = process.env.VUE_APP_BASE_URL_STORAGE;
 
-export default {
-  name: "VenueComponent",
-  components: { Splide, SplideSlide, VueEasyLightbox },
-  props: ["id"],
+const venue = ref({});
 
-  setup() {
-    const options = {
-      rewind: true,
-      gap: "1rem",
-      width: "100%",
-      height: "400px",
-      type: "loop",
-      perPage: 1,
-      perMove: 1,
-      focus: "center",
-    };
+const options = {
+  rewind: true,
+  gap: '1rem',
+  width: '100%',
+  height: '400px',
+  type: 'loop',
+  perPage: 1,
+  perMove: 1,
+  focus: 'center',
+};
 
-    const visibleRef = ref(false);
-    const indexRef = ref(0);
-    const imgsRef = ref([
-      { title: "test img", src: "http://via.placeholder.com/350x150" },
-      {
-        title: "test img 2",
-        src: "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nature-quotes-1557340276.jpg?crop=0.666xw:1.00xh;0.168xw,0&resize=640:*",
-      },
-    ]);
-    const splideRef = ref(null); // Adding a ref for the Splide component
+const visibleRef = ref(false);
+const indexRef = ref(0);
+const imgsRef = ref([
+  { title: 'test img', 
+    src: 'http://via.placeholder.com/350x150' },
+  {
+    title: 'test img 2',
+    src: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nature-quotes-1557340276.jpg?crop=0.666xw:1.00xh;0.168xw,0&resize=640:*',
+  },
+]);
 
-    const onShow = () => {
-      visibleRef.value = true;
-    };
+const onShow = () => {
+  visibleRef.value = true;
+};
 
-    const showMultiple = (event, index) => {
-      if (!event.target.classList.contains("splide__arrow")) {
-        imgsRef.value = [
-          { title: "test img", src: "http://via.placeholder.com/350x150" },
-          {
-            title: "test img 2",
-            src: "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nature-quotes-1557340276.jpg?crop=0.666xw:1.00xh;0.168xw,0&resize=640:*",
-          },
-        ];
-        indexRef.value = index;
-        onShow();
-      }
-    };
+const showMultiple = (event) => {
+  if (!event.target.classList.contains('splide__arrow')) {
+    onShow();
+  }
+};
 
-    const onHide = () => (visibleRef.value = false);
+const onHide = () => (visibleRef.value = false);
 
-    // Prevent event propagation for the slider controls
-    onMounted(() => {
-      const controls = splideRef.value.$el.querySelectorAll(".splide__arrow");
-      controls.forEach((control) => {
-        control.addEventListener("click", (e) => {
-          e.stopPropagation();
-        });
+onMounted(async () => {
+  // Fetch venue data and populate imgsRef
+  venue.value = await getVenue(route.params.id);
+  if (venue.value.images && Array.isArray(venue.value.images)) {
+    imgsRef.value = venue.value.images.map(image => ({
+      title: 'Venue Image',
+      src: VUE_APP_BASE_URL_STORAGE + image.path,
+    }));
+  }
+
+  // Set up Splide controls
+  const controls = splideRef.value?.$el?.querySelectorAll('.splide__arrow');
+  if (controls) {
+    controls.forEach((control) => {
+      control.addEventListener('click', (e) => {
+        e.stopPropagation();
       });
     });
+  }
+});
 
-    return {
-      options,
-      visibleRef,
-      indexRef,
-      imgsRef,
-      showMultiple,
-      onHide,
-      splideRef,
-    };
-  },
-
-  data() {
-    return {
-      venue: {},
-    };
-  },
-
-  computed: {
-    ...mapGetters([]),
-    // ...Other computed properties...
-  },
-
-  mounted() {
-    axios
-      .get("https://preporuka.zhechev.eu/api/venues/" + this.id)
-      .then(({ data }) => {
-        this.venue = data;
-      });
-  },
-};
 </script>
+
+
 
 <template>
   <div class="clearfix"></div>
 
   <div id="utf_listing_gallery_part" class="utf_listing_section">
-    <Splide
-      :options="options"
-      ref="splideRef"
-      aria-labelledby="My Favorite Images"
-    >
+    <Splide :options="options" ref="splideRef">
       <SplideSlide v-for="(img, index) in imgsRef" :key="index">
         <img
           class="listing_gallery_img"

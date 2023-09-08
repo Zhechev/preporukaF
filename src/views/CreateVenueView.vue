@@ -125,7 +125,6 @@ const submitForm = async () => {
   // add other images to formData
 
   if (otherImagesFiles.value && otherImagesFiles.value.files) {
-    alert(1);
     for (let i = 0; i < otherImagesFiles.value.files.length; i++) {
       formData.append("images[]", otherImagesFiles.value.files[i]);
     }

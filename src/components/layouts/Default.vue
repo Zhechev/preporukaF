@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import Header from '../common/Header.vue'
+import Header from '../common/HeaderComponent.vue'
 import Footer from '../common/Footer.vue'
 import { mapGetters } from 'vuex'
 export default {

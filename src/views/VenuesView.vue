@@ -16,7 +16,9 @@ const categories = computed(() => store.getters["categories/categories"]);
 const cities = computed(() => store.getters["cities/cities"]);
 const category = ref("");
 const city = ref("");
+const title = ref("");
 const selectedFeatures = ref([]);
+let timer;
 
 const VUE_APP_BASE_URL_STORAGE = process.env.VUE_APP_BASE_URL_STORAGE;
 
@@ -95,9 +97,24 @@ const selectedByCat = async (cat) => {
     }
 };
 
-const fetchVenues = async (categoryId, sortType, cityId, features) => {
+const onTitleInputChange = () => {
+  if (timer) {
+    clearTimeout(timer);
+  }
+
+  timer = setTimeout(() => {
+    handleTitleInputChange();
+  }, 300);
+};
+
+const handleTitleInputChange = async() => {
+  router.push({ name: "showVenues", query: { ...router.currentRoute.value.query, title: title.value}});
+  await fetchVenues(route.query.category, route.query.sort, route.query.city, selectedFeatures.value.join(','), title.value);
+};
+
+const fetchVenues = async (categoryId, sortType, cityId, features, title) => {
   try {
-    const venuesResponse = await getVenues(currentPage.value, categoryId, sortType, cityId, features);
+    const venuesResponse = await getVenues(currentPage.value, categoryId, sortType, cityId, features, title);
     venues.value = venuesResponse.data;
     console.log(venues.value);
     totalPages.value = venuesResponse.last_page;
@@ -117,6 +134,11 @@ onMounted(async () => {
     const sortType = route.query.sort || 'default';
     const categoryId = route.query.category || 0;
     const cityId = route.query.city || 0;
+    const routeTitle = route.query.title || '';
+
+    if (routeTitle) {
+      title.value = routeTitle;
+    }
 
     if (route.query.features) {
       selectedFeatures.value = route.query.features.split(','); // Convert to array
@@ -132,7 +154,7 @@ onMounted(async () => {
     }
 
     try {
-        const venuesResponse = await fetchVenues(categoryId, sortType, cityId, route.query.features || '');
+        const venuesResponse = await fetchVenues(categoryId, sortType, cityId, route.query.features || '', routeTitle);
         venues.value = venuesResponse.data;
         totalPages.value = venuesResponse.last_page;
         paginationLinks.value = venuesResponse.links;
@@ -313,6 +335,7 @@ watch(() => route.query, async (newQuery) => {
                 </div>
               </div>
             </div>
+            <input v-model="title" @input="onTitleInputChange" placeholder="Filter by title">
             <div class="sort-by">
               <div class="utf_sort_by_select_item sort_by_margin">
                 <div class="dropdown">
@@ -358,7 +381,7 @@ watch(() => route.query, async (newQuery) => {
         </div>
         <div class="row" v-if="venues && venues.length">
           <div
-            v-for="venue in venues"
+            v-for="venue in venues" 
             :key="venue.id"
             class="col-lg-12 col-md-12"
           >

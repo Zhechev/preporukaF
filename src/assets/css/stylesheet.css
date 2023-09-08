@@ -1177,7 +1177,7 @@ body[data-menu-position="closed"] .nav_responsive i.fa.fa-reorder:before {
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: 50%;
-	height: 620px;
+	height: 300px;
 	z-index: 9;
 }
 .search_container_block:before {
@@ -6212,7 +6212,7 @@ h4 span.headline_part-detail {
 =========*/
 @media (max-width: 1366px) {
 .search_container_block {
-	height: 575px;
+	height: 250px;
 }
 }
 @media only screen and (max-width: 1365px) {

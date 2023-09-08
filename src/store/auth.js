@@ -1,5 +1,5 @@
 import router from '@/router'
-import { login, logout, register, getAuthenticatedUser, retrieveToken } from '../services/authService';
+import { login, logout, register, getAuthenticatedUser } from '../services/authService';
 
 
 export default {
@@ -7,7 +7,6 @@ export default {
     state:{ // Defining the state
         authenticated:false,
         user:{},
-        token:{}
     },
     getters:{ // Simply return their respective state properties.
         authenticated(state) {
@@ -16,9 +15,6 @@ export default {
         user(state) {
             return state.user
         },
-        token(state) {
-            return state.token
-        }
     },
     mutations:{ // These are synchronous functions that change the state.
         SET_AUTHENTICATED (state, value) {
@@ -26,9 +22,6 @@ export default {
         },
         SET_USER (state, value) {
             state.user = value
-        },
-        SET_TOKEN(state, token) {
-            state.token = token;
         },
     },
     actions:{
@@ -39,7 +32,7 @@ export default {
                 // Commit mutation to update user and authenticated state 
                 commit('SET_USER', data.user);
                 commit('SET_AUTHENTICATED', true);
-                commit('SET_TOKEN', data.token); // Store the token
+
                 router.push({ name: 'home' }); // redirect
             } catch (error) {
                 commit('SET_USER', {});
@@ -52,22 +45,10 @@ export default {
             }
             
         },
-        async retrieveTokenAndLogin({ commit }) {
+        async retrieveUserData({ commit }) {
             try {
-                // First, get the token from Laravel backend
-                const token = await retrieveToken();
-        
-                if (!token) {
-                    throw new Error("Token not received");
-                }
-        
-                commit('SET_TOKEN', token);
-                
                 // Use the token to fetch the authenticated user
-                const userData = await getAuthenticatedUser(token);
-
-                console.log(userData);
-                alert(1);
+                const userData = await getAuthenticatedUser();
                 
                 commit('SET_USER', userData.user);
                 commit('SET_AUTHENTICATED', true);
@@ -85,12 +66,10 @@ export default {
                 const response = await logout();
                 // Check the response message or status code from the backend
                 if (response.message === 'Logged out successfully') {
-            
                     // Reset the Vuex state
                     commit('SET_USER', {});
                     commit('SET_AUTHENTICATED', false);
-                    commit('SET_TOKEN', {});
-                    
+
                     // Redirect to login page
                     router.push({ name: 'login' }); 
                 }else {
@@ -101,7 +80,6 @@ export default {
                     // Reset the Vuex state
                     commit('SET_USER', {});
                     commit('SET_AUTHENTICATED', false);
-                    commit('SET_TOKEN', {});
                     
                     // Redirect to login page
                     router.push({ name: 'login' }); 

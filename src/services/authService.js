@@ -1,19 +1,18 @@
     import axios from 'axios';
 
     const BASE_URL = process.env.VUE_APP_BASE_API_URL;
+    axios.defaults.withCredentials = true;
 
-    let authToken = null;
+
 
     export async function login(authData) {
         const { data } = await axios.post(`${BASE_URL}/login`, authData);
-        authToken = data.token;
-        axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
         return data;
     }
 
     export async function logout() {
         const response = await axios.post(`${BASE_URL}/logout`);
-        authToken = null;
+
         delete axios.defaults.headers.common['Authorization'];
         return response.data;
     }
@@ -24,16 +23,7 @@
         return data;
     }
 
-    export async function retrieveToken() {
-        const { data } = await axios.post(`${BASE_URL}/get-token`);
-        return data.token;
-    }
-
-    export async function getAuthenticatedUser(token) {
-        const { data } = await axios.get(`${BASE_URL}/user`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+    export async function getAuthenticatedUser() {
+        const { data } = await axios.get(`${BASE_URL}/user`);
         return data;
     }

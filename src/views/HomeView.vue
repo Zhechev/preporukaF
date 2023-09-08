@@ -43,22 +43,7 @@ console.log(token.value);
               :categories="categories"
               :cities="cities"
             ></SearchComponent>
-            <div class="main_popular_categories">
-              <h3>explore categories</h3>
-              <ul class="main_popular_categories_list">
-                <li v-for="category in categories" :key="category.id">
-                  <router-link
-                    :to="{ name: 'showVenues' }"
-                    :key="category.id"
-                  >
-                    <div class="utf_box">
-                      <i :class="category.icon" aria-hidden="true"></i>
-                      <p>{{ getCategoryName(category) }}</p>
-                    </div>
-                  </router-link>
-                </li>
-              </ul>
-            </div>
+
           </div>
         </div>
       </div>
@@ -68,7 +53,7 @@ console.log(token.value);
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <h3 class="headline_part centered margin-top-75">Explore categories</h3>
+        <h3 class="headline_part centered margin-top-35">Explore categories</h3>
       </div>
     </div>
     <div class="row">

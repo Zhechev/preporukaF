@@ -4,6 +4,8 @@ import { useStore } from 'vuex';
 import { Field, ErrorMessage, defineRule, useForm } from 'vee-validate';
 import { required, email } from '@vee-validate/rules';
 
+const BASE_URL = process.env.VUE_APP_BASE_API_URL;
+
 // Define vee-validate rules
 defineRule('required', required);
 defineRule('email', email);
@@ -36,11 +38,11 @@ const onSubmit = handleSubmit(async () => {
 });
 
 const loginWithGoogle = () => {
-    window.location.href = 'http://localhost:8000/redirect-to-google';
+    window.location.href = `${BASE_URL}/redirect-to-google`;
 }
 
 const loginWithFacebbok = () => {
-    window.location.href = 'http://localhost:8000/redirect-to-facebook';
+    window.location.href = `${BASE_URL}/redirect-to-facebook`;
 }
 </script>
 
