@@ -59,3 +59,18 @@ export const getVenue = async (id) => {
     const response = await axios.get(`${BASE_URL}/venues/${id}`);
     return response.data;
 }
+
+// New function to create a review for a venue
+export const createReviewForVenue = async (venueId, formData) => {
+    try {
+        const response = await axios.post(`${BASE_URL}/venues/${venueId}/reviews`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error creating review for venue:', error);
+        throw error;
+    }
+};

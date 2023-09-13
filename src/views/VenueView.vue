@@ -1,17 +1,30 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { useStore } from 'vuex'
 import { getVenue } from "@/services/venueService";
-import '@splidejs/splide/dist/css/splide.min.css'; // Added this
+import '@splidejs/splide/dist/css/splide.min.css';
 import '@splidejs/vue-splide/css';
-import { Splide, SplideSlide } from '@splidejs/vue-splide'; // Added this
+import { Splide, SplideSlide } from '@splidejs/vue-splide';
 import VueEasyLightbox from 'vue-easy-lightbox';
+import { createReviewForVenue } from "@/services/venueService";
+
 
 const route = useRoute();
+const store = useStore();
 const splideRef = ref(null);
 const VUE_APP_BASE_URL_STORAGE = process.env.VUE_APP_BASE_URL_STORAGE;
 
+const isAuth = computed(() => store.getters['auth/authenticated'])
+
 const venue = ref({});
+
+const rating = ref(null);
+const name = ref("");
+const email = ref("");
+const subject = ref("");
+const content = ref("");
+const fileUpload = ref(null);
 
 const options = {
   rewind: true,
@@ -46,6 +59,26 @@ const showMultiple = (event) => {
 };
 
 const onHide = () => (visibleRef.value = false);
+
+const onSubmit = async () => {
+    const formData = new FormData();
+    formData.append('rating', rating.value);
+    formData.append('name', name.value);
+    formData.append('email', email.value);
+    formData.append('subject', subject.value);
+    formData.append('content', content.value);
+
+    if (fileUpload.value?.files?.[0]) {
+        formData.append('photo', fileUpload.value.files[0]);
+    }
+
+    try {
+      await createReviewForVenue(venue.value.id, formData);
+        // TODO: Handle success (show a message, redirect, etc.)
+    } catch (error) {
+        // TODO: Handle error (show error message, etc.)
+    }
+};
 
 onMounted(async () => {
   // Fetch venue data and populate imgsRef
@@ -339,13 +372,14 @@ onMounted(async () => {
         </div>
         <div id="utf_add_review" class="utf_add_review-box">
           <h3
-            :style="authStateCheck ? '' : 'filter: blur(1px)'"
+            :style="isAuth ? '' : 'filter: blur(1px)'"
             class="utf_listing_headline_part margin-bottom-20 add_review_title"
           >
-            {{ addReviewText }}
+            Add review
           </h3>
+          <span class="utf_leave_rating_title">Your email address will not be published.</span>
 
-          <div v-if="!authStateCheck" class="disable_form_review_text">
+          <div v-if="!isAuth" class="disable_form_review_text">
             <span>{{ reviewDisabledText }}</span>
             <a :href="loginRoute" class="button">{{ loginNowText }}</a>
           </div>
@@ -354,7 +388,8 @@ onMounted(async () => {
             class="utf_add_comment"
             enctype="multipart/form-data"
             action=""
-            :style="authStateCheck ? '' : 'filter: blur(5px)'"
+            :style="isAuth ? '' : 'filter: blur(5px)'"
+            @submit.prevent="onSubmit"
           >
             <div class="row">
               <div class="col-md-6 col-sm-6 col-xs-12">
@@ -380,7 +415,7 @@ onMounted(async () => {
                     <span class="i">
                       <font-awesome-icon :icon="['fas', 'circle-arrow-up']"
                     /></span>
-                    <input type="file" class="upload" />
+                    <input type="file" class="upload" ref="fileUpload"/>
                   </div>
                 </div>
               </div>
@@ -389,15 +424,15 @@ onMounted(async () => {
               <div class="row">
                 <div class="col-md-4">
                   <label>Name:</label>
-                  <input type="text" placeholder="Name" value="" />
+                  <input type="text" placeholder="Name" v-model="name"/>
                 </div>
                 <div class="col-md-4">
                   <label>Email:</label>
-                  <input type="text" placeholder="Email" value="" />
+                  <input type="text" placeholder="Email" v-model="email"/>
                 </div>
                 <div class="col-md-4">
                   <label>Subject:</label>
-                  <input type="text" placeholder="Subject" value="" />
+                  <input type="text" placeholder="Subject" v-model="subject"/>
                 </div>
               </div>
               <div>
@@ -406,6 +441,7 @@ onMounted(async () => {
                   cols="40"
                   placeholder="Your Message..."
                   rows="3"
+                  v-model="content"
                 ></textarea>
               </div>
             </fieldset>
