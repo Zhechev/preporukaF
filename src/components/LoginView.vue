@@ -50,36 +50,50 @@ const loginWithFacebbok = () => {
 
 <template>
     <div class="container h-100">
-        <div class="row h-100 align-items-center">
-            <div class="col-12 col-md-6 offset-md-3">
-                <div class="card shadow sm">
-                    <div class="card-body">
-                        <h1 class="text-center">Login</h1>
-                        <hr/>
-                        <form @submit.prevent="onSubmit" class="row" method="post">
-                            <div class="form-group col-12">
-                                <label for="email" class="font-weight-bold">Email</label>
-                                <Field name="email" :rules="'required|email'" v-model="auth.email" />
-                                <ErrorMessage name="email" />
+        <div class="row with-forms">
+            <div class="col-12 col-md-10 offset-md-1">
+           
+                        <form @submit.prevent="onSubmit" class="row utf_signin_form" method="post">
+                            <div class="left-column">
+                                <h1 class="text-center">Login</h1>
+                                <div class="form-group">
+                                    <label for="email" class="font-weight-bold">Email</label>
+                                    <Field name="email" :rules="'required|email'" v-model="auth.email" />
+                                    <ErrorMessage name="email" />
+                                </div>
+                                <div class="form-groupmy-2">
+                                    <label for="password" class="font-weight-bold">Password</label>
+                                    <Field name="password" :rules="'required'" v-model="auth.password" />
+                                    <ErrorMessage name="password" />
+                                </div>
+                                <div class="form-grouputf_row_form utf_form_wide_block form_forgot_part"> 
+                                    <span class="lost_password fl_left"> <a href="javascript:void(0);">Forgot Password?</a> </span>
+                                    <div class="checkboxes fl_right">
+                                        <input id="remember-me" type="checkbox" name="check">
+                                        <label for="remember-me">Remember Me</label>
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <button type="submit" :disabled="processing" @click="login" class="btn">
+                                        {{ processing ? "Please wait" : "Login" }}
+                                    </button>
+                                </div>
+                                </div>
+                            <div class="right-column">
+                                <div class="utf-reg-txt">
+                                    <p>Don't have an account?</p>
+                                    <router-link :to="{name:'register'}" class="reg-link">Sign up</router-link>
+                                </div>
+                                <div class="utf-login_with">
+                                    <span class="txt">Or</span>
+                                </div>
+                                <div class="d-flex">
+                                    <button class="social_bt facebook_btn mb-0" @click="loginWithFacebbok">Login with Facebook</button>
+                                    <button class="social_bt google_btn mb-0" @click="loginWithGoogle">Login with Google</button>
+                                </div>
                             </div>
-                            <div class="form-group col-12 my-2">
-                                <label for="password" class="font-weight-bold">Password</label>
-                                <Field name="password" :rules="'required'" v-model="auth.password" />
-                                <ErrorMessage name="password" />
-                            </div>
-                            <div class="col-12 mb-2">
-                                <button type="submit" :disabled="processing" @click="login" class="btn btn-primary btn-block">
-                                    {{ processing ? "Please wait" : "Login" }}
-                                </button>
-                            </div>
-                            <div class="col-12 text-center">
-                                <label>Don't have an account? <router-link :to="{name:'register'}">Register Now!</router-link></label>
-                            </div>
-                            <button @click="loginWithGoogle">Login with Google</button>
-                            <button @click="loginWithFacebbok">Login with Facebook</button>
                         </form>
-                    </div>
-                </div>
+             
             </div>
         </div>
     </div>

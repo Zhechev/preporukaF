@@ -53,7 +53,7 @@ console.log(token.value);
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <h3 class="headline_part centered margin-top-35">Explore categories</h3>
+        <h3 class="headline_part centered margin-top-35">{{ $t("text.categories") }}</h3>
       </div>
     </div>
     <div class="row">
@@ -65,9 +65,11 @@ console.log(token.value);
             :key="category.id"
             class="utf_category_small_box_part"
           >
-            <i :class="category.icon"></i>
+            <span class="cat-icon">
+              <font-awesome-icon :icon="['fas', category.icon ]" />
+            </span>
             <h4>{{ getCategoryName(category) }}</h4>
-            <span>{{ category.venues_count }}</span>
+            <span class="num">{{ category.venues_count }}</span>
           </router-link>
         </div>
       </div>
