@@ -316,7 +316,13 @@ onMounted(async () => {
                 </div>
                 <div class="utf_comment_content">
                   <div class="utf_arrow_comment"></div>
-                  <div class="utf_star_rating_section" data-rating="5"></div>
+                  <div class="utf_star_rating_section" data-rating="4">
+                    <span class="star"><font-awesome-icon :icon="['fas', 'star']" /></span>
+                    <span class="star"><font-awesome-icon :icon="['fas', 'star']" /></span>
+                    <span class="star"><font-awesome-icon :icon="['fas', 'star']" /></span>
+                    <span class="star"><font-awesome-icon :icon="['fas', 'star']" /></span>
+                    <span class="star empty"><font-awesome-icon :icon="['fas', 'star']" /></span>
+                  </div>
                   <a href="#" class="rate-review"
                     >Helpful Review
                     <font-awesome-icon :icon="['fas', 'thumbs-up']"
@@ -396,15 +402,15 @@ onMounted(async () => {
                 <div class="clearfix"></div>
                 <div class="utf_leave_rating margin-bottom-30">
                   <input type="radio" name="rating" id="rating-1" value="1" />
-                  <label for="rating-1" class="fa fa-star"></label>
+                  <label for="rating-1"><font-awesome-icon :icon="['fas', 'star']" /></label>
                   <input type="radio" name="rating" id="rating-2" value="2" />
-                  <label for="rating-2" class="fa fa-star"></label>
+                  <label for="rating-2"><font-awesome-icon :icon="['fas', 'star']" /></label>
                   <input type="radio" name="rating" id="rating-3" value="3" />
-                  <label for="rating-3" class="fa fa-star"></label>
+                  <label for="rating-3"><font-awesome-icon :icon="['fas', 'star']" /></label>
                   <input type="radio" name="rating" id="rating-4" value="4" />
-                  <label for="rating-4" class="fa fa-star"></label>
+                  <label for="rating-4"><font-awesome-icon :icon="['fas', 'star']" /></label>
                   <input type="radio" name="rating" id="rating-5" value="5" />
-                  <label for="rating-5" class="fa fa-star"></label>
+                  <label for="rating-5"><font-awesome-icon :icon="['fas', 'star']" /></label>
                 </div>
                 <div class="clearfix"></div>
               </div>

@@ -413,6 +413,11 @@ watch(() => route.query, async (newQuery) => {
                       ><font-awesome-icon :icon="['fas', 'phone']" /> {{ venue.phone }}</span
                     >
                     <div class="utf_star_rating_section" :data-rating="venue.rating">
+                      <span class="star"><font-awesome-icon :icon="['fas', 'star']" /></span>
+                      <span class="star"><font-awesome-icon :icon="['fas', 'star']" /></span>
+                      <span class="star"><font-awesome-icon :icon="['fas', 'star']" /></span>
+                      <span class="star"><font-awesome-icon :icon="['fas', 'star']" /></span>
+                      <span class="star half"><font-awesome-icon :icon="['fas', 'star']" /></span>
                       <div class="utf_counter_star_rating">( {{ venue.rating }} )</div>
                     </div>
                     <p>

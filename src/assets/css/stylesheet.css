@@ -3729,6 +3729,9 @@ mark {
 	color: #808080;
 	display: block;
 }
+.utf_listing_item-container.list-layout .utf_listing_item-inner span.star {
+	color: #ffc600;
+}
 .utf_listing_item-container.list-layout .utf_star_rating_section {
 	padding: 0px 0 8px 0;
 }
@@ -3964,6 +3967,7 @@ section.fullwidth_block .utf_listing_item-container.list-layout{
 }
 .utf_listing_item_content span.star{
 	font-size: 14px;
+	color: #ffc600;
 }
 .utf_listing_item_content span i{
 	font-size:16px;
@@ -4094,7 +4098,7 @@ section.fullwidth_block .utf_listing_item-container.list-layout{
 .utf_listing_item-container.compact .utf_counter_star_rating {
 	color: rgba(255,255,255,1);
 }
-.utf_listing_item-container.compact .utf_star_rating_section .star.empty:before, .utf_listing_item-container.compact .utf_star_rating_section .star.half:before {
+.utf_listing_item-container.compact .utf_star_rating_section .star.empty, .utf_listing_item-container.compact .utf_star_rating_section .star.half {
 	color: rgba(0, 0, 0, 0.3);
 }
 .utf_listing_item-container.compact .utf_listing_item_content span.tag {
@@ -4168,6 +4172,7 @@ section.fullwidth_block .utf_listing_item-container.list-layout{
 	float: left;
 	margin-right: 4px;
 	position: relative;
+	color: #ffc600;
 }
 .utf_counter_star_rating {
 	font-family: "Open Sans";
@@ -4189,13 +4194,7 @@ section.fullwidth_block .utf_listing_item-container.list-layout{
 	top: 0px;
 	position: relative;
 }
-.utf_star_rating_section .star.half:after, .utf_star_rating_section .star:before {
-	font-family: "FontAwesome";
-	content: "\f005";
-	display: block;
-	color: #ffc600;
-}
-.utf_star_rating_section .star.empty:before {
+.utf_star_rating_section .star.empty {
 	color: #999;
 }
 .rating:after {
@@ -4206,18 +4205,11 @@ section.fullwidth_block .utf_listing_item-container.list-layout{
 	line-height: 0;
 	height: 0;
 }
-.utf_star_rating_section .star.half:before {
-	color: #999;
+.utf_star_rating_section .star.half .svg {
+	clip-path: inset(0 50% 0 0);
+    color: #ffc600
 }
-.utf_star_rating_section .star.half:after {
-	color: #ffc600;
-	position: absolute;
-	top: 0;
-	width: 50%;
-	display: block;
-	height: 100%;
-	overflow: hidden;
-}
+
 .utf_view_count i{
 	font-size:15px;
 	color:rgba(0, 0, 0, 0.55);
