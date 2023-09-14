@@ -44,5 +44,10 @@
     "password": "Парола",
     "confirm_password": "Потвърди парола",
     "register": "Регистрация",
-    "please_wait": "Моля, изчакайте"
+    "sign_up": "Регистрирай се",
+    "please_wait": "Моля, изчакайте",
+    "forget_password": "Забравена парола",
+    "remember_me": "Запомни ме",
+    "not_account": "Нямаш акаунт?",
+    "or": "или"
 }

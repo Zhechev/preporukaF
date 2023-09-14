@@ -44,5 +44,10 @@
     "password": "Password",
     "confirm_password": "Confirm password",
     "register": "Register",
-    "please_wait": "Please wait"
+    "sign_up": "Sign up",
+    "please_wait": "Please wait",
+    "forget_password": "Forgot password",
+    "remember_me": "Remember me",
+    "not_account": "Don't have an account?",
+    "or": "or"
 }

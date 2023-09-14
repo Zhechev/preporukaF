@@ -51,49 +51,51 @@ const loginWithFacebbok = () => {
 <template>
     <div class="container h-100">
         <div class="row with-forms">
-            <div class="col-12 col-md-10 offset-md-1">
-           
-                        <form @submit.prevent="onSubmit" class="row utf_signin_form" method="post">
-                            <div class="left-column">
-                                <h1 class="text-center">Login</h1>
+            <div class="col-12 col-lg-10 offset-lg-1">
+                <form @submit.prevent="onSubmit" class="row utf_signin_form" method="post">
+                    <div class="left-column">
+                                <h1 class="text-center">{{ $t("text.login") }}</h1>
                                 <div class="form-group">
-                                    <label for="email" class="font-weight-bold">Email</label>
+                                    <label for="email" class="font-weight-bold">{{ $t("text.email") }}</label>
                                     <Field name="email" :rules="'required|email'" v-model="auth.email" />
                                     <ErrorMessage name="email" />
                                 </div>
-                                <div class="form-groupmy-2">
-                                    <label for="password" class="font-weight-bold">Password</label>
+                                <div class="form-group">
+                                    <label for="password" class="font-weight-bold">{{ $t("text.password") }}</label>
                                     <Field name="password" :rules="'required'" v-model="auth.password" />
                                     <ErrorMessage name="password" />
                                 </div>
-                                <div class="form-grouputf_row_form utf_form_wide_block form_forgot_part"> 
-                                    <span class="lost_password fl_left"> <a href="javascript:void(0);">Forgot Password?</a> </span>
-                                    <div class="checkboxes fl_right">
+                                <div class="form-group utf_row_form utf_form_wide_block form_forgot_part"> 
+                                    <div class="lost_password mb-2"> <a href="javascript:void(0);">{{ $t("text.forget_password") }}?</a> </div>
+                                    <div class="checkboxes in-row">
                                         <input id="remember-me" type="checkbox" name="check">
-                                        <label for="remember-me">Remember Me</label>
+                                        <label for="remember-me">{{ $t("text.remember_me") }}
+                                            <span class="tick">
+                                                <font-awesome-icon :icon="['fas', 'check']"/>
+                                            </span>
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="mb-2">
                                     <button type="submit" :disabled="processing" @click="login" class="btn">
-                                        {{ processing ? "Please wait" : "Login" }}
+                                        {{ processing ? $t("text.please_wait") : $t("text.login") }}
                                     </button>
                                 </div>
-                                </div>
-                            <div class="right-column">
+                    </div>
+                    <div class="right-column">
                                 <div class="utf-reg-txt">
-                                    <p>Don't have an account?</p>
-                                    <router-link :to="{name:'register'}" class="reg-link">Sign up</router-link>
+                                    <p>{{ $t("text.not_account") }}</p>
+                                    <router-link :to="{name:'register'}" class="reg-link">{{ $t("text.sign_up") }}</router-link>
                                 </div>
                                 <div class="utf-login_with">
-                                    <span class="txt">Or</span>
+                                    <span class="txt">{{ $t("text.or") }}</span>
                                 </div>
-                                <div class="d-flex">
-                                    <button class="social_bt facebook_btn mb-0" @click="loginWithFacebbok">Login with Facebook</button>
-                                    <button class="social_bt google_btn mb-0" @click="loginWithGoogle">Login with Google</button>
+                                <div class="">
+                                    <button class="social_bt facebook_btn" @click="loginWithFacebbok">Login with Facebook</button>
+                                    <button class="social_bt google_btn" @click="loginWithGoogle">Login with Google</button>
                                 </div>
-                            </div>
-                        </form>
-             
+                    </div>
+                </form>
             </div>
         </div>
     </div>

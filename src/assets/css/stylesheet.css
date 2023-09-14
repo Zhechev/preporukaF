@@ -211,7 +211,7 @@ input, input[type="text"], input[type="password"], input[type="email"], input[ty
 	outline: none;
 	font-size: 15px;
 	color: #808080;
-	margin: 0 0 16px 0;
+	/* margin: 0 0 16px 0; */
 	max-width: 100%;
 	width: 100%;
 	box-sizing: border-box;
@@ -314,6 +314,9 @@ label span, legend span {
 fieldset {
 	padding: 0;
 	border: none;
+}
+span[role=alert] {
+	color: #ff2222;
 }
 mark.color{
 	background-color:#ff2222;
@@ -1932,7 +1935,7 @@ button.panel-cancel:active {
 	overflow: hidden;
 }
 }
-.row.with-forms input, .row.with-forms input[type="text"], .row.with-forms input[type="password"], .row.with-forms input[type="email"], .row.with-forms input[type="number"], .row.with-forms textarea, .row.with-forms input, .row.with-forms select, .row.with-forms .chosen-container {
+.row.with-forms .form-group, .row.with-forms .chosen-container {
 	margin-bottom: 18px;
 }
 .row.with-forms {
@@ -3344,10 +3347,12 @@ mark {
   Login Block
 ============*/
 .utf_signin_form {
-	border-radius: 4px;
-	transition: box-shadow 0.2s!important;
-	box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.07);
-	margin-top: 30px;
+	background-color: #f9f9f9;
+    border-radius: 4px;
+    padding: 30px;
+    transform: translate3d(0, 0, 0);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+	margin: 50px 0;
 }
 
 .utf_signin_form .left-column, .utf_signin_form .right-column {
@@ -3355,9 +3360,11 @@ mark {
 	-ms-flex: 1 0 50%;
 		flex: 1 0 50%;
 }
+
 .utf_signin_form .left-column {
 	padding: 20px;
 	box-sizing: border-box;
+	border-right: 1px solid #e8e8e8;
 }
 .utf_signin_form .right-column {
 	display: -webkit-box;
@@ -3373,8 +3380,6 @@ mark {
     -webkit-box-pack: center;
         -ms-flex-pack: center;
             justify-content: center;
-
-	background-color: #ff2222;
 }
 .lost_password a {
 	margin: 0;
@@ -3433,6 +3438,9 @@ mark {
 	left: 15px;
 	bottom: 11px;
 }
+.utf_signin_form .checkboxes.in-row label {
+	margin-top: 0;
+}
 .utf_signin_form .btn {
 	line-height: 30px;
 	height: auto;
@@ -3447,37 +3455,27 @@ mark {
 
 .utf_signin_form .reg-link {
 	border-radius: 34px;
-    border: 1px solid #fff;
-    color: #fff;
+    border: 1px solid #666;
+	color: #666;
     padding: 5px 10px;
 	text-transform: capitalize;
 }
 
 .utf_signin_form .reg-link:hover {
-	border: 1px solid #fff;
-    color: #ff2222;
-	background-color: #fff;
+	border: 1px solid #666;
+    color: #fff;
+	background-color: #666;
 }
 
-.utf-login_with::after {
-    z-index: -1;
-    position: absolute;
-    content: '';
-    width: 100%;
-    height: 1px;
-    background: #E9E4E4;
-    left: 0;
-    top: 14px;
-}
 .utf-login_with .txt {
     display: inline-block;
 	padding: 0 10px;
 	font-weight: 600;
 	font-size: 14px;
-    color: #fff;
+    color: #666;
 }
 .utf-reg-txt {
-	color: #fff;
+	color: #666;
 	text-align: center;
 	margin-bottom: 10px;
 
@@ -3485,11 +3483,11 @@ mark {
 .utf-login_with {
     position: relative;
     text-align: center;
-	margin-bottom: 10px;
 }
 
 .utf_signin_form .social_bt {
 	margin: 10px;
+	width: calc( 100% - 20px);
 }
 
 /*==========
@@ -3603,7 +3601,7 @@ mark {
 	top: 3px;
 	background-color: #fff;
 	border: 2px solid #d0d0d0;
-	border-radius: 20px;
+	/* border-radius: 20px; */
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -5313,13 +5311,13 @@ label.switch {
 	padding: 0;
 	margin: 0 0 0 4px;
 }
-.add_utf_listing_section .row.with-forms input, .add_utf_listing_section .row.with-forms input[type="text"], .add_utf_listing_section .row.with-forms input[type="password"], .add_utf_listing_section .row.with-forms input[type="email"], .add_utf_listing_section .row.with-forms input[type="number"], .add_utf_listing_section .row.with-forms textarea, .add_utf_listing_section .row.with-forms input, .add_utf_listing_section .row.with-forms select, .add_utf_listing_section .row.with-forms .chosen-container {
+/* .add_utf_listing_section .row.with-forms input, .add_utf_listing_section .row.with-forms input[type="text"], .add_utf_listing_section .row.with-forms input[type="password"], .add_utf_listing_section .row.with-forms input[type="email"], .add_utf_listing_section .row.with-forms input[type="number"], .add_utf_listing_section .row.with-forms textarea, .add_utf_listing_section .row.with-forms input, .add_utf_listing_section .row.with-forms select, .add_utf_listing_section .row.with-forms .chosen-container {
 	margin-bottom: 22px;
 }
 .add_utf_listing_section textarea {
 	min-height: 200px;
 	margin-bottom: 35px;
-}
+} */
 #utf_add_listing_part h5.fb-input {
 	color: #3b5998;
 }
@@ -6594,6 +6592,21 @@ h4 span.headline_part-detail {
 }
 .add_utf_listing_section{
 	padding:0 20px 20px 20px;
+}
+.utf_signin_form {
+	padding: 0;
+}
+.utf_signin_form .left-column, .utf_signin_form .right-column {
+	-webkit-box-flex: 1;
+	-ms-flex: 1 0 100%;
+		flex: 1 0 100%;
+}
+.utf_signin_form .left-column {
+	border-right: none;
+    border-bottom: 1px solid #e8e8e8;
+}
+.utf-reg-txt {
+    margin-top: 20px;
 }
 #bottom_backto_top {
 	display: block;

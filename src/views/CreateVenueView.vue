@@ -217,7 +217,7 @@ const checkErrors = async () => {
                   </h3>
                 </div>
                 <div class="row with-forms">
-                  <div class="col-md-6">
+                  <div class="col-md-6 form-group">
                     <h5>{{ $t("text.title") }}</h5>
                     <Field
                       v-model="title"
@@ -230,7 +230,7 @@ const checkErrors = async () => {
                     />
                     <ErrorMessage name="title" />
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6 form-group">
                     <h5>{{ $t("text.category") }}</h5>
                     <div class="dropdown">
                       <button
@@ -282,7 +282,7 @@ const checkErrors = async () => {
                 </div>
                 <div class="utf_submit_section">
                   <div class="row with-forms">
-                    <div class="col-md-6">
+                    <div class="col-md-6 form-group">
                       <h5>{{ $t("text.city") }}</h5>
                       <div class="dropdown">
                         <button
@@ -320,7 +320,7 @@ const checkErrors = async () => {
                         </ul>
                       </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 form-group">
                       <h5>{{ $t("text.address") }}</h5>
                       <Field
                         v-model="address"
@@ -384,7 +384,7 @@ const checkErrors = async () => {
                   </h3>
                 </div>
                 <div class="row with-forms">
-                  <div class="col-md-6">
+                  <div class="col-md-6 form-group">
                     <h5>{{ $t("text.phone") }}</h5>
                     <input
                       v-model="phone"
@@ -394,7 +394,7 @@ const checkErrors = async () => {
                       :placeholder="$t('text.phone')"
                     />
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6 form-group">
                     <h5>E-mail</h5>
                     <Field
                       v-model="email"
@@ -407,7 +407,7 @@ const checkErrors = async () => {
                     />
                     <ErrorMessage name="email" />
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6 form-group">
                     <h5>Website</h5>
                     <input
                       v-model="website"
@@ -416,7 +416,7 @@ const checkErrors = async () => {
                       placeholder="Website"
                     />
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6 form-group">
                     <h5>Facebook</h5>
                     <input
                       v-model="facebook"
@@ -425,7 +425,7 @@ const checkErrors = async () => {
                       placeholder="Facebook"
                     />
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6 form-group">
                     <h5>Instagram</h5>
                     <input
                       v-model="instagram"
@@ -434,7 +434,7 @@ const checkErrors = async () => {
                       placeholder="Instagram"
                     />
                   </div>
-                  <div class="col-md-12">
+                  <div class="col-md-12 form-group">
                     <h5>{{ $t("text.description_bg") }}</h5>
                     <Field
                       v-model="content_bg"
@@ -447,7 +447,7 @@ const checkErrors = async () => {
                     />
                     <ErrorMessage name="content_bg" />
                   </div>
-                  <div class="col-md-12">
+                  <div class="col-md-12 form-group">
                     <h5>{{ $t("text.description_en") }}</h5>
                     <textarea
                       v-model="content_en"
