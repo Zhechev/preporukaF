@@ -1,5 +1,6 @@
 <script setup>
 // 1. Imports
+import ReviewCommentComponent from '@/components/ReviewCommentComponent.vue';
 import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
@@ -360,6 +361,7 @@ onMounted(async () => {
                     {{ review.content }}
                   </p>
                 </div>
+                <review-comment-component :review-id="review.id"></review-comment-component>
               </li>
             </ul>
           </div>
