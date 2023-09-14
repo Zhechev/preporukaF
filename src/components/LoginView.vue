@@ -54,7 +54,7 @@ const loginWithFacebbok = () => {
             <div class="col-12 col-lg-10 offset-lg-1">
                 <form @submit.prevent="onSubmit" class="row utf_signin_form" method="post">
                     <div class="left-column">
-                                <h1 class="text-center">{{ $t("text.login") }}</h1>
+                                <h1 class="title text-center">{{ $t("text.login") }}</h1>
                                 <div class="form-group">
                                     <label for="email" class="font-weight-bold">{{ $t("text.email") }}</label>
                                     <Field name="email" :rules="'required|email'" v-model="auth.email" />
@@ -66,7 +66,7 @@ const loginWithFacebbok = () => {
                                     <ErrorMessage name="password" />
                                 </div>
                                 <div class="form-group utf_row_form utf_form_wide_block form_forgot_part"> 
-                                    <div class="lost_password mb-2"> <a href="javascript:void(0);">{{ $t("text.forget_password") }}?</a> </div>
+                                    <div class="lost_password mb-2"> <a href="javascript:void(0);" class="link">{{ $t("text.forget_password") }}?</a> </div>
                                     <div class="checkboxes in-row">
                                         <input id="remember-me" type="checkbox" name="check">
                                         <label for="remember-me">{{ $t("text.remember_me") }}

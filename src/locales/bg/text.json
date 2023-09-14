@@ -49,5 +49,6 @@
     "forget_password": "Забравена парола",
     "remember_me": "Запомни ме",
     "not_account": "Нямаш акаунт?",
-    "or": "или"
+    "or": "или",
+    "have_account": "Вече имаш акаунт?"
 }

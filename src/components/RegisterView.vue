@@ -80,44 +80,40 @@ function getDisplayName(fieldName) {
 
 <template>
     <div class="container h-100">
-        <div class="row h-100 align-items-center">
-            <div class="col-12 col-md-6 offset-md-3">
-                <div class="card shadow sm">
-                    <div class="card-body">
-                        <h1 class="text-center">Register</h1>
-                        <hr/>
-                        <form @submit.prevent="onSubmit" class="row" method="post">
-                            <div class="form-group col-12">
+        <div class="row with-forms">
+            <div class="col-12 col-lg-6 offset-lg-3">
+                        <form @submit.prevent="onSubmit" class="row utf_signin_form" method="post">
+                          <h1 class="title text-center">{{ $t("text.sign_up") }}</h1>
+                            <div class="form-group">
                                 <label for="name" class="font-weight-bold">{{ $t('text.name') }}</label>
                                 <Field name="name" :rules="'required|min:5'" v-model="user.name" />
                                 <ErrorMessage name="name" class="error-message" />
                             </div>
-                            <div class="form-group col-12 my-2">
+                            <div class="form-group">
                                 <label for="email" class="font-weight-bold">{{ $t('text.email') }}</label>
                                 <Field name="email" :rules="'required|email'" v-model="user.email" />
                                 <ErrorMessage name="email" />
                             </div>
-                            <div class="form-group col-12">
+                            <div class="form-group">
                                 <label for="password" class="font-weight-bold">{{ $t('text.password') }}</label>
                                 <Field type="password" name="password" :rules="'required'" v-model="user.password" />
                                 <ErrorMessage name="password" />
                             </div>
-                            <div class="form-group col-12 my-2">
+                            <div class="form-group">
                                 <label for="password_confirmation" class="font-weight-bold">{{ $t('text.confirm_password') }}</label>
                                 <Field type="password" name="password_confirmation" :rules="'required|confirmed:@password'" v-model="user.password_confirmation" />
                                 <ErrorMessage name="password_confirmation" />
                             </div>
-                            <div class="col-12 mb-2">
-                                <button type="submit" :disabled="processing" class="btn btn-primary btn-block">
+                            <div class="mb-4">
+                                <button type="submit" :disabled="processing" class="btn">
                                     {{ processing ? $t('text.please_wait') : $t('text.register') }}
                                 </button>
                             </div>
                             <div class="col-12 text-center">
-                                <label>Already have an account? <router-link :to="{name:'login'}">Login Now!</router-link></label>
+                                <p>{{ $t('text.have_account') }}</p>
+                                <router-link :to="{name:'login'}" class="reg-link">{{ $t('text.login') }}</router-link>
                             </div>
                         </form>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

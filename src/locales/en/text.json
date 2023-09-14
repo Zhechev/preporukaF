@@ -49,5 +49,6 @@
     "forget_password": "Forgot password",
     "remember_me": "Remember me",
     "not_account": "Don't have an account?",
-    "or": "or"
+    "or": "or",
+    "have_account": "Already have an account?"
 }
