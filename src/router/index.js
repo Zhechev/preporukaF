@@ -74,7 +74,6 @@ const routes = [
     {
         name: "showVenue",
         path: "/venues/:id",
-        props: true,
         component: VenueView,
         meta: {
             middleware: ["all"],

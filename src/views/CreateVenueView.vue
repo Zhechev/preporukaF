@@ -1,7 +1,6 @@
 <script setup>
 import { useStore } from "vuex";
 import LeafletMap from "../components/common/LeafletMap.vue";
-import axios from "axios";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import {
   required as requiredRule,
@@ -10,10 +9,6 @@ import {
 import { useI18n } from "vue-i18n";
 import { computed, ref } from "vue";
 import { createVenue } from "@/services/venueService";
-
-axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
-  "token"
-)}`;
 
 const { t, locale } = useI18n();
 const store = useStore();
@@ -172,30 +167,30 @@ const isRequired = (value) => {
   return true;
 };
 
-const checkErrors = async () => {
-  const result = await formRef.value.validate();
+// const checkErrors = async () => {
+//   const result = await formRef.value.validate();
 
-  if (!result.valid) {
-    const firstErrorField = Object.keys(result.errors)[0];
-    let errorElement;
+//   if (!result.valid) {
+//     const firstErrorField = Object.keys(result.errors)[0];
+//     let errorElement;
 
-    if (firstErrorField === "category") {
-      // This handles the special case where the error is on the hidden category input.
-      // Here, we scroll to the dropdown associated with this input.
-      errorElement = document.querySelector("#dropdownCategory");
-    } else {
-      errorElement = document.querySelector(`[name="${firstErrorField}"]`);
-    }
+//     if (firstErrorField === "category") {
+//       // This handles the special case where the error is on the hidden category input.
+//       // Here, we scroll to the dropdown associated with this input.
+//       errorElement = document.querySelector("#dropdownCategory");
+//     } else {
+//       errorElement = document.querySelector(`[name="${firstErrorField}"]`);
+//     }
 
-    if (errorElement) {
-      errorElement.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }
-  }
-  return result;
-};
+//     if (errorElement) {
+//       errorElement.scrollIntoView({
+//         behavior: "smooth",
+//         block: "center",
+//       });
+//     }
+//   }
+//   return result;
+// };
 </script>
 
 <template>
@@ -437,6 +432,7 @@ const checkErrors = async () => {
                   <div class="col-md-12 form-group">
                     <h5>{{ $t("text.description_bg") }}</h5>
                     <Field
+                      as="textarea"
                       v-model="content_bg"
                       name="content_bg"
                       cols="40"
@@ -449,7 +445,8 @@ const checkErrors = async () => {
                   </div>
                   <div class="col-md-12 form-group">
                     <h5>{{ $t("text.description_en") }}</h5>
-                    <textarea
+                    <Field
+                      as="textarea"
                       v-model="content_en"
                       name="content_en"
                       cols="40"
@@ -457,7 +454,8 @@ const checkErrors = async () => {
                       id="content_en"
                       :placeholder="$t('text.description_en')"
                       spellcheck="true"
-                    ></textarea>
+                    />
+                    <ErrorMessage name="content_en" />
                   </div>
                 </div>
               </div>

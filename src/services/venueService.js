@@ -60,6 +60,11 @@ export const getVenue = async (id) => {
     return response.data;
 }
 
+export const getVenueReviews = async (venueId, page = 1) => {
+    const response = await axios.get(`${BASE_URL}/venues/${venueId}/reviews?page=${page}`);
+    return response.data;
+}
+
 // New function to create a review for a venue
 export const createReviewForVenue = async (venueId, formData) => {
     try {
