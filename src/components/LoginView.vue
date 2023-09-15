@@ -91,8 +91,14 @@ const loginWithFacebbok = () => {
                                     <span class="txt">{{ $t("text.or") }}</span>
                                 </div>
                                 <div class="">
-                                    <button class="social_bt facebook_btn" @click="loginWithFacebbok">Login with Facebook</button>
-                                    <button class="social_bt google_btn" @click="loginWithGoogle">Login with Google</button>
+                                    <button class="social_bt facebook_btn" @click="loginWithFacebbok">
+                                        <span class="icon"><font-awesome-icon :icon="['fab', 'facebook']" /></span>
+                                        <span class="txt">{{ $t("text.login_with") }} Facebook</span>
+                                    </button>
+                                    <button class="social_bt google_btn" @click="loginWithGoogle">
+                                        <span class="icon"><font-awesome-icon :icon="['fab', 'google']" /></span>
+                                        <span class="txt">{{ $t("text.login_with") }} Google</span>
+                                    </button>
                                 </div>
                     </div>
                 </form>

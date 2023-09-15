@@ -29,6 +29,7 @@
     "features": "Характеристики",
     "save": "Запази",
     "login": "Вход",
+    "login_with": "Вход с",
     "add_venue": "Добави обект",
     "choose_category": "Изберете категория",
     "choose_city": "Изберете град",
@@ -50,5 +51,6 @@
     "remember_me": "Запомни ме",
     "not_account": "Нямаш акаунт?",
     "or": "или",
-    "have_account": "Вече имаш акаунт?"
+    "have_account": "Вече имаш акаунт?",
+    "search_by_name": "Търси по име"
 }

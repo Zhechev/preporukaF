@@ -1430,8 +1430,18 @@ body[data-menu-position="closed"] .nav_responsive i.fa.fa-reorder:before {
 	width:100%;
 	border:1px solid rgba(0, 0, 0, 0.05);
 }
+.listing_filter_block .wrap-sorts {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin: 0 20px;
+}
 .listing_filter_block .sort-by{
     top: 5px;
+	flex: 1 0 31.3%;
+}
+.listing_filter_block .sort-by-txt {
+	flex: 1 0 100%;
 }
 .listing_filter_block .utf_search_map_section ul{
 	margin-bottom:0
@@ -1443,10 +1453,10 @@ body[data-menu-position="closed"] .nav_responsive i.fa.fa-reorder:before {
 	position: relative;
 	top: 9px;
 }
-.sort-by label, .sort-by .utf_sort_by_select_item {
+/* .sort-by label, .sort-by .utf_sort_by_select_item {
 	display: inline-block;
 	float: right;
-}
+} */
 .utf_sort_by_select_item select {
 	border-radius: 4px;
 	color: #666;
@@ -1462,9 +1472,9 @@ body[data-menu-position="closed"] .nav_responsive i.fa.fa-reorder:before {
 .listing_filter_block .utf_sort_by_select_item select{
 	margin-bottom:10px !important;
 }
-.sort_by_margin{
+/* .sort_by_margin{
 	margin-left:10px;
-}
+} */
 .sort-by label {
 	line-height: 40px;
 	margin-top: 1px;
@@ -1485,6 +1495,12 @@ body[data-menu-position="closed"] .nav_responsive i.fa.fa-reorder:before {
 	border-radius:4px;
 	transition: all 0.3s;
 	display: inline-block;
+}
+
+@media only screen and (max-width: 991px) {
+	.listing_filter_block .sort-by {
+		flex: 1 0 100%;
+	}
 }
 
 /*==========
@@ -1881,37 +1897,6 @@ button.panel-cancel:active {
 /*==========
   Navigation Layout Style
 ============*/
-.utf_layout_nav a {
-	width: 38px;
-	height: 38px;
-	background-color: #e7e7e7;
-	display: inline-block;
-	color: #8c8c8c;
-	font-size: 14px;
-	line-height: 38px;
-	top:5px;
-	text-align: center;
-	transition: all 0.4s;
-	border-radius: 50%;
-	font-weight: 500;
-	overflow: hidden;
-	position: relative;
-	margin-right: 5px;
-}
-.utf_layout_nav a.active {
-	color: #ff2222;
-	background-color: #fff;
-	border: 1px solid #ff2222;
-	line-height: 38px;
-}
-.utf_layout_nav a i {
-	position: relative;
-	z-index: 11;
-}
-.utf_layout_nav a:hover {
-	color: #fff;
-	background-color: #ff2222;
-}
 #header_part.fixed {
 	position: fixed;
 	top: 0;
@@ -3494,6 +3479,18 @@ mark {
 	width: calc( 100% - 20px);
 }
 
+.utf_signin_form .social_bt .icon {
+	font-size: 20px;
+    width: 25px;
+    float: left;
+	display: inline-block;
+}
+
+.utf_signin_form .social_bt .txt {
+	float: left;
+    padding: 3px 0 3px 5px;
+}
+
 /*==========
   Social Icon Style
 ============*/
@@ -3560,10 +3557,6 @@ mark {
 .amenities_checkbox ul{
 	list-style-type:none;
 	padding-left:0;
-}
-.amenities_checkbox ul li{
-	width:33%;
-	float:left
 }
 .checkboxes.in-row label {
 	margin-top: 9px;
@@ -4077,10 +4070,6 @@ section.fullwidth_block .utf_listing_item-container.list-layout{
 	background:#fff !important;
 	border-color:#fff !important;
 	color:#ff2222;
-}
-.utf_layout_nav a:hover {
-    color: #ffffff !important;
-    border-color: #ff2222;
 }
 .utf_listing_item-container.compact .utf_listing_item {
 	border-radius: 4px;
@@ -4901,10 +4890,6 @@ section.fullwidth_block .utf_listing_item-container.list-layout{
 #not-found i {
 	font-size: 120px;
 	top: 16px;
-}
-.amenities_checkbox ul li {
-    width: 100%;
-    float: left;
 }
 }
 

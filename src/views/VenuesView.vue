@@ -253,19 +253,81 @@ watch(() => route.query, async (newQuery) => {
   </div>
   <div class="container">
     <div class="row">
+      <!-- Sidebar -->
+      <div class="col-lg-4 col-md-4">
+        <div class="sidebar">
+          <div class="utf_box_widget margin-bottom-35">
+            <div class="checkboxes in-row amenities_checkbox">
+                  <h3>
+                    <span class="i"
+                      ><font-awesome-icon :icon="['fas', 'copy']"
+                    /></span>
+                    {{ $t("text.features") }}
+                  </h3>
+                  <ul class="d-flex flex-column">
+                    <li v-for="feature in category.features" :key="feature.id">
+                      <input
+                        :id="'input-feature' + feature.id"
+                        type="checkbox"
+                        name="check"
+                        :value="feature.id"
+                        @change="selectFeatures(feature.id, $event)"
+                      />
+                      <label class="icon icon-solid" :for="'input-feature' + feature.id">
+                        <span class="tick"><font-awesome-icon :icon="['fas', 'check']" /></span>
+                        {{ feature["name_" + $i18n.locale] }}
+                      </label>
+                    </li>
+                  </ul>
+                </div>
+          </div>
+          <div class="utf_box_widget margin-top-35 margin-bottom-75">
+            <h3>
+              <span class="i"
+                ><font-awesome-icon :icon="['fas', 'folder']"
+              /></span>
+              {{ $t("text.categories") }}
+            </h3>
+            <ul class="utf_listing_detail_sidebar">
+              <li>
+                <span class="i"
+                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
+                ><a href="#">Travel</a>
+              </li>
+              <li>
+                <span class="i"
+                  ><font-awesome-icon :icon="['fas', 'angles-right']"
+                /></span>
+                <a href="#">Nightlife</a>
+              </li>
+              <li>
+                <span class="i"
+                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
+                ><a href="#">Fitness</a>
+              </li>
+              <li>
+                <span class="i"
+                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
+                ><a href="#">Real Estate</a>
+              </li>
+              <li>
+                <span class="i"
+                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
+                ><a href="#">Restaurant</a>
+              </li>
+              <li>
+                <span class="i"
+                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
+                ><a href="#">Dance Floor</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <div class="col-lg-8 col-md-8">
         <div class="listing_filter_block">
-          <div class="col-md-2 col-xs-2">
-            <div class="utf_layout_nav">
-              <a href="listings_grid_with_sidebar.html" class="grid"
-                ><font-awesome-icon :icon="['fas', 'th']"
-              /></a>
-              <a href="#" class="list active"
-                ><font-awesome-icon :icon="['fas', 'align-justify']"
-              /></a>
-            </div>
-          </div>
-          <div class="col-md-10 col-xs-10">
+          <div class="wrap-sorts">
             <!-- <div class="sort-by utf_panel_dropdown sort_by_margin float-right">
               <a href="#">Destination</a>
               <div class="utf_panel_dropdown-content">
@@ -283,6 +345,9 @@ watch(() => route.query, async (newQuery) => {
                 </div>
               </div>
             </div> -->
+            <div class="sort-by-txt">
+              <input v-model="title" @input="onTitleInputChange" :placeholder="$t('text.search_by_name')">
+            </div>
             <div class="sort-by">
               <div class="utf_sort_by_select_item sort_by_margin">
                 <div class="dropdown">
@@ -335,7 +400,6 @@ watch(() => route.query, async (newQuery) => {
                 </div>
               </div>
             </div>
-            <input v-model="title" @input="onTitleInputChange" placeholder="Filter by title">
             <div class="sort-by">
               <div class="utf_sort_by_select_item sort_by_margin">
                 <div class="dropdown">
@@ -475,72 +539,6 @@ watch(() => route.query, async (newQuery) => {
             </div>
           </div>
         </div>  
-      </div>
-
-      <!-- Sidebar -->
-      <div class="col-lg-4 col-md-4">
-        <div class="sidebar">
-          <div class="utf_box_widget margin-bottom-35">
-            <div class="checkboxes in-row amenities_checkbox">
-                  <ul>
-                    <li v-for="feature in category.features" :key="feature.id">
-                      <input
-                        :id="'input-feature' + feature.id"
-                        type="checkbox"
-                        name="check"
-                        :value="feature.id"
-                        @change="selectFeatures(feature.id, $event)"
-                      />
-                      <label class="icon icon-solid" :for="'input-feature' + feature.id">
-                        <span class="tick"><font-awesome-icon :icon="['fas', 'check']" /></span>
-                        {{ feature["name_" + $i18n.locale] }}
-                      </label>
-                    </li>
-                  </ul>
-                </div>
-          </div>
-          <div class="utf_box_widget margin-top-35 margin-bottom-75">
-            <h3>
-              <span class="i"
-                ><font-awesome-icon :icon="['fas', 'folder']"
-              /></span>
-              {{ $t("text.categories") }}
-            </h3>
-            <ul class="utf_listing_detail_sidebar">
-              <li>
-                <span class="i"
-                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
-                ><a href="#">Travel</a>
-              </li>
-              <li>
-                <span class="i"
-                  ><font-awesome-icon :icon="['fas', 'angles-right']"
-                /></span>
-                <a href="#">Nightlife</a>
-              </li>
-              <li>
-                <span class="i"
-                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
-                ><a href="#">Fitness</a>
-              </li>
-              <li>
-                <span class="i"
-                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
-                ><a href="#">Real Estate</a>
-              </li>
-              <li>
-                <span class="i"
-                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
-                ><a href="#">Restaurant</a>
-              </li>
-              <li>
-                <span class="i"
-                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
-                ><a href="#">Dance Floor</a>
-              </li>
-            </ul>
-          </div>
-        </div>
       </div>
     </div>
   </div>

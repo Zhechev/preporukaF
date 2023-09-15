@@ -29,6 +29,7 @@
     "features": "Features",
     "save": "Save",
     "login": "Login",
+    "login_with": "Login with",
     "add_venue": "Add venue",
     "choose_category": "Choose Category",
     "choose_city": "Choose City",
@@ -50,5 +51,6 @@
     "remember_me": "Remember me",
     "not_account": "Don't have an account?",
     "or": "or",
-    "have_account": "Already have an account?"
+    "have_account": "Already have an account?",
+    "search_by_name": "Search by name"
 }
