@@ -25,14 +25,15 @@ onMounted(() => {
 
 <template>
   <div class="review-comments">
-    <div v-for="comment in comments" :key="comment.id">
+    <!-- <div v-for="comment in comments" :key="comment.id">
+      <div class="avatar"><img src="images/client-avatar1.jpg" alt=""></div>
       <strong>{{ comment.user.name }}</strong
       >: {{ comment.content }}
-    </div>
+    </div> -->
 
     <form @submit.prevent="submitComment">
       <textarea v-model="newCommentContent"></textarea>
-      <button type="submit">Add Comment</button>
+      <button type="submit" class="button">Add Comment</button>
     </form>
   </div>
 </template>

@@ -2,7 +2,6 @@
     <Header :categories="categories"></Header>
 
     <router-view></router-view>
-
     <Footer></Footer>
     <div id="bottom_backto_top"><a href="#"></a></div>
 
@@ -12,6 +11,7 @@
 import Header from '../common/HeaderComponent.vue'
 import Footer from '../common/Footer.vue'
 import { mapGetters } from 'vuex'
+
 export default {
     components: {
         Header: Header,

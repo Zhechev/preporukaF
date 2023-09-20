@@ -1,7 +1,7 @@
 <script setup>
 // 1. Imports
 import ReviewCommentComponent from '@/components/ReviewCommentComponent.vue';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { getVenue, getVenueReviews, createReviewForVenue } from "@/services/venueService";
@@ -14,6 +14,7 @@ import {
   required as requiredRule,
 } from "@vee-validate/rules";
 import { useI18n } from "vue-i18n";
+import MessagePopup from '@/components/common/MessagePopup.vue';
 
 // 2. Component setup
 const route = useRoute();
@@ -28,6 +29,7 @@ const venue = ref({});
 const rating = ref(null);
 const content = ref("");
 const fileUpload = ref(null);
+const savingSuccessful = ref(false);
 const visibleRef = ref(false);
 const indexRef = ref(0);
 const imgsRef = ref([
@@ -86,7 +88,7 @@ const onSubmit = async () => {
     if (fileUpload.value?.files?.[0]) {
         formData.append('photo', fileUpload.value.files[0]);
     }
-
+    
     try {
       await createReviewForVenue(venue.value.id, formData);
         // TODO: Handle success (show a message, redirect, etc.)
@@ -121,6 +123,17 @@ onMounted(async () => {
 
   await fetchReviews();
 });
+
+// replay comments show/hide
+const toggleComments = (review) => {
+    review.showComments = !review.showComments;
+}
+
+// Popup
+watch ( savingSuccessful, () => {
+    document.body.style.overflow = savingSuccessful.value ? "hidden" : "auto"
+    document.body.style.backgroundColor = savingSuccessful.value ? "background-color:rgba(0,0,0,0.8)" : "none"
+})
 </script>
 
 
@@ -356,12 +369,20 @@ onMounted(async () => {
                       ><font-awesome-icon :icon="['fas', 'clock']" /> 
                       {{ formatReviewDate(review.created_at) }}
                       </span>
+                      <p>
+                        {{ review.content }}
+                      </p>
+                      <div v-for="comment in comments" :key="comment.id">
+                        <div class="avatar"><img src="images/client-avatar1.jpg" alt=""></div>
+                        <strong>{{ comment.user.name }}</strong
+                        >: {{ comment.content }}
+                      </div>
+                      <div class="utf_add_comment">
+                        <button @click="toggleComments(review)" class="replay"><font-awesome-icon :icon="['fas', 'reply']" /> Replay</button>
+                        <review-comment-component :review-id="review.id" v-if="review.showComments"></review-comment-component>
+                      </div>
                   </div>
-                  <p>
-                    {{ review.content }}
-                  </p>
                 </div>
-                <review-comment-component :review-id="review.id"></review-comment-component>
               </li>
             </ul>
           </div>
@@ -404,13 +425,14 @@ onMounted(async () => {
             <span>Add Review Disabled</span>
             <a :href="loginRoute" class="button">Login now</a>
           </div>
-          <Form 
+          <Form
             ref="formRef"
             id="addReview"
             class="utf_add_comment"
             enctype="multipart/form-data"
             action=""
             :style="isAuth ? '' : 'filter: blur(5px); pointer-events: none;'"
+            v-if="!savingSuccessful"
             @submit="onSubmit"
           >
             <div class="row">
@@ -460,6 +482,7 @@ onMounted(async () => {
             </fieldset>
             <button class="button" :disabled="!isAuth" >Submit Review</button>
             <div class="clearfix"></div>
+            <MessagePopup v-if="savingSuccessful"/>
           </Form>
         </div>
       </div>

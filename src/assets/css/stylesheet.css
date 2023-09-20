@@ -2518,6 +2518,21 @@ a.send-message-to-owner.button {
 	font-weight:600;
 	margin-top: 10px;
 }
+.utf_comment_content .replay {
+	font-size: 13px;
+    color: #666;
+	border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    padding: 0 10px;
+    margin-top: 5px;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.utf_comment_content .replay:hover {
+	background-color: #54ba1d;
+	color: #fff;
+	border: 1px solid #54ba1d;
+}
 .comments ul li {
     position: relative;
     border: 1px solid rgba(0, 0, 0, 0.10);
@@ -2690,6 +2705,17 @@ body .utf_comment_content p {
     display: block;
 	border:0;
 }
+.utf_add_comment .review-comments {
+	margin-top: 20px;
+}
+.utf_add_comment .review-comments textarea{
+	margin: 0 0 20px 0;
+    min-height: 150px;
+}
+.utf_add_comment .review-comments .button {
+	float: right;
+    min-width: 100px;
+}
 .utf_leave_rating {
 	height: 48px;
 	float: left;
@@ -2808,6 +2834,58 @@ a.rate-review:hover {
 	background-color: #ff2222;
 }
 
+/*==========
+  Popup Style
+============*/
+.popup {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	/* width: 500px;
+	height: 200px; */
+    z-index: 2000;
+    overflow: hidden;
+	background-color: #fdfdfd;
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.07);
+	color: #666;
+    padding: 30px;
+    text-align: center;
+    max-width: 400px;
+	width: 90%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    /* background: #000;
+	opacity: 0.8; */
+}
+
+.popup .icon {
+	font-size: 42px;
+    color: #54ba1d;
+}
+
+.popup .title {
+	padding: 25px 0 15px;
+    margin: 0;
+}
+
+.popup .btn {
+	background: #ff2222;
+    color: #fff;
+    line-height: 30px;
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.popup .btn:hover {
+	background-color: #fff;
+	color: #ff2222;
+	border-color: #ff2222;
+}
 /*==========
   Pagination Style
 ============*/
