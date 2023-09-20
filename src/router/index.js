@@ -17,6 +17,9 @@ const CreateVenueView = () => import('@/views/CreateVenueView.vue')
 
 const GoogleLoginSuccessView = () => import('@/components/GoogleLoginSuccessView.vue')
 
+// Profile
+const ProfileView = () => import('@/views/ProfileView.vue');
+
 
 const routes = [
     {
@@ -61,6 +64,15 @@ const routes = [
                 }
             }
         ]
+    },
+    {
+        name: "profile",
+        path: "/profile",
+        component: ProfileView,
+        meta: {
+            middleware: "auth",
+            title: `ProfileView`
+        }
     },
     {
         name: "showVenues",
