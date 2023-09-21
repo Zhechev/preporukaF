@@ -18,7 +18,7 @@
                   <font-awesome-icon :icon="['fas', 'user']" />
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="profile">
-                  <li><a class="dropdown-item" href="#">Настройки</a></li>
+                  <li><router-link :to="{name:'profile'}" class="reg-link">{{ $t('text.profile') }}</router-link></li>
                   <li><a class="dropdown-item" href="#" @click.prevent="logout">Разлогване</a></li>
                 </ul>
               </div>
@@ -36,8 +36,6 @@
             </div>
         </div>
         </div>
-
-
       </div>
     </div>
   </header>
