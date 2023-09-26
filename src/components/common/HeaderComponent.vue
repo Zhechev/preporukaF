@@ -1,5 +1,5 @@
 <template>
-   <header id="header_part" class="fullwidth">
+  <header id="header_part" class="fullwidth">
     <div id="header">
       <div class="container">
         <div class="utf_left_side">

@@ -30,10 +30,6 @@
   <div id="footer" class="footer_sticky_part">
     <div class="container">
       <div class="row">
-		<div class="col-md-4 col-sm-12 col-xs-12">
-          <h4>About Us</h4>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore</p>
-        </div>
         <div class="col-md-2 col-sm-3 col-xs-6">
           <h4>Useful Links</h4>
           <ul class="social_footer_link">
