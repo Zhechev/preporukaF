@@ -22,7 +22,7 @@
 <template>
     <header id="header_part" class="fixed fullwidth_block dashboard"> 
         <div id="header" class="not-sticky">
-        <div class="container"> 
+        <div class="container-fluid"> 
             <div class="utf_left_side"> 
                 <div id="logo"> <router-link :to="{name:'home'}"><img src="http://ulisting.utouchdesign.com/ulisting_ltr/images/logo.png" alt=""></router-link> </div>
             </div>

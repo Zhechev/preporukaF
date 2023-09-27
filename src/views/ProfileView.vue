@@ -142,34 +142,34 @@
                 <h4>Recent Activities</h4>
                 <ul>
                 <li> 
-                    <i class="utf_list_box_icon sl sl-icon-layers"></i> Peter Parker Left A Review 5.0 On <strong><a href="#"> Restaurant</a></strong> <a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
+                    <span class="i utf_list_box_icon"><font-awesome-icon :icon="['fas', 'list-ul']" /></span> Peter Parker Left A Review 5.0 On <strong><a href="#"> Restaurant</a></strong> <a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
                 </li>
                 <li> 
-                    <i class="utf_list_box_icon sl sl-icon-star"></i> Your Listing <strong><a href="#">Local Service</a></strong> Has Been Approved<a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
+                    <span class="i utf_list_box_icon"><font-awesome-icon :icon="['fas', 'star']" /></span> Your Listing <strong><a href="#">Local Service</a></strong> Has Been Approved<a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
                 </li>
                 <li> 
-                    <i class="utf_list_box_icon sl sl-icon-heart"></i> Someone Bookmarked Your <strong><a href="#">Listing</a></strong> Restaurant <a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
+                    <span class="i utf_list_box_icon"><font-awesome-icon :icon="['fas', 'heart']" /></span> Someone Bookmarked Your <strong><a href="#">Listing</a></strong> Restaurant <a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
                 </li>              
                 <li> 
-                    <i class="utf_list_box_icon sl sl-icon-star"></i> Your Listing <strong><a href="#">Local Service</a></strong> Has Been Approved<a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
+                    <span class="i utf_list_box_icon"><font-awesome-icon :icon="['fas', 'star']" /></span> Your Listing <strong><a href="#">Local Service</a></strong> Has Been Approved<a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
                 </li>
                 <li> 
-                    <i class="utf_list_box_icon sl sl-icon-heart"></i> Someone Bookmarked Your <strong><a href="#">Listing</a></strong> Restaurant <a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
+                    <span class="i utf_list_box_icon"><font-awesome-icon :icon="['fas', 'list-ul']" /></span> Someone Bookmarked Your <strong><a href="#">Listing</a></strong> Restaurant <a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
                 </li>			  
                 <li> 
-                    <i class="utf_list_box_icon sl sl-icon-layers"></i> Peter Parker Left A Review 5.0 On <strong><a href="#"> Restaurant</a></strong> <a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
+                    <span class="i utf_list_box_icon"><font-awesome-icon :icon="['fas', 'list-ul']" /></span> Peter Parker Left A Review 5.0 On <strong><a href="#"> Restaurant</a></strong> <a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
                 </li>
                 <li>
-                    <i class="utf_list_box_icon sl sl-icon-star"></i> Someone Bookmarked Your <strong><a href="#">Listing</a></strong> Restaurant <a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
+                    <span class="i utf_list_box_icon"><font-awesome-icon :icon="['fas', 'star']" /></span> Someone Bookmarked Your <strong><a href="#">Listing</a></strong> Restaurant <a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
                 </li>
                 <li> 
-                    <i class="utf_list_box_icon sl sl-icon-layers"></i> Peter Parker Left A Review 5.0 On <strong><a href="#"> Restaurant</a></strong> <a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
+                    <span class="i utf_list_box_icon"><font-awesome-icon :icon="['fas', 'list-ul']" /></span> Peter Parker Left A Review 5.0 On <strong><a href="#"> Restaurant</a></strong> <a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
                 </li>
                 <li> 
-                    <i class="utf_list_box_icon sl sl-icon-star"></i> Your Listing <strong><a href="#">Local Service</a></strong> Has Been Approved<a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
+                    <span class="i utf_list_box_icon"><font-awesome-icon :icon="['fas', 'star']" /></span> Your Listing <strong><a href="#">Local Service</a></strong> Has Been Approved<a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
                 </li>
                 <li> 
-                    <i class="utf_list_box_icon sl sl-icon-heart"></i> Someone Bookmarked Your <strong><a href="#">Listing</a></strong> Restaurant <a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
+                    <span class="i utf_list_box_icon"><font-awesome-icon :icon="['fas', 'heart']" /></span> Someone Bookmarked Your <strong><a href="#">Listing</a></strong> Restaurant <a href="#" class="close-list-item"><span class="i"><font-awesome-icon :icon="['fas', 'xmark']" /></span></a> 
                 </li>
                 </ul>
             </div>

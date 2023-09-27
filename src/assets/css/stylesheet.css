@@ -5482,7 +5482,7 @@ a.utf_dashboard_nav_responsive {
 .utf_dashboard_list_box .numerical-rating {
 	margin: 0 3px;
 }
-.utf_dashboard_list_box ul li i.utf_list_box_icon {
+.utf_dashboard_list_box ul li .i.utf_list_box_icon {
 	height: 38px;
 	width: 38px;
 	color: #777;
@@ -5497,7 +5497,7 @@ a.utf_dashboard_nav_responsive {
 	transform: translateY(-50%);
 	left: 20px;
 }
-.utf_dashboard_list_box ul li:hover i.utf_list_box_icon {
+.utf_dashboard_list_box ul li:hover .i.utf_list_box_icon {
 	background-color: #eaeaea;
 }
 .utf_dashboard_list_box-static {
