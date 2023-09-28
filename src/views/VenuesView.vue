@@ -18,6 +18,7 @@ const category = ref("");
 const city = ref("");
 const title = ref("");
 const selectedFeatures = ref([]);
+const isOpen = ref(false);
 let timer;
 
 const VUE_APP_BASE_URL_STORAGE = process.env.VUE_APP_BASE_URL_STORAGE;
@@ -205,7 +206,6 @@ const getPageRange = () => {
   return Array.from({ length: end - start + 1 }, (_, i) => i + start);
 };
 
-
 watch(
   () => route.params.page,
   (newPage) => {
@@ -254,11 +254,16 @@ watch(() => route.query, async (newQuery) => {
   <div class="container">
     <div class="row">
       <!-- Sidebar -->
-      <div class="col-lg-4 col-md-4">
-        <div class="sidebar">
-          <div class="utf_box_widget margin-bottom-35">
+      <div class="col-lg-4">
+        <div @click="isOpen = !isOpen" class="open-sidebar d-inline-block d-lg-none mb-4"><font-awesome-icon :icon="['fas', 'filter']" /> Филтриране</div>
+        <div v-bind:class = "!isOpen ?'d-none d-lg-block':''" class="sidebar">
+          <div class="utf_box_widget">
+            <div class="header-sidebar d-flex justify-content-between d-block d-lg-none">
+              <div @click="isOpen = !isOpen" class="close fs-1"><font-awesome-icon :icon="['fas', 'xmark']" /></div>
+              <div>Изчистване</div>
+            </div>
             <div class="checkboxes in-row amenities_checkbox">
-                  <h3>
+                  <h3 class="d-none d-lg-block">
                     <span class="i"
                       ><font-awesome-icon :icon="['fas', 'copy']"
                     /></span>
@@ -281,7 +286,7 @@ watch(() => route.query, async (newQuery) => {
                   </ul>
                 </div>
           </div>
-          <div class="utf_box_widget margin-top-35 margin-bottom-75">
+          <div class="utf_box_widget d-none d-lg-block">
             <h3>
               <span class="i"
                 ><font-awesome-icon :icon="['fas', 'folder']"
@@ -289,62 +294,19 @@ watch(() => route.query, async (newQuery) => {
               {{ $t("text.categories") }}
             </h3>
             <ul class="utf_listing_detail_sidebar">
-              <li>
+              <li v-for="category in categories" :key="category.id">
                 <span class="i"
                   ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
-                ><a href="#">Travel</a>
-              </li>
-              <li>
-                <span class="i"
-                  ><font-awesome-icon :icon="['fas', 'angles-right']"
-                /></span>
-                <a href="#">Nightlife</a>
-              </li>
-              <li>
-                <span class="i"
-                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
-                ><a href="#">Fitness</a>
-              </li>
-              <li>
-                <span class="i"
-                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
-                ><a href="#">Real Estate</a>
-              </li>
-              <li>
-                <span class="i"
-                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
-                ><a href="#">Restaurant</a>
-              </li>
-              <li>
-                <span class="i"
-                  ><font-awesome-icon :icon="['fas', 'angles-right']" /></span
-                ><a href="#">Dance Floor</a>
+                ><router-link :to="{name:'showVenues', query: { category: category.id, page: 1 }}" href="#">{{ getCategoryName(category) }}</router-link>
               </li>
             </ul>
           </div>
         </div>
       </div>
 
-      <div class="col-lg-8 col-md-8">
+      <div class="col-lg-8">
         <div class="listing_filter_block">
           <div class="wrap-sorts">
-            <!-- <div class="sort-by utf_panel_dropdown sort_by_margin float-right">
-              <a href="#">Destination</a>
-              <div class="utf_panel_dropdown-content">
-                <input
-                  class="distance-radius"
-                  type="range"
-                  min="1"
-                  max="999"
-                  step="1"
-                  value="1"
-                  data-title="Select Range"
-                />
-                <div class="panel-buttons">
-                  <button class="panel-apply">Apply</button>
-                </div>
-              </div>
-            </div> -->
             <div class="sort-by-txt">
               <input v-model="title" @input="onTitleInputChange" :placeholder="$t('text.search_by_name')">
             </div>
