@@ -36,6 +36,7 @@ const imgsRef = ref([
   { title: 'test img', src: 'http://via.placeholder.com/350x150' },
   { title: 'test img 2', src: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nature-quotes-1557340276.jpg?crop=0.666xw:1.00xh;0.168xw,0&resize=640:*' },
 ]);
+const categoryFeatures = ref([]);
 const reviews = ref([]);
 const reviewsPagination = ref({});
 
@@ -122,6 +123,20 @@ onMounted(async () => {
   }
 
   await fetchReviews();
+
+  // get features
+  let venueFeatures = venue.value.features;
+  let categoryFeaturesValue = venue.value.category.features;
+
+  for (const venueFeature of venueFeatures) {
+    const matchingFeature = categoryFeaturesValue.find(catF => catF.id === venueFeature.id);
+
+    if (matchingFeature) {
+      matchingFeature.hasFeature = true;
+    }
+  }
+
+  categoryFeatures.value = categoryFeaturesValue;
 });
 
 // replay comments show/hide
@@ -134,7 +149,6 @@ watch ( savingSuccessful, () => {
     document.body.style.overflow = savingSuccessful.value ? "hidden" : "auto"
     document.body.style.backgroundColor = savingSuccessful.value ? "background-color:rgba(0,0,0,0.8)" : "none"
 })
-
 </script>
 
 
@@ -225,30 +239,12 @@ watch ( savingSuccessful, () => {
                 ><font-awesome-icon :icon="['fab', 'facebook']" /></span
               >Facebook
             </a>
-            <!-- <a href="#" class="twitter-link">
-              <span class="i"
-                ><font-awesome-icon :icon="['fab', 'twitter']"
-              /></span>
-              Twitter
-            </a> -->
             <a :href="venue.instagram" class="instagram-link">
               <span class="i"
                 ><font-awesome-icon :icon="['fab', 'instagram']"
               /></span>
               Instagram
             </a>
-            <!-- <a href="#" class="linkedin-link">
-              <span class="i"
-                ><font-awesome-icon :icon="['fab', 'linkedin']"
-              /></span>
-              Linkedin
-            </a>
-            <a href="#" class="youtube-link">
-              <span class="i"
-                ><font-awesome-icon :icon="['fab', 'youtube']"
-              /></span>
-              Youtube
-            </a> -->
           </div>
         </div>
         <div
@@ -286,25 +282,27 @@ watch ( savingSuccessful, () => {
 
         <div id="utf_listing_amenities" class="utf_listing_section">
           <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">
-            Features
+            {{ $t("text.features") }}
           </h3>
           <ul class="utf_listing_features checkboxes margin-top-0">
-            <!-- <li
-              v-for="feature in featuresWithCheckStatus"
+            <li
+              v-for="feature in categoryFeatures"
               :key="feature.id"
               :class="{
                 'feature-yes': feature.hasFeature,
                 'feature-no': !feature.hasFeature,
               }"
             >
-              {{ feature.name_bg }}
-            </li> -->
+              <span v-if="feature.hasFeature" class="i"><font-awesome-icon :icon="['fas', 'circle-check']" /></span>
+              <span v-else class="i"><font-awesome-icon :icon="['fas', 'circle-xmark']" /></span>
+              {{ feature["name_" + $i18n.locale] }}
+            </li>
           </ul>
         </div>
         <div id="utf_listing_location" class="utf_listing_section">
           <h3
             class="utf_listing_headline_part margin-top-60 margin-bottom-40"
-          ></h3>
+          >{{ $t("text.location") }}</h3>
           <div id="utf_single_listing_map_block">
             <div
               id="utf_listing_location"

@@ -2244,24 +2244,24 @@ a.send-message-to-owner.button {
 .utf_listing_features li span, .utf_listing_features.checkboxes li {
 	color: #707070;
 }
-.utf_listing_features.checkboxes li:before {
-	display: inline-block;
-	width: 19px;
-	height: 19px;
-	position: relative;
-	content: "\f00c";
-	font-family: "FontAwesome";
-	font-size: 12px;
-	color: #fff;
-	text-align: center;
-	line-height: 15px;
-	background-color: #ff2222;
-	border: 2px solid transparent;
-	transition: border-color 0s;
-	border-radius: 12px;
-	position: absolute;
-	left: 0;
-	top: 3px;
+.utf_listing_features.checkboxes li .i {
+    position: relative;
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+    line-height: 15px;
+    position: absolute;
+    left: 0;
+    top: 5px;
+    color: #ff2222;
+}
+
+.utf_listing_features.checkboxes li.feature-no .i {
+    color: #e0e0e0;
+}
+
+.utf_listing_features.checkboxes li.feature-yes .i {
+    color: #ff2222;
 }
 
 .dashboard-list-box {
@@ -3657,7 +3657,7 @@ mark {
     font-weight: 500;
     padding: 4px 15px;
     border-radius:4px;
-	margin-right:3px;
+	margin-right:6px;
     -webkit-transition: all .2s;
     -moz-transition: all .2s;
     -ms-transition: all .2s;
@@ -8971,14 +8971,4 @@ header.fullwidth .container {
 }
 #utf_rev_slider_block .bootstrap-select.btn-group .dropdown-menu.inner{
     height: 150px;
-}
-
-.utf_listing_features.checkboxes li.feature-no::before {
-    content: "\f00d";
-    background-color: #e0e0e0;
-}
-
-.utf_listing_features.checkboxes li.feature-yes::before {
-    content: "\f00c";
-    background-color: #ff2222;
 }
