@@ -134,6 +134,7 @@ watch ( savingSuccessful, () => {
     document.body.style.overflow = savingSuccessful.value ? "hidden" : "auto"
     document.body.style.backgroundColor = savingSuccessful.value ? "background-color:rgba(0,0,0,0.8)" : "none"
 })
+
 </script>
 
 
@@ -191,28 +192,10 @@ watch ( savingSuccessful, () => {
         <div id="utf_listing_overview" class="utf_listing_section">
           <h3
             class="utf_listing_headline_part margin-top-30 margin-bottom-30"
-          ></h3>
+          > {{ $t("text.description") }}
+          </h3>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in
-            pulvinar neque. Nulla finibus lobortis pulvinar. Donec a consectetur
-            nulla. Nulla posuere sapien vitae lectus suscipit, et pulvinar nisi
-            tincidunt. Aliquam erat volutpat. Curabitur convallis fringilla diam
-            sed aliquam.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in
-            pulvinar neque. Nulla finibus lobortis pulvinar. Donec a consectetur
-            nulla. Nulla posuere sapien vitae lectus suscipit, et pulvinar nisi
-            tincidunt. Aliquam erat volutpat. Curabitur convallis fringilla diam
-            sed aliquam. Sed tempor iaculis massa faucibus feugiat. In fermentum
-            facilisis massa, a consequat purus viverra.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in
-            pulvinar neque. Nulla finibus lobortis pulvinar. Donec a consectetur
-            nulla. Nulla posuere sapien vitae lectus suscipit, et pulvinar nisi
-            tincidunt. Aliquam erat volutpat. Curabitur convallis fringilla diam
-            sed aliquam.
+            {{ venue["content_" + $i18n.locale] }}
           </p>
           <div
             id="utf_listing_tags"
@@ -222,39 +205,39 @@ watch ( savingSuccessful, () => {
               <span class="i"
                 ><font-awesome-icon :icon="['fas', 'phone']"
               /></span>
-              +(01) 1123-254-456
+              {{ venue.phone}}
             </a>
             <a href="#">
               <span class="i"
                 ><font-awesome-icon :icon="['fas', 'envelope']" /></span
-              >info@example.com
+              >{{ venue.email }}
             </a>
             <a href="#">
               <span class="i"
                 ><font-awesome-icon :icon="['fas', 'globe']"
               /></span>
-              www.example.com
+              {{ venue.website }}
             </a>
           </div>
           <div class="social-contact">
-            <a href="#" class="facebook-link">
+            <a :href="venue.facebook" class="facebook-link">
               <span class="i"
                 ><font-awesome-icon :icon="['fab', 'facebook']" /></span
               >Facebook
             </a>
-            <a href="#" class="twitter-link">
+            <!-- <a href="#" class="twitter-link">
               <span class="i"
                 ><font-awesome-icon :icon="['fab', 'twitter']"
               /></span>
               Twitter
-            </a>
-            <a href="#" class="instagram-link">
+            </a> -->
+            <a :href="venue.instagram" class="instagram-link">
               <span class="i"
                 ><font-awesome-icon :icon="['fab', 'instagram']"
               /></span>
               Instagram
             </a>
-            <a href="#" class="linkedin-link">
+            <!-- <a href="#" class="linkedin-link">
               <span class="i"
                 ><font-awesome-icon :icon="['fab', 'linkedin']"
               /></span>
@@ -265,7 +248,7 @@ watch ( savingSuccessful, () => {
                 ><font-awesome-icon :icon="['fab', 'youtube']"
               /></span>
               Youtube
-            </a>
+            </a> -->
           </div>
         </div>
         <div
