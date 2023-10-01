@@ -447,7 +447,7 @@ watch(() => route.query, async (newQuery) => {
                       <div class="utf_counter_star_rating">( {{ venue.rating }} )</div>
                     </div>
                     <p>
-                      {{ venue.description }}
+                      {{ venue["content_" + $i18n.locale] }}
                     </p>
                   </div>
                 </div>
