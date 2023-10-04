@@ -1,5 +1,6 @@
 <script setup>
 // 1. Imports
+import LeafletMap from "@/components/common/LeafletMap.vue";
 import ReviewCommentComponent from '@/components/ReviewCommentComponent.vue';
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
@@ -308,12 +309,15 @@ watch ( savingSuccessful, () => {
               id="utf_listing_location"
               class="col-md-12 utf_listing_section map"
             >
-              <!-- <leaflet-map
-                v-if="venue && venue.lat && venue.lng"
-                :lat="venue.lat"
-                :lng="venue.lng"
-                :zoom="13"
-              ></leaflet-map> -->
+              <leaflet-map
+                ref="map"
+                v-if="venue.lat && venue.lng"
+                :lat="parseFloat(venue.lat)"
+                :lng="parseFloat(venue.lng)"
+                :zoom="25"
+                :interactive="true"
+                style="z-index: 1"
+              ></leaflet-map>
             </div>
           </div>
         </div>
