@@ -467,7 +467,7 @@ watch ( savingSuccessful, () => {
             </fieldset>
             <button class="button" :disabled="!isAuth" >Submit Review</button>
             <div class="clearfix"></div>
-            <MessagePopup v-if="savingSuccessful"/>
+            <MessagePopup v-if="savingSuccessful" :title="'Благодаря Ви!'" :text="'Ревюто Ви ще бъде прегледано и одобрено до 24 часа'"/>
           </Form>
         </div>
       </div>
