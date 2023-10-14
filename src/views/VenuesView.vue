@@ -23,9 +23,6 @@ let timer;
 
 const VUE_APP_BASE_URL_STORAGE = process.env.VUE_APP_BASE_URL_STORAGE;
 
-// like icon, must remove
-const is_like = ref(false);
-
 // Pagination state
 const currentPage = ref(1);
 const totalPages = ref(0);
@@ -125,6 +122,10 @@ const fetchVenues = async (categoryId, sortType, cityId, features, title) => {
     // Optionally show an error to the user
   }
 };
+
+const likeVenue = (venue) => {
+  venue.isLiked = !venue.isLiked;
+}
 
 onMounted(async () => {
     currentPage.value = Number(route.query.page) || 1;
@@ -419,9 +420,9 @@ watch(() => route.query, async (newQuery) => {
                 <div class="utf_listing_item-image">
                   <img :src="VUE_APP_BASE_URL_STORAGE + venue.cover_image" alt="" />
                   <span class="tag"><i :class="venue.category.icon"></i>test</span>
-                  <div @click="is_like = !is_like" class="like-icon">
-                    <span v-if="is_like == false"><font-awesome-icon :icon="['far', 'heart']" /></span>
-                    <span v-else><font-awesome-icon :icon="['fas', 'heart']" /></span>
+                  <div @click.prevent="likeVenue(venue)" class="like-icon">
+                    <span v-if="venue.isLiked === true"><font-awesome-icon :icon="['fas', 'heart']" /></span>
+                    <span v-else><font-awesome-icon :icon="['far', 'heart']" /></span>
                   </div>
                   <div class="utf_listing_prige_block utf_half_list">
                     <!-- <span class="utf_meta_listing_price"><i class="fa fa-tag"></i> $25 - $45</span> -->
