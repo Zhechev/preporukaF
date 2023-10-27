@@ -53,5 +53,25 @@
     "not_account": "Don't have an account?",
     "or": "or",
     "have_account": "Already have an account?",
-    "search_by_name": "Search by name"
+    "search_by_name": "Search by name",
+    "profile": "Profile",
+    "reviewNotification": "User {username} left a review for your venue {venue_title}",
+    "commentNotification": "User {username} left a comment on your review for {category_name} {venue_title}",
+    "notifications": {
+        "review": {
+            "beforeUsername": "User ",
+            "beforeReview": " left a ",
+            "reviewWord": "review",
+            "betweenReviewAndVenue": " for your venue ",
+            "afterVenue": ""
+        },
+        "comment": {
+            "beforeUsername": "User ",
+            "beforeComment": " left a ",
+            "commentWord": "comment",
+            "betweenCommentAndCategory": " on your review for ",
+            "betweenCategoryAndVenue": " ",
+            "afterVenue": ""
+        }
+    }
 }

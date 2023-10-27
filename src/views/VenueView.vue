@@ -106,6 +106,12 @@ const formatReviewDate = (dateString) => {
 
 // 6. Lifecycle hooks
 onMounted(async () => {
+
+  const commentElement = document.getElementById(`comment-16`);
+
+
+  console.log(commentElement);
+
   venue.value = await getVenue(route.params.id);
   if (venue.value.images && Array.isArray(venue.value.images)) {
     imgsRef.value = venue.value.images.map(image => ({
@@ -357,14 +363,9 @@ watch ( savingSuccessful, () => {
                       <p>
                         {{ review.content }}
                       </p>
-                      <div v-for="comment in comments" :key="comment.id">
-                        <div class="avatar"><img src="images/client-avatar1.jpg" alt=""></div>
-                        <strong>{{ comment.user.name }}</strong
-                        >: {{ comment.content }}
-                      </div>
                       <div class="utf_add_comment">
                         <button @click="toggleComments(review)" class="replay"><font-awesome-icon :icon="['fas', 'reply']" /> Replay</button>
-                        <review-comment-component :review-id="review.id" v-if="review.showComments"></review-comment-component>
+                        <review-comment-component :review-id="review.id" :key="review.id"></review-comment-component>
                       </div>
                   </div>
                 </div>
@@ -467,7 +468,7 @@ watch ( savingSuccessful, () => {
             </fieldset>
             <button class="button" :disabled="!isAuth" >Submit Review</button>
             <div class="clearfix"></div>
-            <MessagePopup v-if="savingSuccessful" :title="'Благодаря Ви!'" :text="'Ревюто Ви ще бъде прегледано и одобрено до 24 часа'"/>
+            <MessagePopup v-if="savingSuccessful"/>
           </Form>
         </div>
       </div>

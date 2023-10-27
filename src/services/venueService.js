@@ -68,6 +68,8 @@ export const getVenueReviews = async (venueId, page = 1) => {
 // New function to create a review for a venue
 export const createReviewForVenue = async (venueId, formData) => {
     try {
+        await axios.get(`${BASE_URL}/sanctum/csrf-cookie`);
+        
         const response = await axios.post(`${BASE_URL}/reviews/${venueId}/reviews`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -80,8 +82,9 @@ export const createReviewForVenue = async (venueId, formData) => {
     }
 };
 
-export const getReviewComments = async (reviewId) => {
-    const response = await axios.get(`${BASE_URL}/reviews/${reviewId}/review-comments`);
+
+export const getReviewComments = async (reviewId, page = 1) => {
+    const response = await axios.get(`${BASE_URL}/reviews/${reviewId}/review-comments?page=${page}`);
     return response.data;
 }
   

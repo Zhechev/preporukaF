@@ -16,10 +16,8 @@ function getCategoryName(category) {
 
 const store = useStore();
 
-const token = computed(() => store.getters["auth/token"]);
 const categories = computed(() => store.getters["categories/categories"]);
 const cities = computed(() => store.getters["cities/cities"]);
-console.log(token.value);
 </script>
 
 <template>

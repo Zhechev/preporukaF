@@ -53,5 +53,23 @@
     "not_account": "Нямаш акаунт?",
     "or": "или",
     "have_account": "Вече имаш акаунт?",
-    "search_by_name": "Търси по име"
+    "search_by_name": "Търси по име",
+    "profile": "Профил",
+    "notifications": {
+        "review": {
+            "beforeUsername": "Потребител ",
+            "beforeReview": " остави ",
+            "reviewWord": "отзив",
+            "betweenReviewAndVenue": " за вашия обект ",
+            "afterVenue": ""
+        },
+        "comment": {
+            "beforeUsername": "Потребител ",
+            "beforeComment": " остави ",
+            "commentWord": "коментар",
+            "betweenCommentAndCategory": " към вашия отзив за ",
+            "betweenCategoryAndVenue": " ",
+            "afterVenue": ""
+        }
+    }
 }

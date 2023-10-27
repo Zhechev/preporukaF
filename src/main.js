@@ -42,12 +42,15 @@ window.axios.defaults.withCredentials = true
 
 import Chosen from './components/common/ChosenSelect.vue';
 import DefaultLayout from './components/layouts/Default.vue';
+import ProfileHeaderComponent from './components/common/ProfileHeaderComponent.vue';
 
 const app = createApp(DefaultLayout);
 
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.component('chosen-select', Chosen);
-app.component('default-layout', DefaultLayout); // rename here
+app.component('default-layout', DefaultLayout);
+
+app.component('profile-header', ProfileHeaderComponent);
 
 app.config.globalProperties.$filters = filters;
 

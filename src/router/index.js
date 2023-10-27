@@ -18,8 +18,8 @@ const CreateVenueView = () => import('@/views/CreateVenueView.vue')
 const GoogleLoginSuccessView = () => import('@/components/GoogleLoginSuccessView.vue')
 
 // Profile
-const ProfileView = () => import('@/views/ProfileView.vue');
-
+const ProfileView = () => import('@/views/Profile/ProfileView.vue');
+const ReviewView = () => import('@/views/Profile/ReviewView.vue')
 
 const routes = [
     {
@@ -52,7 +52,7 @@ const routes = [
         path: "/",
         component: HomeView,
         meta: {
-            middleware: ["all"]
+            middleware: "all",
         },
         children: [
             {
@@ -66,12 +66,21 @@ const routes = [
         ]
     },
     {
-        name: "profile",
-        path: "/profile",
+        path: '/profile',
         component: ProfileView,
+        name: 'profile',
         meta: {
-            middleware: "auth",
+            middleware: "all",
             title: `ProfileView`
+        }
+    },
+    {
+        name: "showReview",
+        path: "/reviews/:id",
+        component: ReviewView,
+        meta: {
+            middleware: "all",
+            title: 'ReviewView'
         }
     },
     {
@@ -79,7 +88,7 @@ const routes = [
         path: "/venues/",
         component: VenuesView,
         meta: {
-            middleware: ["all"],
+            middleware: "all",
             title: 'VenuesView'
         }
     },    
@@ -88,7 +97,7 @@ const routes = [
         path: "/venues/:id",
         component: VenueView,
         meta: {
-            middleware: ["all"],
+            middleware: "all",
             title: 'showVenue'
         }
     },
@@ -98,7 +107,7 @@ const routes = [
         props: true,
         component: CreateVenueView,
         meta: {
-            middleware: ["auth"],
+            middleware: "auth",
             title: 'createVenue'
         }
     },
@@ -107,7 +116,7 @@ const routes = [
         path: "/login-success",
         component: GoogleLoginSuccessView,
         meta: {
-            middleware: ["all"],
+            middleware: "all",
             title: `Google Login Success`
         }
     }
