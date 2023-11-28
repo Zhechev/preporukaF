@@ -19,7 +19,10 @@ const GoogleLoginSuccessView = () => import('@/components/GoogleLoginSuccessView
 
 // Profile
 const ProfileView = () => import('@/views/Profile/ProfileView.vue');
-const ReviewView = () => import('@/views/Profile/ReviewView.vue')
+const ReviewView = () => import('@/views/Profile/ReviewView.vue');
+
+const UserProfileView = () => import('@/views/Profile/UserProfileView.vue');
+
 
 const routes = [
     {
@@ -75,8 +78,17 @@ const routes = [
         }
     },
     {
+        path: '/user/:userId',
+        component: UserProfileView,
+        name: 'userProfile',
+        meta: {
+            middleware: "all",
+            title: `UserProfileView`
+        }
+    },
+    {
         name: "showReview",
-        path: "/reviews/:id",
+        path: "/reviews/:reviewId",
         component: ReviewView,
         meta: {
             middleware: "all",
@@ -94,7 +106,7 @@ const routes = [
     },    
     {
         name: "showVenue",
-        path: "/venues/:id",
+        path: "/venues/:venueId",
         component: VenueView,
         meta: {
             middleware: "all",

@@ -3,10 +3,12 @@ import { ref, onMounted, computed, watchEffect } from "vue";
 import { useStore } from "vuex";
 import { fetchUserDetails, fetchUserNotifications } from "@/services/profileService.js";
 import ProfileLayout from "@/components/layouts/ProfileLayout.vue";
+import { useRouter } from 'vue-router';
 
 
 const store = useStore();
 const storedUser = computed(() => store.getters["auth/user"]);
+const router = useRouter(); // Access router instance
 
 const user = ref(null);
 const notifications = ref([]);
@@ -17,6 +19,7 @@ const totalPages = computed(() => Math.ceil(notifications.value.total / notifica
 const changePage = (page) => {
     if (page > 0 && page <= totalPages.value) {
         currentPage.value = page;
+        router.push({ query: { page: page } });
     }
 };
 
@@ -139,11 +142,23 @@ onMounted(async () => {
                             <!-- For Review Notifications -->
                             <template v-if="notification.data.short_type === 'review'">
                                 {{ $t('text.notifications.review.beforeUsername') }}
-                                <strong><router-link :to="`/user/${notification.data.username}`">{{ notification.data.username }}</router-link></strong>
+                                <strong><router-link :to="{ name: 'userProfile', params: { userId: notification.data.username_id }}">{{ notification.data.username }}</router-link></strong>
                                 {{ $t('text.notifications.review.beforeReview') }}
-                                <strong><router-link :to="`/review/${notification.data.review_id}`">{{ $t('text.notifications.review.reviewWord') }}</router-link></strong>
+                                <strong>
+                                    <router-link 
+                                        :to="{ 
+                                        name: 'showVenue', 
+                                        params: { venueId: notification.data.venue_id }, 
+                                        query: { 
+                                            review: notification.data.review_id 
+                                        } 
+                                        }"
+                                    >
+                                        {{ $t('text.notifications.review.reviewWord') }}
+                                    </router-link>
+                                </strong>
                                 {{ $t('text.notifications.review.betweenReviewAndVenue') }}
-                                <strong><router-link :to="`/venue/${notification.data.venue_title}`">{{ notification.data.venue_title }}</router-link></strong>
+                                <strong><router-link :to="{ name: 'showVenue', params: { venueId: notification.data.venue_id }}">{{ notification.data.venue_title }}</router-link></strong>
                                 {{ $t('text.notifications.review.afterVenue') }}
                             </template>
 
@@ -151,13 +166,13 @@ onMounted(async () => {
                             <!-- For Comment Notifications -->
                             <template v-else-if="notification.data.short_type === 'comment'">
                                 {{ $t('text.notifications.comment.beforeUsername') }}
-                                <strong><router-link :to="`/user/${notification.data.username}`">{{ notification.data.username }}</router-link></strong>
+                                <strong><router-link :to="{ name: 'userProfile', params: { userId: notification.data.username_id }}">{{ notification.data.username }}</router-link></strong>
                                 {{ $t('text.notifications.comment.beforeComment') }}
                                 <strong>
                                     <router-link 
                                         :to="{ 
                                         name: 'showVenue', 
-                                        params: { id: notification.data.venue_id }, 
+                                        params: { venueId: notification.data.venue_id }, 
                                         query: { 
                                             comment: notification.data.comment_id, 
                                             review: notification.data.review_id 
@@ -170,7 +185,7 @@ onMounted(async () => {
                                 {{ $t('text.notifications.comment.betweenCommentAndCategory') }}
                                 {{ notification.data.category_name }}
                                 {{ $t('text.notifications.comment.betweenCategoryAndVenue') }}
-                                <strong><router-link :to="`/venue/${notification.data.venue_title}`">{{ notification.data.venue_title }}</router-link></strong>
+                                <strong><router-link :to="{ name: 'showVenue', params: { venueId: notification.data.venue_id }}">{{ notification.data.venue_title }}</router-link></strong>
                                 {{ $t('text.notifications.comment.afterVenue') }}
                             </template>
 

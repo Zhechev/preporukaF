@@ -2,10 +2,10 @@
 // 1. Imports
 import LeafletMap from "@/components/common/LeafletMap.vue";
 import ReviewCommentComponent from '@/components/ReviewCommentComponent.vue';
-import { ref, onMounted, computed, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onMounted, computed, watch, nextTick } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { getVenue, getVenueReviews, createReviewForVenue } from "@/services/venueService";
+import { getVenue, getVenueReviews, createReviewForVenue, getReviewPage } from "@/services/venueService";
 import '@splidejs/splide/dist/css/splide.min.css';
 import '@splidejs/vue-splide/css';
 import { Splide, SplideSlide } from '@splidejs/vue-splide';
@@ -19,6 +19,7 @@ import MessagePopup from '@/components/common/MessagePopup.vue';
 
 // 2. Component setup
 const route = useRoute();
+const router = useRouter();
 const store = useStore();
 const VUE_APP_BASE_URL_STORAGE = process.env.VUE_APP_BASE_URL_STORAGE;
 const { t } = useI18n();
@@ -40,6 +41,7 @@ const imgsRef = ref([
 const categoryFeatures = ref([]);
 const reviews = ref([]);
 const reviewsPagination = ref({});
+const targetReviewId = ref(null);
 
 // 4. Computed properties
 const isAuth = computed(() => store.getters['auth/authenticated']);
@@ -65,10 +67,18 @@ const isRequired = (value) => {
 };
 
 const fetchReviews = async (page = 1) => {
-    const reviewData = await getVenueReviews(route.params.id, page);
+    const reviewData = await getVenueReviews(route.params.venueId, page);
+    console.log(reviewData);
     reviews.value = reviewData.data;
     reviewsPagination.value = reviewData;
+
+    const currentQuery = {...router.currentRoute.value.query};
+
+    currentQuery.page = page;
+
+    router.push({ name: "showVenue", query: currentQuery });
 };
+
 
 const onShow = () => {
   visibleRef.value = true;
@@ -106,13 +116,7 @@ const formatReviewDate = (dateString) => {
 
 // 6. Lifecycle hooks
 onMounted(async () => {
-
-  const commentElement = document.getElementById(`comment-16`);
-
-
-  console.log(commentElement);
-
-  venue.value = await getVenue(route.params.id);
+  venue.value = await getVenue(route.params.venueId);
   if (venue.value.images && Array.isArray(venue.value.images)) {
     imgsRef.value = venue.value.images.map(image => ({
       title: 'Venue Image',
@@ -129,7 +133,19 @@ onMounted(async () => {
     });
   }
 
-  await fetchReviews();
+  const reviewId = route.query.review;
+  if (reviewId) {
+    targetReviewId.value = reviewId;
+    const reviewPage = await getReviewPage(targetReviewId.value);
+    await fetchReviews(reviewPage);
+  } else {
+    await fetchReviews();
+  }
+
+
+  if (targetReviewId.value) {
+    await tryScrollingToReview();
+  }
 
   // get features
   let venueFeatures = venue.value.features;
@@ -156,6 +172,18 @@ watch ( savingSuccessful, () => {
     document.body.style.overflow = savingSuccessful.value ? "hidden" : "auto"
     document.body.style.backgroundColor = savingSuccessful.value ? "background-color:rgba(0,0,0,0.8)" : "none"
 })
+
+const tryScrollingToReview = async () => {
+  const reviewElement = document.getElementById(`review-${targetReviewId.value}`);
+  console.log(reviewElement);
+  if (reviewElement) {
+    reviewElement.scrollIntoView({ behavior: "smooth", block: "center" });
+  } else if (reviewsPagination.value.next_page_url && targetReviewId.value != null) {
+    // Тук трябва да заредите следващата страница, ако има такава
+    await nextTick();
+    await tryScrollingToReview(); // Рекурсивно повикване на функцията
+  }
+};
 </script>
 
 
@@ -334,7 +362,7 @@ watch ( savingSuccessful, () => {
           <div class="clearfix"></div>
           <div class="comments utf_listing_reviews">
             <ul>
-              <li v-for="review in reviews" :key="review.id">
+              <li v-for="review in reviews" :key="review.id" :id="`review-${review.id}`">
                 <div class="avatar">
                   <img src="images/client-avatar1.jpg" alt="" />
                 </div>
@@ -379,17 +407,31 @@ watch ( savingSuccessful, () => {
                 <nav class="pagination">
                   <ul>
                     <li>
-                      <a href="#" @click.prevent="fetchReviews(reviewsPagination.current_page - 1)"
-                        ><font-awesome-icon :icon="['fas', 'arrow-left']"
-                      /></a>
+                      <a 
+                        :href="'/venues/33?page=' + (reviewsPagination.current_page - 1)" 
+                        @click.prevent="fetchReviews(reviewsPagination.current_page - 1)" 
+                        v-if="reviewsPagination.current_page > 1"
+                      >
+                        <font-awesome-icon :icon="['fas', 'arrow-left']" />
+                      </a>
                     </li>
                     <li v-for="n in reviewsPagination.last_page" :key="n">
-                      <a href="#" @click.prevent="fetchReviews(n)" :class="{ 'current-page': n === reviewsPagination.current_page }">{{ n }}</a>
+                      <a 
+                        :href="'/venues/33?page=' + n" 
+                        @click.prevent="fetchReviews(n)" 
+                        :class="{ 'current-page': n === reviewsPagination.current_page }"
+                      >
+                        {{ n }}
+                      </a>
                     </li>
                     <li>
-                      <a href="#" @click.prevent="fetchReviews(reviewsPagination.current_page + 1)"
-                        ><font-awesome-icon :icon="['fas', 'arrow-right']"
-                      /></a>
+                      <a 
+                        :href="'/venues/33?page=' + (reviewsPagination.current_page + 1)" 
+                        @click.prevent="fetchReviews(reviewsPagination.current_page + 1)" 
+                        v-if="reviewsPagination.current_page < reviewsPagination.last_page"
+                      >
+                        <font-awesome-icon :icon="['fas', 'arrow-right']" />
+                      </a>
                     </li>
                   </ul>
                 </nav>

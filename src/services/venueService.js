@@ -92,3 +92,8 @@ export const addCommentToReview = async (reviewId, content) => {
     const response = await axios.post(`${BASE_URL}/reviews/${reviewId}/review-comments`, { content });
     return response.data;
 };
+
+export const getReviewPage = async(reviewId) => {
+    const response = await axios.get(`${BASE_URL}/reviews/find-page/${reviewId}`);
+    return response.data.page;
+}

@@ -414,7 +414,7 @@ watch(() => route.query, async (newQuery) => {
           >
             <div class="utf_listing_item-container list-layout">
               <router-link
-                :to="{ name: 'showVenue', params: { id: venue.id } }"
+                :to="{ name: 'showVenue', params: { venueId: venue.id } }"
                 class="utf_listing_item"
               >
                 <div class="utf_listing_item-image">
